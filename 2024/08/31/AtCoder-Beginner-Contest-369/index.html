@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
-    <title>Categories: 杂谈 | 叫兽の窝</title>
+    <title>AtCoder Beginner Contest 369 | 叫兽の窝</title>
     <meta name="author" content="joso" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -50,6 +50,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -180,14 +184,20 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
+            <div class="article">
+    <div>
+        <h1>AtCoder Beginner Contest 369</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/8/31
+        </span>
         
-        
-        
-        <span>
-            <a href="/categories/%E9%A2%98%E8%A7%A3/" style="background: #00a596">
+        <span class="category">
+            <a href="/categories/%E9%A2%98%E8%A7%A3/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
@@ -196,134 +206,215 @@
         </span>
         
         
-        
-        <span>
-            <a href="/categories/%E6%9D%82%E8%B0%88/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                杂谈
-            </a>
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/atcoder-C/" style="color: #ff7d73">
+                    -atcoder -C++
+                </a>
+            </span>
+            
         </span>
         
-        
-        
-        
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/8/31</div>
-            <a href="/2024/08/31/codeforces%E7%AC%AC%E4%B8%80%E4%B8%AA4000%E5%88%86/">
-                <h3>codeforces第一个4000分！</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E6%9D%82%E8%B0%88/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        杂谈
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/codeforces/" style="color: #03a9f4">
-                            codeforces
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <!-- toc -->
+
+<ul>
+<li><a href="#a-369"><strong>A - 369</strong></a><ul>
+<li><a href="#%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0">问题陈述</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0">实现</a></li>
+</ul>
+</li>
+<li><a href="#b-piano-3"><strong>B - Piano 3</strong></a><ul>
+<li><a href="#%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0-1">问题陈述</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-1">实现</a></li>
+</ul>
+</li>
+<li><a href="#c-count-arithmetic-subarrays"><strong>C - Count Arithmetic Subarrays</strong></a><ul>
+<li><a href="#%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0-2">问题陈述</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-2">实现</a></li>
+</ul>
+</li>
+<li><a href="#d-bonus-exp"><strong>D - Bonus EXP</strong></a><ul>
+<li><a href="#%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0-3">问题陈述</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-3">实现</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="a-369"><strong>A - 369</strong></span></h1><h2><span id="问题陈述">问题陈述</span></h2><p>给你两个整数 $A$ 和 $B$ 。</p>
+<p>有多少个整数 $x$ 满足以下条件？</p>
+<ul>
+<li>条件：可以将三个整数 $A$ 、 $B$ 和 $x$ 按一定顺序排列，组成一个算术序列。</li>
+</ul>
+<p>当且仅当 $q-p$ 等于 $r-q$ 时，三个整数 $p$ ， $q$ 和 $r$ 按此顺序排列的序列是算术序列。</p>
+<h2><span id="实现">实现</span></h2><pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5;
+void solve()
+&#123;
+   int a,b;
+   cin&gt;&gt;a&gt;&gt;b;
+   if(a==b)
+   &#123;
+         cout&lt;&lt;1&lt;&lt;endl;
+         return ;
+   &#125;
+   if(abs(b-a)%2==0) cout&lt;&lt;3&lt;&lt;endl;
+   else cout&lt;&lt;2&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="b-piano-3"><strong>B - Piano 3</strong></span></h1><h2><span id="问题陈述">问题陈述</span></h2><p>高桥有一架钢琴，上面有 $100$ 个排成一行的琴键。从左边开始的第 $i$ 个键叫做 $i$ 键。</p>
+<p>他要逐个按下 $N$ 个键来演奏音乐。在按下 $i$ &#x2F;th键时，他将用左手按下 $A_i$ 键，如果是 $S_i&#x3D;$ ，则用右手按下 $A_i$ 键。如果按 $S_i&#x3D;$ 则用左手，如果按 $S_i&#x3D;$ 则用右手。<code>R</code>.</p>
+<p>开始演奏前，他可以将双手放在任意键上，此时他的<strong>疲劳度</strong>为 0。在演奏过程中，如果他将一只手从键 $x$ 移动到键 $y$ ，疲劳度会增加 $|y-x|$ （反之，除移动双手外，疲劳度不会增加）。用手按下某个键时，该手必须放在该键上。</p>
+<p>找出表演结束时可能的最低疲劳度。</p>
+<h2><span id="实现">实现</span></h2><p>简单模拟即可</p>
+<pre><code>#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5;
+void solve()
+&#123;
+   int n;
+   cin&gt;&gt;n;
+   int l=0;
+   int r=0;
+   int ans=0;
+   for(int i=1;i&lt;=n;i++)
+   &#123;
+        int x;
+        char ch;
+        cin&gt;&gt;x&gt;&gt;ch;
+        if(ch==&#39;L&#39;) 
+        &#123;
+            if(l==0) l=x;
+            else ans+=(abs(l-x)),l=x;
+        &#125;
+        else
+        &#123;
+            if(r==0) r=x;
+            else ans+=(abs(r-x)),r=x;
+        &#125;
+   &#125;
+   cout&lt;&lt;ans&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="c-count-arithmetic-subarrays"><strong>C - Count Arithmetic Subarrays</strong></span></h1><h2><span id="问题陈述">问题陈述</span></h2><p>给你一个由 $N$ 个正整数 $A&#x3D;(A_1,A_2,\dots,A_N)$ 组成的序列。</p>
+<p>求满足 $1\leq l\leq r\leq N$ 的一对整数 $(l,r)$ 中，子序列 $(A_l,A_{l+1},\dots,A_r)$ 构成算术级数的个数。</p>
+<p>当且仅当存在一个 $d$ 使得 $x_{i+1}-x_i&#x3D;d\ (1\leq i &lt; |x|)$ 是算术级数时，序列 $(x_1,x_2,\dots,x_{|x|})$ 才是算术级数。特别地，长度为 $1$ 的序列总是算术级数。</p>
+<h2><span id="实现">实现</span></h2><pre><code>#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5;
+int a[N];
+int b[N];
+void solve()
+&#123;
+   int n;
+   cin&gt;&gt;n;
+   for(int i=1;i&lt;=n;i++) cin&gt;&gt;a[i];
+   for(int i=1;i&lt;n;i++)
+   &#123;
+        b[i]=(a[i+1]-a[i]);
+   &#125;
+   int r=1;
+   int ans=n;
+   for(int l=1;l&lt;n;l++)
+   &#123;
+        while(b[r+1]==b[l]&amp;&amp;r+1&lt;n) r++;
+        int num=r-l+1;
+        //cout&lt;&lt;num&lt;&lt;&#39; &#39;;
+        ans+=(num)*(num+1)/2;
+        l=r;
+   &#125;
+   cout&lt;&lt;ans&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="d-bonus-exp"><strong>D - Bonus EXP</strong></span></h1><h2><span id="问题陈述">问题陈述</span></h2><p>高桥将依次遇到 $N$ 只怪物。 $i$ 个怪物 $(1\leq i\leq N)$ 的力量为 $A &#95; i$ 。</p>
+<p>对于每只怪物，他都可以选择放走或打败它。<br>每次行动都会获得以下经验值：</p>
+<ul>
+<li>如果放走怪物，他将获得 $0$ 点经验值。</li>
+<li>如果他以 $X$ 的力量击败了怪物，则会获得 $X$ 点经验值。<br>  如果击败的是偶数怪物(第 2 个、第 4 个……)，他将额外获得 $X$ 点经验值。</li>
+</ul>
+<p>求他能从 $N$ 个怪物身上获得的经验值上限。</p>
+<h2><span id="实现">实现</span></h2><pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5;
+int a[N];
+int b[N];
+int dp[N][2][2];
+void solve()
+&#123;
+   int n;
+   cin&gt;&gt;n;
+   for(int i=1;i&lt;=n;i++) cin&gt;&gt;a[i];
+   for(int i=1;i&lt;=n;i++)
+   &#123;
+        dp[i][0][1]=max(dp[i-1][0][1],dp[i-1][1][1]);
+        dp[i][0][0]=max(dp[i-1][0][0],dp[i-1][1][0]);
+        dp[i][1][1]=max(dp[i-1][1][0],dp[i-1][0][0])+a[i];
+        if(i==1) continue;
+        dp[i][1][0]=max(dp[i-1][1][1],dp[i-1][0][1])+2*a[i];
+   &#125;
+   cout&lt;&lt;max(dp[n][1][0],dp[n][1][1])&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/8/30</div>
-            <a href="/2024/08/30/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">
-                <h3>图床搭建</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E6%9D%82%E8%B0%88/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        杂谈
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/hexo/" style="color: #ffa2c4">
-                            hexo
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/8/29</div>
-            <a href="/2024/08/29/hello-world/">
-                <h3>搭建hexo个人博客</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E6%9D%82%E8%B0%88/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        杂谈
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/hexo/" style="color: #00bcd4">
-                            hexo
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
-    </div>
+    
+    
     
 </div>
 
@@ -355,6 +446,29 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo=""
+    data-repo-id=""
+    data-category=""
+    data-category-id=""
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang=""
+    crossorigin
+    async
+></script>
+
+
+
+
+
     
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"left","width":150,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"dialog":{"enable":true,"hitokoto":true},"log":false});</script></body>
 // <script src="https://giscus.app/client.js"

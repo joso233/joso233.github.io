@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
-    <title>图床搭建 | 叫兽の窝</title>
+    <title>Categories: 算法 | 叫兽の窝</title>
     <meta name="author" content="joso" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -50,10 +50,6 @@
 
 
 <script src="/js/lib/preview.js"></script>
-
-
-
-
 
 
 
@@ -184,20 +180,25 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div class="article">
-    <div>
-        <h1>图床搭建</h1>
-    </div>
-    <div class="info">
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/8/30
+            <div id="archives">
+    
+    <div class="categories-tags">
+        
+        
+        
+        <span>
+            <a href="/categories/%E9%A2%98%E8%A7%A3/" style="background: #00a596">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                题解
+            </a>
         </span>
         
-        <span class="category">
-            <a href="/categories/%E6%9D%82%E8%B0%88/">
+        
+        
+        <span>
+            <a href="/categories/%E6%9D%82%E8%B0%88/" style="background: #ffa2c4">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
@@ -206,56 +207,58 @@
         </span>
         
         
-        <span class="tags">
-            <span class="icon">
-                <i class="fa-solid fa-tags fa-fw"></i>
-            </span>
-            
-            
-            <span class="tag">
-                
-                <a href="/tags/hexo/" style="color: #00a596">
-                    hexo
-                </a>
-            </span>
-            
+        
+        <span>
+            <a href="/categories/%E7%AE%97%E6%B3%95/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                算法
+            </a>
         </span>
+        
+        
+        
         
     </div>
     
-    <div class="content" v-pre>
-        <p><em>在搭建好博客之后，这时写博客想要实现插入图片的功能还需要一些操作，以下为使用腾讯cos及picgo软件实现图床搭建的教程</em></p>
-<h1><span id="一购买腾讯对象存储">一.购买腾讯对象存储</span></h1><p>图床的搭建方案还是很多的，比如Github仓库 + Picgo ，giteec仓库 + Picgo，但考虑到稳定性和高效性，便宜量大的云储存也是不错的选择，其中我购买的是[腾讯对象存储](<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/cos">对象存储数据处理_COS数据处理_数据处理方案-腾讯云 (tencent.com)</a>)</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830212717098.png" alt="image-20240830212717098"></p>
-<p>按照需求购买之后进入控制台，点击创建存储桶</p>
-<img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830212942566.png" alt="image-20240830212942566" style="zoom:50%;">
-
-<p><strong>这里一定要选择公有读私有写</strong></p>
-<p>之后按照提示创建即可，创建完成后进入存储桶，创建文件夹，（例如img）记住该文件夹的地址，之后要用到</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213219242.png" alt="image-20240830213219242"></p>
-<h1><span id="二下载picgo软件">二.下载Picgo软件</span></h1><p>下载地址很多，这里就不提供了，下载完成后进入图床设置</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213548018.png" alt="image-20240830213548018"></p>
-<p>按照提示填入之后，点击设为默认图床即可完成。</p>
-<blockquote>
-<p>[!NOTE]</p>
-<p>Secretld,SecretKey均在腾讯云密钥管理中获取</p>
-<p>Bucket 即为创建存储桶的名称</p>
-</blockquote>
-<h1><span id="三设置你的md编辑器">三.设置你的md编辑器</span></h1><p>这里以typor为例，进入图像相关设置，勾选上传服务为 Picgo(app)，设置正确路径即可</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213912270.png" alt="image-20240830213912270"></p>
-<p><strong>之后在插入图片的同时点击上传图片就会自动上传至腾讯云储存中了</strong></p>
-
+    <div class="timeline">
+        <div class="timeline-tail"></div>
+        <div class="timeline-content">
+            <div class="item-time">2024/9/1</div>
+            <a href="/2024/09/01/dijkstra%E6%B1%82%E6%9C%80%E7%9F%AD%E8%B7%AF%EF%BC%88%E5%A4%9A%E6%BA%90%E7%89%88%E6%9C%AC%EF%BC%89/">
+                <h3>dijkstra求最短路（多源版本）</h3>
+            </a>
+            <div class="info">
+                
+                <span class="category">
+                    <a href="/categories/%E7%AE%97%E6%B3%95/">
+                        <span class="icon">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </span>
+                        算法
+                    </a>
+                </span>
+                
+                
+                <span class="tags">
+                    <span class="icon">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </span>
+                    
+                    
+                    <span class="tag">
+                        
+                        <a href="/tags/%E5%9B%BE%E8%AE%BA-%E7%AE%97%E6%B3%95/" style="color: #03a9f4">
+                            -图论 -算法
+                        </a>
+                    </span>
+                    
+                </span>
+                
+            </div>
+        </div>
     </div>
-    
-    
-    
-    
-    <div id="comment">
-        <div id="giscus-container" class="giscus"></div>
-    </div>
-    
-    
-    
     
 </div>
 
@@ -287,29 +290,6 @@
         
     </div>
     <script src="/js/main.js"></script>
-    
-    
-<script
-    src="https://giscus.app/client.js"
-    data-repo=""
-    data-repo-id=""
-    data-category=""
-    data-category-id=""
-    data-mapping="pathname"
-    data-strict="0"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="bottom"
-    data-theme="preferred_color_scheme"
-    data-lang=""
-    crossorigin
-    async
-></script>
-
-
-
-
-
     
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"left","width":150,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"dialog":{"enable":true,"hitokoto":true},"log":false});</script></body>
 // <script src="https://giscus.app/client.js"

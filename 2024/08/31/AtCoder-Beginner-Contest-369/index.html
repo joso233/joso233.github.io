@@ -214,7 +214,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/atcoder-C/" style="color: #ffa2c4">
+                <a href="/tags/atcoder-C/" style="color: #03a9f4">
                     -atcoder -C++
                 </a>
             </span>
@@ -245,6 +245,11 @@
 <li><a href="#d-bonus-exp"><strong>D - Bonus EXP</strong></a><ul>
 <li><a href="#%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0-3">问题陈述</a></li>
 <li><a href="#%E5%AE%9E%E7%8E%B0-3">实现</a></li>
+</ul>
+</li>
+<li><a href="#e-sightseeing-tour"><strong>E - Sightseeing Tour</strong></a><ul>
+<li><a href="#%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0-4">问题陈述</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-4">实现</a></li>
 </ul>
 </li>
 </ul>
@@ -392,6 +397,103 @@ void solve()
         dp[i][1][0]=max(dp[i-1][1][1],dp[i-1][0][1])+2*a[i];
    &#125;
    cout&lt;&lt;max(dp[n][1][0],dp[n][1][1])&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="e-sightseeing-tour"><strong>E - Sightseeing Tour</strong></span></h1><h2><span id="问题陈述">问题陈述</span></h2><p>有 $N$ 个岛屿和 $M$ 座双向桥梁连接两个岛屿。这些岛屿和桥梁的编号分别为 $1$ 、 $2$ 、 $\ldots$ 、 $N$ 和 $1$ 、 $2$ 、 $\ldots$ 、 $M$ 。<br>大桥 $i$ 连接着岛屿 $U_i$ 和 $V_i$ ，从任一方向穿过大桥所需的时间为 $T_i$ 。<br>没有一座桥将一个岛屿与它自己连接起来，但是有可能两座岛屿被不止一座桥直接连接起来。<br>人们可以通过一些桥梁来往于任意两个岛屿之间。</p>
+<p>给你 $Q$ 个问题，请逐一回答。 $i$ -th 查询如下：</p>
+<blockquote>
+<p>给出了 $K_i$ 个不同的桥：桥 $B_{i,1}, B_{i,2}, \ldots, B_{i,K_i}$ 。<br>求从岛屿 $1$ 到岛屿 $N$ 所需的最少时间，每座桥梁至少使用一次。<br>只考虑过桥的时间。<br>你可以以任何顺序和方向通过给定的桥梁。</p>
+</blockquote>
+<h2><span id="实现">实现</span></h2><p>​	求n遍dijkstral算出各点间的最短路，接着通过全排列枚举必走k个不同桥的走法，要注意不止枚举桥的顺序，还要枚举从u到v还是从v到u，每架桥对应两种状态，因此用01表示，则共2的k次方种选法。</p>
+<p>​	dist[i] [j]表示从上一次走的桥的出口在i，要走到这一次桥的入口j，当选择的是第一架桥时，从1号点出发，到达第x&#x3D;1架桥的入口,下次循x&#x3D;2时则要选择从x-1出发，走到x,表示为dist[b[x-1]] [b[x]],所以最后一架桥作为出口时，此时循环了x&#x3D;k+1次，表示为dist[b[k]] [n]到达n号点</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e3;
+const int M=2e5+10;
+int u[M],v[M],w[M];
+int dist[N][N];
+vector&lt;int&gt;e[M];
+bool st[N][N];
+int b[M];
+typedef pair&lt;int,int&gt; PII;
+
+void dijkstra(int root)
+&#123;
+    priority_queue&lt;PII, vector&lt;PII&gt;, greater&lt;PII&gt;&gt;heap;
+    dist[root][root]=0;
+    heap.push(&#123;0,root&#125;);
+    while(heap.size())
+    &#123;
+        auto k=heap.top();
+        heap.pop();
+        int ver=k.second;
+        int distence=k.first;
+        if(st[root][ver]) continue;
+        st[root][ver]=1;
+        for(int i=0;i&lt;e[ver].size();i++)
+        &#123;
+            if(dist[root][e[ver][i]]&gt;=distence+dist[ver][e[ver][i]])
+            &#123;
+                dist[root][e[ver][i]]=distence+dist[ver][e[ver][i]];
+                heap.push(&#123;dist[root][e[ver][i]],e[ver][i]&#125;);
+            &#125;
+        &#125;
+    &#125;
+&#125;
+void solve()
+&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    memset(dist,127,sizeof(dist));
+    for(int i=1;i&lt;=m;i++)
+    &#123;
+        cin&gt;&gt;u[i]&gt;&gt;v[i]&gt;&gt;w[i];
+        if(!st[u[i]][v[i]])
+        &#123;
+            st[u[i]][v[i]]=1;
+            st[v[i]][u[i]]=1;
+            e[u[i]].push_back(v[i]);
+            e[v[i]].push_back(u[i]);
+        &#125;
+        dist[u[i]][v[i]]=min(dist[u[i]][v[i]],w[i]);
+        dist[v[i]][u[i]]=min(dist[v[i]][u[i]],w[i]);
+    &#125;
+    memset(st,0,sizeof(st));
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        dijkstra(i);
+    &#125;
+    int q;
+    cin&gt;&gt;q;
+    while(q--)
+    &#123;
+        int k;
+        cin&gt;&gt;k;
+        for(int i=1;i&lt;=k;i++) cin&gt;&gt;b[i];
+        sort(b+1,b+1+k);
+        int ans=1e12;
+        do
+        &#123;
+            for(int j=0;j&lt;1&lt;&lt;k;j++)
+            &#123;
+                int cur=0;
+                for(int i=1;i&lt;=k;i++)cur+=w[b[i]];
+                for(int i=1;i&lt;=k+1;i++)cur+=dist[i==1?1:(j&gt;&gt;i-2)&amp;1?v[b[i-1]]:u[b[i-1]]][i&gt;k?n:(j&gt;&gt;i-1)&amp;1?u[b[i]]:v[b[i]]];
+                ans=min(ans,cur);
+            &#125;
+        &#125; while (next_permutation(b+1,b+1+k));
+        cout&lt;&lt;ans&lt;&lt;endl;
+    &#125;   
 &#125;
 signed main()
 &#123;

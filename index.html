@@ -314,11 +314,429 @@ git config --global user.email &quot;youremail&quot;
         
         <span class="tag">
             
-            <a href="/tags/hexo/" style="color: #03a9f4">hexo</a>
+            <a href="/tags/hexo/" style="color: #00bcd4">hexo</a>
         </span>
         
     </div>
     <a href="/2024/08/29/hello-world/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2024/09/02/Codeforces-Round-970-Div-3/">
+        <h2 class="post-title">Codeforces Round 970 (Div. 3)</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E9%A2%98%E8%A7%A3/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                题解
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/9/2
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <!-- toc -->
+
+<ul>
+<li><a href="#a-sakurakos-exam">A. Sakurako’s Exam</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0">实现</a></li>
+</ul>
+</li>
+<li><a href="#b-square-or-not">B. Square or Not</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-1">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-1">实现</a></li>
+</ul>
+</li>
+<li><a href="#c-longest-good-array">C. Longest Good Array</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-2">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-2">实现</a></li>
+</ul>
+</li>
+<li><a href="#d-sakurakos-hobby">D. Sakurako’s Hobby</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-3">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-3">实现</a></li>
+</ul>
+</li>
+<li><a href="#e-alternating-string">E. Alternating String</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-4">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-4">实现</a></li>
+</ul>
+</li>
+<li><a href="#f-sakurakos-box">F. Sakurako’s Box</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-5">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-5">实现</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="a-sakurakos-exam">A. Sakurako’s Exam</span></h1><h2><span id="题目">题目</span></h2><p>Today, Sakurako has a math exam. The teacher gave the array, consisting of $a$ ones and $b$ twos.</p>
+<p>In an array, Sakurako <strong>must</strong> place either a ‘+’ or a ‘-‘ in front of each element so that the sum of all elements in the array equals $0$.</p>
+<p>Sakurako is not sure if it is possible to solve this problem, so determine whether there is a way to assign signs such that the sum of all elements in the array equals $0$.</p>
+<h2><span id="实现">实现</span></h2><pre><code class="c++">
+  #include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+const int mod=1e9+7; 
+void solve()
+&#123;
+    int a,b;
+    cin&gt;&gt;a&gt;&gt;b;
+    int now=a+b*2;
+    while(b&gt;0 and now&gt;=4)
+    &#123;
+        b--;
+        now-=4;
+    &#125;
+    while(a&gt;0 and now&gt;=2)
+    &#123;
+        a--;
+        now-=2;
+    &#125;
+    if(now==0) cout&lt;&lt;&quot;YES&quot;&lt;&lt;endl;
+    else cout&lt;&lt;&quot;NO&quot;&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="b-square-or-not">B. Square or Not</span></h1><h2><span id="题目">题目</span></h2><p>A beautiful binary matrix is a matrix that has ones on its edges and zeros inside.</p>
+<p><img src="https://espresso.codeforces.com/afad8366aa93c86fcb39360ee5ee76aa44941a37.png"></p>
+<p>Today, Sakurako was playing with a beautiful binary matrix of size $r \times c$ and created a binary string $s$ by writing down all the rows of the matrix, starting from the first and ending with the $r$-th. More formally, the element from the matrix in the $i$-th row and $j$-th column corresponds to the $((i-1)*c+j)$-th element of the string.</p>
+<p>You need to check whether the beautiful matrix from which the string $s$ was obtained could be <strong>squared</strong>. In other words, you need to check whether the string $s$ could have been build from a <strong>square</strong> beautiful binary matrix (i.e., one where $r&#x3D;c$).</p>
+<h2><span id="实现">实现</span></h2><pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+void solve()
+&#123;
+   int n;
+   cin&gt;&gt;n;
+   string s;
+   cin&gt;&gt;s;
+   if(sqrt(n)*sqrt(n)!=n) 
+   &#123;
+        cout&lt;&lt;&quot;No&quot;&lt;&lt;endl;
+        return;
+   &#125;
+   s=&#39; &#39;+s;   
+   if(n==4||s==&quot; 1111&quot;)
+   &#123;
+        cout&lt;&lt;&quot;Yes&quot;&lt;&lt;endl;
+        return;
+   &#125;
+   int num=sqrt(n);
+   for(int i=num+1;i&lt;=n-num;i++)
+   &#123;
+        if((i%num==1||i%num==0)&amp;&amp;s[i]==&#39;0&#39;) 
+        &#123;
+            cout&lt;&lt;&quot;No&quot;&lt;&lt;endl;
+            return;
+        &#125;
+        if((i%num)!=1&amp;&amp;((i%num)!=0))
+        &#123;
+            if(s[i]==&#39;1&#39;)
+            &#123;
+                cout&lt;&lt;&quot;No&quot;&lt;&lt;endl;
+                return;
+            &#125;
+        &#125;
+   &#125;
+   cout&lt;&lt;&quot;Yes&quot;&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="c-longest-good-array">C. Longest Good Array</span></h1><h2><span id="题目">题目</span></h2><p>Today, Sakurako was studying arrays. An array $a$ of length $n$ is considered good if and only if:</p>
+<ul>
+<li>the array $a$ is increasing, meaning $a_{i - 1} &lt; a_i$ for all $2 \le i \le n$;</li>
+<li>the differences between adjacent elements are increasing, meaning $a_i - a_{i-1} &lt; a_{i+1} - a_i$ for all $2 \le i &lt; n$.</li>
+</ul>
+<p>Sakurako has come up with boundaries $l$ and $r$ and wants to construct a good array of maximum length, where $l \le a_i \le r$ for all $a_i$.</p>
+<p>Help Sakurako find the maximum length of a good array for the given $l$ and $r$.</p>
+<h2><span id="实现">实现</span></h2><pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e3;
+const int M=2e5+10;
+void solve()
+&#123;
+   int n;
+   cin&gt;&gt;n;
+   for(int i=1;i&lt;=n;i++)
+   &#123;
+        int l,r;
+        cin&gt;&gt;l&gt;&gt;r;
+        int num=0;
+        for(;num*(num+1)/2&lt;=r-l;num++)
+        &#123;
+            ;
+        &#125;
+        if(num*(num+1)/2&gt;r-l) num--;
+        cout&lt;&lt;num+1&lt;&lt;endl;
+   &#125;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="d-sakurakos-hobby">D. Sakurako’s Hobby</span></h1><h2><span id="题目">题目</span></h2><p>For a certain permutation $p$$^{\text{∗}}$ Sakurako calls an integer $j$ reachable from an integer $i$ if it is possible to make $i$ equal to $j$ by assigning $i&#x3D;p_i$ a certain number of times.</p>
+<p>If $p&#x3D;[3,5,6,1,2,4]$, then, for example, $4$ is reachable from $1$, because: $i&#x3D;1$ $\rightarrow$ $i&#x3D;p_1&#x3D;3$ $\rightarrow$ $i&#x3D;p_3&#x3D;6$ $\rightarrow$ $i&#x3D;p_6&#x3D;4$. Now $i&#x3D;4$, so $4$ is reachable from $1$.</p>
+<p>Each number in the permutation is colored either black or white.</p>
+<p>Sakurako defines the function $F(i)$ as the number of black integers that are reachable from $i$.</p>
+<p>Sakurako is interested in $F(i)$ for each $1\le i\le n$, but calculating all values becomes very difficult, so she asks you, as her good friend, to compute this.</p>
+<p>$^{\text{∗}}$A permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation (the number $2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n&#x3D;3$, but the array contains $4$).</p>
+<h2><span id="实现">实现</span></h2><pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+//const int M=2e5+10;
+int dp[N];
+int a[N],b[N];
+int p[N];
+int find(int x)
+&#123;
+    if(x!=p[x]) p[x]=find(p[x]);
+    return p[x];
+&#125;
+void solve()
+&#123;
+   int n;
+   cin&gt;&gt;n;
+   for(int i=1;i&lt;=n;i++)
+   &#123;
+        cin&gt;&gt;a[i];
+        p[i]=i;
+   &#125;
+   string s;
+   cin&gt;&gt;s;
+   s=&#39; &#39;+s;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        p[find(a[i])]=find(i);
+    &#125;
+    map&lt;int,int&gt;mp;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        if(s[i]==&#39;0&#39;) mp[find(i)]++;
+    &#125;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        cout&lt;&lt;mp[find(i)]&lt;&lt;&#39; &#39;;
+    &#125;
+    cout&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="e-alternating-string">E. Alternating String</span></h1><h2><span id="题目">题目</span></h2><p>Sakurako really loves alternating strings. She calls a string $s$ of lowercase Latin letters an alternating string if characters in the even positions are the same, if characters in the odd positions are the same, and the length of the string is <strong>even</strong>.</p>
+<p>For example, the strings ‘abab’ and ‘gg’ are alternating, while the strings ‘aba’ and ‘ggwp’ are not.</p>
+<p>As a good friend, you decided to gift such a string, but you couldn’t find one. Luckily, you can perform two types of operations on the string:</p>
+<ol>
+<li>Choose an index $i$ and delete the $i$-th character from the string, which will reduce the length of the string by $1$. This type of operation can be performed <strong>no more than $1$ time</strong>;</li>
+<li>Choose an index $i$ and replace $s_i$ with any other letter.</li>
+</ol>
+<p>Since you are in a hurry, you need to determine the minimum number of operations required to make the string an alternating one.</p>
+<h2><span id="实现">实现</span></h2><p>考虑两种状态，一种n为偶数，一种为奇数，偶数必不进行删除操作，那只需要贪心选最小成本即可，奇数要枚举删除的位置，删完之后的位置奇偶的顺序会发生变化，因此记录一下i号位当前的各字母出现情况，注意区分奇偶序列，从1到n枚举，每次贪心选出最后剩什么字母的成本，取最小即可</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+//const int M=2e5+10;
+int dp[N];
+int a[N],b[N];
+int ch1[N][27];
+int ch2[N][27];
+void solve()
+&#123;
+    int n;
+    cin&gt;&gt;n;
+    string s;
+    cin&gt;&gt;s;
+    s=&#39; &#39;+s;
+    map&lt;char,int&gt;mp1;
+    map&lt;char,int&gt;mp2;
+    if(n%2==0)
+    &#123;
+        for(int i=1;i&lt;=n;i++)
+        &#123;
+            if(i%2==1) mp1[s[i]]++;
+            else mp2[s[i]]++;
+        &#125;
+        int ans1=0;
+        int ans2=0;
+        for(auto it:mp1) ans1=max(ans1,it.second);
+        for(auto it:mp2) ans2=max(ans2,it.second);
+        cout&lt;&lt;n-ans1-ans2&lt;&lt;endl;
+    &#125;
+    else
+    &#123;
+        for(int i=1;i&lt;=n;i++)
+        &#123;
+            for(int j=0;j&lt;=26;j++)
+            &#123;
+                ch1[i][j]=0;
+                ch2[i][j]=0;
+            &#125;
+            if(i%2==1)
+            &#123;
+                ch1[i][s[i]-&#39;a&#39;]++;
+                for(int j=0;j&lt;26;j++)
+                &#123;
+                    ch1[i][j]+=ch1[i-1][j];
+                    ch2[i][j]+=ch2[i-1][j];
+                &#125;
+            &#125;
+            else
+            &#123;
+                ch2[i][s[i]-&#39;a&#39;]++;
+                for(int j=0;j&lt;26;j++)
+                &#123;
+                    ch1[i][j]+=ch1[i-1][j];
+                    ch2[i][j]+=ch2[i-1][j];
+                &#125;
+            &#125;
+        &#125;
+        int ans=0;
+        for(int i=1;i&lt;=n;i++)
+        &#123;
+            int max1=0;
+            int max2=0;
+            for(int j=0;j&lt;26;j++)
+            &#123;
+                max1=max(ch2[n][j]-ch2[i][j]+ch1[i-1][j],max1);
+                max2=max(ch1[n][j]-ch1[i][j]+ch2[i-1][j],max2);
+            &#125;
+            ans=max(ans,max1+max2);
+        &#125;
+        cout&lt;&lt;n-ans&lt;&lt;endl;
+    &#125;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="f-sakurakos-box">F. Sakurako’s Box</span></h1><h2><span id="题目">题目</span></h2><p>Sakurako has a box with $n$ balls. Each ball has it’s value. She wants to bet with her friend that if the friend randomly picks two balls from the box (it could be two distinct balls, but they may have the same value), the product of their values will be the same as the number that Sakurako guessed.</p>
+<p>Since Sakurako has a PhD in probability, she knows that the best number to pick is <a target="_blank" rel="noopener" href="http://tiny.cc/matozh_en">the expected value</a>, but she forgot how to calculate it. Help Sakurako and find the expected value of the product of two elements from the array.</p>
+<p>It can be shown that the expected value has the form $\frac{P}{Q}$, where $P$ and $Q$ are non-negative integers, and $Q \ne 0$. Report the value of $P \cdot Q^{-1}(\bmod 10^9+7)$.</p>
+<h2><span id="实现">实现</span></h2><p>我恨取模</p>
+<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240903002706846.png" alt="image-20240903002706846"></p>
+<p>算贡献+组合数+逆元</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+int dp[N];
+int a[N],b[N];
+const int mod=1e9+7; 
+int quick_pow(int a,int b)
+&#123;
+    int ans=1;
+    while(b)&#123;
+        if(b&amp;1) ans=(ans*a)%mod;
+        b&gt;&gt;=1;
+        a=(a*a)%mod;
+    &#125;
+    return ans;
+&#125;
+int inv(int a,int b)
+&#123;
+    return (a*quick_pow(b,mod-2))%mod;
+&#125;
+void solve()
+&#123;
+    int n;
+    cin&gt;&gt;n;
+    int sum=0;
+    for(int i=1;i&lt;=n;i++) cin&gt;&gt;a[i],sum+=a[i],sum%=mod;
+    int num=(n-1)*n/2;
+    num%=mod;
+    int d1=0;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        sum-=a[i];
+        d1+=(a[i]%mod)*((sum+mod)%mod);
+        d1%=mod;
+    &#125;
+    int ans=inv(d1,num);
+    cout&lt;&lt;(ans+mod)%mod&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/codeforces/" style="color: #ffa2c4">-codeforces</a>
+        </span>
+        
+    </div>
+    <a href="/2024/09/02/Codeforces-Round-970-Div-3/" class="go-post">阅读全文</a>
 </div>
 
 <div class="post">
@@ -429,7 +847,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/%E5%9B%BE%E8%AE%BA-%E7%AE%97%E6%B3%95/" style="color: #00bcd4">-图论 -算法</a>
+            <a href="/tags/%E5%9B%BE%E8%AE%BA-%E7%AE%97%E6%B3%95/" style="color: #ff7d73">-图论 -算法</a>
         </span>
         
     </div>
@@ -758,7 +1176,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/atcoder-C/" style="color: #ffa2c4">-atcoder -C++</a>
+            <a href="/tags/atcoder-C/" style="color: #00a596">-atcoder -C++</a>
         </span>
         
     </div>
@@ -792,7 +1210,7 @@ signed main()
     <div class="description">
         <div class="content" v-pre>
             
-            <h1><span id="见证历史codeforces上第一个黑红名tourist">见证历史，codeforces上第一个黑红名——<strong>tourist</strong>！</span></h1><p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240831112043330.png" alt="image-20240831112043330"></p>
+            <h1><span id="见证历史codeforces上第一个红黑名tourist">见证历史，codeforces上第一个红黑名——<strong>tourist</strong>！</span></h1><p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240831112043330.png" alt="image-20240831112043330"></p>
 
             
         </div>
@@ -807,7 +1225,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/codeforces/" style="color: #03a9f4">codeforces</a>
+            <a href="/tags/codeforces/" style="color: #00a596">codeforces</a>
         </span>
         
     </div>
@@ -875,7 +1293,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/hexo/" style="color: #03a9f4">hexo</a>
+            <a href="/tags/hexo/" style="color: #00bcd4">hexo</a>
         </span>
         
     </div>

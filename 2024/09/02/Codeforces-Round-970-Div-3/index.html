@@ -214,7 +214,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/codeforces/" style="color: #03a9f4">
+                <a href="/tags/codeforces/" style="color: #00bcd4">
                     -codeforces
                 </a>
             </span>
@@ -255,6 +255,11 @@
 <li><a href="#f-sakurakos-box">F. Sakurako’s Box</a><ul>
 <li><a href="#%E9%A2%98%E7%9B%AE-5">题目</a></li>
 <li><a href="#%E5%AE%9E%E7%8E%B0-5">实现</a></li>
+</ul>
+</li>
+<li><a href="#g-sakurakos-task">G. Sakurako’s Task</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-6">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-6">实现</a></li>
 </ul>
 </li>
 </ul>
@@ -583,6 +588,63 @@ void solve()
     &#125;
     int ans=inv(d1,num);
     cout&lt;&lt;(ans+mod)%mod&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="g-sakurakos-task">G. Sakurako’s Task</span></h1><h2><span id="题目">题目</span></h2><p>Sakurako has prepared a task for you:</p>
+<p>She gives you an array of $n$ integers and allows you to choose $i$ and $j$ such that $i \neq j$ and $a_i \ge a_j$, and then assign $a_i &#x3D; a_i - a_j$ or $a_i &#x3D; a_i + a_j$. You can perform this operation any number of times for any $i$ and $j$, as long as they satisfy the conditions.</p>
+<p>Sakurako asks you what is the maximum possible value of $mex_k$$^{\text{∗}}$ of the array after any number of operations.</p>
+<p>$^{\text{∗}}$$mex_k$ is the $k$-th non-negative integer that is absent in the array. For example, $mex_1({1,2,3 })&#x3D;0$, since $0$ is the first element that is not in the array, and $mex_2({0,2,4 })&#x3D;3$, since $3$ is the second element that is not in the array.</p>
+<h2><span id="实现">实现</span></h2><p>尽可能让所有的数字变小就是最优解，手动模拟一下会发现最后的数组排列为i*数组最大公因数（0&lt;&#x3D;i&lt;&#x3D;n）</p>
+<p>将k按顺序插入即是最答案</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+const int mod=1e9+7; 
+int a[N];
+int gcd(int a,int b)
+&#123;
+    if(a%b==0) return b;
+    else return gcd(b,a%b);
+&#125;
+void solve()
+&#123;
+    int n,k;
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        cin&gt;&gt;a[i];
+    &#125;
+    int num=0;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        if(!num) num=a[i];
+        else num=gcd(num,a[i]);
+    &#125;
+    if(n == 1)
+    &#123;
+       if(k&gt;a[1]) cout&lt;&lt;k&lt;&lt;endl;
+       else cout&lt;&lt;k-1&lt;&lt;endl;
+    &#125;
+    else
+    &#123;
+        if(num==1) cout&lt;&lt;n-1+k&lt;&lt;endl;
+        else
+        &#123;
+            int sum=((k+num-2)/(num-1));
+            sum=min(sum,n);
+            cout&lt;&lt;k+sum-1&lt;&lt;endl;
+        &#125;
+    &#125;
 &#125;
 signed main()
 &#123;

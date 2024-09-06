@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
-    <title>Tags: -图论 -算法 | 叫兽の窝</title>
+    <title>牛客小白月赛100 E | 叫兽の窝</title>
     <meta name="author" content="joso" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -50,6 +50,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -180,129 +184,119 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
+            <div class="article">
+    <div>
+        <h1>牛客小白月赛100 E</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/9/6
+        </span>
         
-        
-        
-        <span>
-            <a href="/tags/atcoder-C/" style="background: #00bcd4">
+        <span class="category">
+            <a href="/categories/%E9%A2%98%E8%A7%A3/">
                 <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                -atcoder -C++
+                题解
             </a>
         </span>
         
         
-        
-        <span>
-            <a href="/tags/codeforces/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                codeforces
-            </a>
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/c/" style="color: #ff7d73">
+                    c++
+                </a>
+            </span>
+            
         </span>
-        
-        
-        
-        <span>
-            <a href="/tags/hexo/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                hexo
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/%E5%9B%BE%E8%AE%BA-%E7%AE%97%E6%B3%95/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -图论 -算法
-            </a>
-        </span>
-        
-        
-        
-        
-        
-        <span>
-            <a href="/tags/codeforces/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -codeforces
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -c++ -数据结构
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                c++
-            </a>
-        </span>
-        
         
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/9/1</div>
-            <a href="/2024/09/01/dijkstra%E6%B1%82%E6%9C%80%E7%9F%AD%E8%B7%AF%EF%BC%88%E5%A4%9A%E6%BA%90%E7%89%88%E6%9C%AC%EF%BC%89/">
-                <h3>dijkstra求最短路（多源版本）</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E7%AE%97%E6%B3%95/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        算法
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/%E5%9B%BE%E8%AE%BA-%E7%AE%97%E6%B3%95/" style="color: #00bcd4">
-                            -图论 -算法
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <h1><span id="e-acm中的cm题">E-ACM中的CM题</span></h1><p>现在在你前面有 nnn 个地雷</p>
+<p>刚刚学会瞬移的你决定排走所有地雷</p>
+<p>遗憾的是，你的初始排雷能力 m&#x3D;0m &#x3D; 0m&#x3D;0，但你知道</p>
+<p>当排雷能力为 mmm 时，你可以任何时刻在当前位置 lll 处将[l,l+m][l, l+m][l,l+m] 中的雷全部排走</p>
+<p>也可以在任何时刻任何地点，将排雷能力从 mmm 变为 m+1m+1m+1 </p>
+<p>以上两种操作都需要花费 1 的时间，但瞬移不花费时间！</p>
+<p>求排所有雷所需最小时间！</p>
+<h2><span id="思路">思路</span></h2><p>枚举m长度二分求次数即可</p>
+<pre><code class="c++">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N = 2e5 + 10;
+int a[N];
+int n, ans;
+void check(int len) &#123;
+    int res = len - 1;
+    for (int i = 1; i &lt;= n; i++) &#123;
+        int l = i, r = n;
+        while (l &lt; r) &#123;
+            int mid = (l + r + 1) / 2;
+            if (a[mid] - a[i] + 1 &gt; len)
+                r = mid - 1;
+            else
+                l = mid;
+        &#125;
+        res++;
+        i = l;
+        if (l == n)
+            break;
+    &#125;
+    ans = min(ans, res);
+&#125;
+
+void solve() &#123;
+    int num;
+    cin &gt;&gt; num;
+    n = 0;
+    map&lt;int, int&gt; mp;
+    for (int i = 1; i &lt;= num; i++) &#123;
+        int x;
+        cin &gt;&gt; x;
+        if (!mp[x]) &#123;
+            a[++n] = x;
+        &#125;
+        mp[x] = 1;
+    &#125;
+    ans = n;
+    sort(a + 1, a + 1 + n);
+    for (int i = 1; i &lt;= n; i++) &#123;
+        check(i);
+    &#125;
+    cout &lt;&lt; ans &lt;&lt; endl;
+&#125;
+signed main() &#123;
+    int t = 1;
+    while (t--) &#123;
+        solve();
+    &#125;
+    return 0;
+&#125;
+</code></pre>
+
     </div>
+    
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
+    
+    
+    
     
 </div>
 
@@ -334,6 +328,29 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo=""
+    data-repo-id=""
+    data-category=""
+    data-category-id=""
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang=""
+    crossorigin
+    async
+></script>
+
+
+
+
+
     
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"left","width":150,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"dialog":{"enable":true,"hitokoto":true},"log":false});</script></body>
 // <script src="https://giscus.app/client.js"

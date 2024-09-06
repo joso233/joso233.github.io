@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
-    <title>Categories: 杂谈 | 叫兽の窝</title>
+    <title>线段树板子题《最大数》 | 叫兽の窝</title>
     <meta name="author" content="joso" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -50,6 +50,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -180,38 +184,20 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
-        
-        
-        
-        <span>
-            <a href="/categories/%E9%A2%98%E8%A7%A3/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                题解
-            </a>
+            <div class="article">
+    <div>
+        <h1>线段树板子题《最大数》</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/9/6
         </span>
         
-        
-        
-        <span>
-            <a href="/categories/%E6%9D%82%E8%B0%88/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                杂谈
-            </a>
-        </span>
-        
-        
-        
-        
-        
-        <span>
-            <a href="/categories/%E7%AE%97%E6%B3%95/" style="background: #ff7d73">
+        <span class="category">
+            <a href="/categories/%E7%AE%97%E6%B3%95/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
@@ -220,121 +206,136 @@
         </span>
         
         
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #ffa2c4">
+                    -c++ -数据结构
+                </a>
+            </span>
+            
+        </span>
+        
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/8/31</div>
-            <a href="/2024/08/31/codeforces%E7%AC%AC%E4%B8%80%E4%B8%AA4000%E5%88%86/">
-                <h3>codeforces第一个4000分！</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E6%9D%82%E8%B0%88/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        杂谈
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/codeforces/" style="color: #ffa2c4">
-                            codeforces
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <h1><span id="jsoi2008-最大数">[JSOI2008] 最大数</span></h1><h2><span id="题目描述">题目描述</span></h2><p>现在请求你维护一个数列，要求提供以下两种操作：</p>
+<ol>
+<li>查询操作。</li>
+</ol>
+<p>语法：<code>Q L</code></p>
+<p>功能：查询当前数列中末尾 $L$ 个数中的最大的数，并输出这个数的值。</p>
+<p>限制：$L$ 不超过当前数列的长度。$(L &gt; 0)$</p>
+<ol start="2">
+<li>插入操作。</li>
+</ol>
+<p>语法：<code>A n</code></p>
+<p>功能：将 $n$ 加上 $t$，其中 $t$ 是最近一次查询操作的答案（如果还未执行过查询操作，则 $t&#x3D;0$），并将所得结果对一个固定的常数 $D$ 取模，将所得答案插入到数列的末尾。</p>
+<p>限制：$n$ 是整数（可能为负数）并且在长整范围内。</p>
+<p>注意：初始时数列是空的，没有一个数。</p>
+<h2><span id="输入格式">输入格式</span></h2><p>第一行两个整数，$M$ 和 $D$，其中 $M$ 表示操作的个数，$D$ 如上文中所述。</p>
+<p>接下来的 $M$ 行，每行一个字符串，描述一个具体的操作。语法如上文所述。</p>
+<h2><span id="输出格式">输出格式</span></h2><p>对于每一个查询操作，你应该按照顺序依次输出结果，每个结果占一行。</p>
+<h2><span id="样例-1">样例 #1</span></h2><h3><span id="样例输入-1">样例输入 #1</span></h3><pre><code>5 100
+A 96
+Q 1
+A 97
+Q 1
+Q 2
+</code></pre>
+<h3><span id="样例输出-1">样例输出 #1</span></h3><pre><code>96
+93
+96
+</code></pre>
+<h2><span id="提示">提示</span></h2><h4><span id="数据规模与约定">数据规模与约定</span></h4><p>对于全部的测试点，保证 $1 \leq M \leq 2 \times 10^5$，$1 \leq D \leq 2 \times 10^9$。</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+const int mod=1e9+7; 
+struct ty
+&#123;
+    int minv;
+&#125;tree[4*N];
+void update(int id)
+&#123;
+    tree[id].minv=max(tree[id*2].minv,tree[id*2+1].minv);
+&#125;
+int query(int id,int l,int r,int ql,int qr)
+&#123;
+    if(l==ql&amp;&amp;r==qr) return tree[id].minv;
+    int mid=(l+r)&gt;&gt;1;
+    if(qr&lt;=mid) return query(id*2,l,mid,ql,qr);
+    else if(ql&gt;mid) return query(id*2+1,mid+1,r,ql,qr);
+    else return max(query(id*2,l,mid,ql,mid),query(id*2+1,mid+1,r,mid+1,qr));
+&#125;
+void change(int id,int l,int r,int pos,int val)
+&#123;
+    if(l==r) tree[id].minv=val;
+    else
+    &#123;
+        int mid=(l+r)&gt;&gt;1;
+        if(pos&lt;=mid) change(id*2,l,mid,pos,val);
+        else change(id*2+1,mid+1,r,pos,val);
+        update(id);
+    &#125;
+&#125;
+void solve()
+&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+
+    //build(1,1,n);
+    int last=0;
+    int idx=0;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        char op;
+        cin&gt;&gt;op;
+        if(op==&#39;A&#39;) 
+        &#123;
+            int x;
+            cin&gt;&gt;x;
+            change(1,1,n,idx+1,(x+last)%m);
+            idx++;
+        &#125;
+        else
+        &#123;
+            int x;
+            cin&gt;&gt;x;
+            last=query(1,1,n,idx-x+1,idx);
+            cout&lt;&lt;last&lt;&lt;endl;
+        &#125;
+
+    &#125;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/8/30</div>
-            <a href="/2024/08/30/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">
-                <h3>图床搭建</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E6%9D%82%E8%B0%88/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        杂谈
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/hexo/" style="color: #ff7d73">
-                            hexo
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/8/29</div>
-            <a href="/2024/08/29/hello-world/">
-                <h3>搭建hexo个人博客</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E6%9D%82%E8%B0%88/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        杂谈
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/hexo/" style="color: #00a596">
-                            hexo
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
-    </div>
+    
+    
     
 </div>
 
@@ -366,6 +367,29 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo=""
+    data-repo-id=""
+    data-category=""
+    data-category-id=""
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang=""
+    crossorigin
+    async
+></script>
+
+
+
+
+
     
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"left","width":150,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"dialog":{"enable":true,"hitokoto":true},"log":false});</script></body>
 // <script src="https://giscus.app/client.js"

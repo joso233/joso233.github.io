@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
-    <title>Tags: -atcoder -C++ | 叫兽の窝</title>
+    <title>AtCoder Beginner Contest 370 | 叫兽の窝</title>
     <meta name="author" content="joso" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -50,6 +50,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -180,167 +184,177 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
+            <div class="article">
+    <div>
+        <h1>AtCoder Beginner Contest 370</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/9/10
+        </span>
         
-        
-        
-        <span>
-            <a href="/tags/atcoder-C/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
+        <span class="category">
+            <a href="/categories/%E9%A2%98%E8%A7%A3/">
                 <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                -atcoder -C++
+                题解
             </a>
         </span>
         
         
-        
-        
-        
-        <span>
-            <a href="/tags/codeforces/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                codeforces
-            </a>
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/atcoder-C/" style="color: #00bcd4">
+                    -atcoder -C++
+                </a>
+            </span>
+            
         </span>
-        
-        
-        
-        <span>
-            <a href="/tags/hexo/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                hexo
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/%E5%9B%BE%E8%AE%BA-%E7%AE%97%E6%B3%95/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -图论 -算法
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/codeforces/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -codeforces
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -c++ -数据结构
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                c++
-            </a>
-        </span>
-        
         
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/9/10</div>
-            <a href="/2024/09/10/AtCoder-Beginner-Contest-370/">
-                <h3>AtCoder Beginner Contest 370</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E9%A2%98%E8%A7%A3/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        题解
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/atcoder-C/" style="color: #ff7d73">
-                            -atcoder -C++
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <p>[TOC]</p>
+<h1><span id="d-cross-explosion"><strong>D - Cross Explosion</strong></span></h1><h3><span id="problem-statement">Problem Statement</span></h3><p>There is a grid with $H$ rows and $W$ columns. Let $(i, j)$ denote the cell at the $i$-th row from the top and $j$-th column from the left.<br>Initially, there is one wall in each cell.<br>After processing $Q$ queries explained below in the order they are given, find the number of remaining walls.</p>
+<p>In the $q$-th query, you are given two integers $R_q$ and $C_q$.<br>You place a bomb at $(R_q, C_q)$ to destroy walls. As a result, the following process occurs.</p>
+<ul>
+<li>If there is a wall at $(R_q, C_q)$, destroy that wall and end the process.</li>
+<li>If there is no wall at $(R_q, C_q)$, destroy the first walls that appear when looking up, down, left, and right from $(R_q, C_q)$. More precisely, the following four processes occur simultaneously:<ul>
+<li>If there exists an $i \lt R_q$ such that a wall exists at $(i, C_q)$ and no wall exists at $(k, C_q)$ for all $i \lt k \lt R_q$, destroy the wall at $(i, C_q)$.</li>
+<li>If there exists an $i \gt R_q$ such that a wall exists at $(i, C_q)$ and no wall exists at $(k, C_q)$ for all $R_q \lt k \lt i$, destroy the wall at $(i, C_q)$.</li>
+<li>If there exists a $j \lt C_q$ such that a wall exists at $(R_q, j)$ and no wall exists at $(R_q, k)$ for all $j \lt k \lt C_q$, destroy the wall at $(R_q, j)$.</li>
+<li>If there exists a $j \gt C_q$ such that a wall exists at $(R_q, j)$ and no wall exists at $(R_q, k)$ for all $C_q \lt k \lt j$, destroy the wall at $(R_q, j)$.</li>
+</ul>
+</li>
+</ul>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+#define fi first
+#define se second
+#define int long long
+
+using namespace std;
+
+typedef pair&lt;int, int&gt; PII;
+typedef long long LL;
+
+signed main() &#123;
+    cin.tie(0);
+    cout.tie(0);
+    ios::sync_with_stdio(0);
+
+    int n, m, q;
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; q;
+
+    vector&lt;set&lt;int&gt;&gt; col(m + 1), lin(n + 1);
+    vector&lt;vector&lt;bool&gt;&gt; st(n + 1, vector&lt;bool&gt;(m + 1, 0));
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = 1; j &lt;= m; j++) col[j].insert(i), lin[i].insert(j), st[i][j] = 1;
+    int res = n * m;
+    while (q--) &#123;
+        int x, y;
+        cin &gt;&gt; x &gt;&gt; y;
+
+        if (st[x][y]) &#123;
+            res--, st[x][y] = 0;
+            col[y].erase(x), lin[x].erase(y);
+            continue;
+        &#125;
+        auto up = col[y].upper_bound(x), down = up, left = lin[x].upper_bound(y), right = left;
+        if (up != col[y].begin()) &#123;
+            up--, res--, st[*up][y] = 0;
+            col[y].erase(up), lin[*up].erase(y);
+        &#125;
+        if (down != col[y].end()) &#123;
+            res--, st[*down][y] = 0;
+            col[y].erase(down), lin[*down].erase(y);
+        &#125;
+        if (left != lin[x].begin()) &#123;
+            left--, res--, st[x][*left] = 0;
+            lin[x].erase(left), col[*left].erase(x);
+        &#125;
+        if (right != lin[x].end()) &#123;
+            res--, st[x][*right] = 0;
+            lin[x].erase(right), col[*right].erase(x);
+        &#125;
+    &#125;
+
+    cout &lt;&lt; res &lt;&lt; endl;
+
+    return 0;
+&#125;
+</code></pre>
+<h1><span id="e-avoid-k-partition"><strong>E - Avoid K Partition</strong></span></h1><h3><span id="problem-statement">Problem Statement</span></h3><p>You are given a sequence $A &#x3D; (A_1, A_2, \dots, A_N)$ of length $N$ and an integer $K$.<br>There are $2^{N-1}$ ways to divide $A$ into several contiguous subsequences. How many of these divisions have no subsequence whose elements sum to $K$? Find the count modulo $998244353$.</p>
+<p>Here, “to divide $A$ into several contiguous subsequences” means the following procedure.</p>
+<ul>
+<li>Freely choose the number $k$ $(1 \leq k \leq N)$ of subsequences and an integer sequence $(i_1, i_2, \dots, i_k, i_{k+1})$ satisfying $1 &#x3D; i_1 \lt i_2 \lt \dots \lt i_k \lt i_{k+1} &#x3D; N+1$.</li>
+<li>For each $1 \leq n \leq k$, the $n$-th subsequence is formed by taking the $i_n$-th through $(i_{n+1} - 1)$-th elements of $A$, maintaining their order.</li>
+</ul>
+<p>Here are some examples of divisions for $A &#x3D; (1, 2, 3, 4, 5)$:</p>
+<ul>
+<li>$(1, 2, 3), (4), (5)$</li>
+<li>$(1, 2), (3, 4, 5)$</li>
+<li>$(1, 2, 3, 4, 5)$</li>
+</ul>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+#define fi first
+#define se second
+#define int long long
+
+using namespace std;
+
+typedef pair&lt;int, int&gt; PII;
+typedef long long LL;
+
+const int mod = 998244353;
+
+signed main() &#123;
+    cin.tie(0);
+    cout.tie(0);
+    ios::sync_with_stdio(0);
+
+    int n, k;
+    cin &gt;&gt; n &gt;&gt; k;
+
+    vector&lt;int&gt; a(n + 1), s(n + 1, 0);
+    for (int i = 1; i &lt;= n; i ++)
+        cin &gt;&gt; a[i], s[i] = s[i - 1] + a[i];
+
+    vector&lt;int&gt; dp(n + 1, 0);
+    unordered_map&lt;int, int&gt; tot;
+    dp[0] = 1, tot[0] = 1;
+    int sum = 1;
+    for (int i = 1; i &lt;= n; i ++) &#123;
+        dp[i] = (sum - tot[s[i] - k] + mod) % mod;
+        (sum += dp[i]) %= mod, (tot[s[i]] += dp[i]) %= mod;
+    &#125;
+
+    cout &lt;&lt; dp[n] &lt;&lt; endl;
+
+    return 0;
+&#125;
+</code></pre>
+
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/8/31</div>
-            <a href="/2024/08/31/AtCoder-Beginner-Contest-369/">
-                <h3>AtCoder Beginner Contest 369</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E9%A2%98%E8%A7%A3/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        题解
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/atcoder-C/" style="color: #ffa2c4">
-                            -atcoder -C++
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
     </div>
+    
+    
+    
     
 </div>
 
@@ -372,6 +386,29 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo=""
+    data-repo-id=""
+    data-category=""
+    data-category-id=""
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang=""
+    crossorigin
+    async
+></script>
+
+
+
+
+
     
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"left","width":150,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"dialog":{"enable":true,"hitokoto":true},"log":false});</script></body>
 // <script src="https://giscus.app/client.js"

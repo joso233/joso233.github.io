@@ -322,6 +322,173 @@ git config --global user.email &quot;youremail&quot;
 </div>
 
 <div class="post">
+    <a href="/2024/09/10/AtCoder-Beginner-Contest-370/">
+        <h2 class="post-title">AtCoder Beginner Contest 370</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E9%A2%98%E8%A7%A3/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                题解
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/9/10
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <p>[TOC]</p>
+<h1><span id="d-cross-explosion"><strong>D - Cross Explosion</strong></span></h1><h3><span id="problem-statement">Problem Statement</span></h3><p>There is a grid with $H$ rows and $W$ columns. Let $(i, j)$ denote the cell at the $i$-th row from the top and $j$-th column from the left.<br>Initially, there is one wall in each cell.<br>After processing $Q$ queries explained below in the order they are given, find the number of remaining walls.</p>
+<p>In the $q$-th query, you are given two integers $R_q$ and $C_q$.<br>You place a bomb at $(R_q, C_q)$ to destroy walls. As a result, the following process occurs.</p>
+<ul>
+<li>If there is a wall at $(R_q, C_q)$, destroy that wall and end the process.</li>
+<li>If there is no wall at $(R_q, C_q)$, destroy the first walls that appear when looking up, down, left, and right from $(R_q, C_q)$. More precisely, the following four processes occur simultaneously:<ul>
+<li>If there exists an $i \lt R_q$ such that a wall exists at $(i, C_q)$ and no wall exists at $(k, C_q)$ for all $i \lt k \lt R_q$, destroy the wall at $(i, C_q)$.</li>
+<li>If there exists an $i \gt R_q$ such that a wall exists at $(i, C_q)$ and no wall exists at $(k, C_q)$ for all $R_q \lt k \lt i$, destroy the wall at $(i, C_q)$.</li>
+<li>If there exists a $j \lt C_q$ such that a wall exists at $(R_q, j)$ and no wall exists at $(R_q, k)$ for all $j \lt k \lt C_q$, destroy the wall at $(R_q, j)$.</li>
+<li>If there exists a $j \gt C_q$ such that a wall exists at $(R_q, j)$ and no wall exists at $(R_q, k)$ for all $C_q \lt k \lt j$, destroy the wall at $(R_q, j)$.</li>
+</ul>
+</li>
+</ul>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+#define fi first
+#define se second
+#define int long long
+
+using namespace std;
+
+typedef pair&lt;int, int&gt; PII;
+typedef long long LL;
+
+signed main() &#123;
+    cin.tie(0);
+    cout.tie(0);
+    ios::sync_with_stdio(0);
+
+    int n, m, q;
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; q;
+
+    vector&lt;set&lt;int&gt;&gt; col(m + 1), lin(n + 1);
+    vector&lt;vector&lt;bool&gt;&gt; st(n + 1, vector&lt;bool&gt;(m + 1, 0));
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = 1; j &lt;= m; j++) col[j].insert(i), lin[i].insert(j), st[i][j] = 1;
+    int res = n * m;
+    while (q--) &#123;
+        int x, y;
+        cin &gt;&gt; x &gt;&gt; y;
+
+        if (st[x][y]) &#123;
+            res--, st[x][y] = 0;
+            col[y].erase(x), lin[x].erase(y);
+            continue;
+        &#125;
+        auto up = col[y].upper_bound(x), down = up, left = lin[x].upper_bound(y), right = left;
+        if (up != col[y].begin()) &#123;
+            up--, res--, st[*up][y] = 0;
+            col[y].erase(up), lin[*up].erase(y);
+        &#125;
+        if (down != col[y].end()) &#123;
+            res--, st[*down][y] = 0;
+            col[y].erase(down), lin[*down].erase(y);
+        &#125;
+        if (left != lin[x].begin()) &#123;
+            left--, res--, st[x][*left] = 0;
+            lin[x].erase(left), col[*left].erase(x);
+        &#125;
+        if (right != lin[x].end()) &#123;
+            res--, st[x][*right] = 0;
+            lin[x].erase(right), col[*right].erase(x);
+        &#125;
+    &#125;
+
+    cout &lt;&lt; res &lt;&lt; endl;
+
+    return 0;
+&#125;
+</code></pre>
+<h1><span id="e-avoid-k-partition"><strong>E - Avoid K Partition</strong></span></h1><h3><span id="problem-statement">Problem Statement</span></h3><p>You are given a sequence $A &#x3D; (A_1, A_2, \dots, A_N)$ of length $N$ and an integer $K$.<br>There are $2^{N-1}$ ways to divide $A$ into several contiguous subsequences. How many of these divisions have no subsequence whose elements sum to $K$? Find the count modulo $998244353$.</p>
+<p>Here, “to divide $A$ into several contiguous subsequences” means the following procedure.</p>
+<ul>
+<li>Freely choose the number $k$ $(1 \leq k \leq N)$ of subsequences and an integer sequence $(i_1, i_2, \dots, i_k, i_{k+1})$ satisfying $1 &#x3D; i_1 \lt i_2 \lt \dots \lt i_k \lt i_{k+1} &#x3D; N+1$.</li>
+<li>For each $1 \leq n \leq k$, the $n$-th subsequence is formed by taking the $i_n$-th through $(i_{n+1} - 1)$-th elements of $A$, maintaining their order.</li>
+</ul>
+<p>Here are some examples of divisions for $A &#x3D; (1, 2, 3, 4, 5)$:</p>
+<ul>
+<li>$(1, 2, 3), (4), (5)$</li>
+<li>$(1, 2), (3, 4, 5)$</li>
+<li>$(1, 2, 3, 4, 5)$</li>
+</ul>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+#define fi first
+#define se second
+#define int long long
+
+using namespace std;
+
+typedef pair&lt;int, int&gt; PII;
+typedef long long LL;
+
+const int mod = 998244353;
+
+signed main() &#123;
+    cin.tie(0);
+    cout.tie(0);
+    ios::sync_with_stdio(0);
+
+    int n, k;
+    cin &gt;&gt; n &gt;&gt; k;
+
+    vector&lt;int&gt; a(n + 1), s(n + 1, 0);
+    for (int i = 1; i &lt;= n; i ++)
+        cin &gt;&gt; a[i], s[i] = s[i - 1] + a[i];
+
+    vector&lt;int&gt; dp(n + 1, 0);
+    unordered_map&lt;int, int&gt; tot;
+    dp[0] = 1, tot[0] = 1;
+    int sum = 1;
+    for (int i = 1; i &lt;= n; i ++) &#123;
+        dp[i] = (sum - tot[s[i] - k] + mod) % mod;
+        (sum += dp[i]) %= mod, (tot[s[i]] += dp[i]) %= mod;
+    &#125;
+
+    cout &lt;&lt; dp[n] &lt;&lt; endl;
+
+    return 0;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/atcoder-C/" style="color: #03a9f4">-atcoder -C++</a>
+        </span>
+        
+    </div>
+    <a href="/2024/09/10/AtCoder-Beginner-Contest-370/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2024/09/06/%E7%89%9B%E5%AE%A2%E5%B0%8F%E7%99%BD%E6%9C%88%E8%B5%9B100-E/">
         <h2 class="post-title">牛客小白月赛100 E</h2>
     </a>
@@ -557,6 +724,78 @@ signed main()
     &#125;
 &#125;
 </code></pre>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+struct tr
+&#123;
+    int l,r;
+    int v;
+&#125;tree[4*N];
+void build(int id,int l,int r)
+&#123;
+    tree[id]=&#123;l,r&#125;;
+    if(l==r) return;
+    int mid=(l+r)&gt;&gt;1;
+    build(id*2,l,mid);
+    build(id*2+1,mid+1,r);
+&#125;
+void update(int id)
+&#123;
+    tree[id].v=max(tree[id*2].v,tree[id*2+1].v);
+&#125;
+void change(int id,int pos,int val)
+&#123;
+    if(tree[id].r==tree[id].l) tree[id].v=val;
+    else
+    &#123;
+        int mid=(tree[id].l+tree[id].r)&gt;&gt;1;
+        if(pos&lt;=mid) change(id*2,pos,val);
+        else change(id*2+1,pos,val);
+        update(id);
+    &#125;
+&#125;
+int query(int id,int ql,int qr)
+&#123;
+    if(tree[id].l==ql&amp;&amp;tree[id].r==qr) return tree[id].v;
+    int mid=tree[id].l+tree[id].r&gt;&gt;1;
+    if(qr&lt;=mid)return query(id*2,ql,qr);
+    else if(ql&gt;mid) return query(id*2+1,ql,qr);
+    else return max(query(id*2,ql,mid),query(id*2+1,mid+1,qr));
+&#125;
+void solve()
+&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    int idx=0,last=0;
+    build(1,1,n);
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        char op;
+        int x;
+        cin&gt;&gt;op&gt;&gt;x;
+        if(op==&#39;A&#39;)
+        &#123;
+            change(1,idx+1,(x+last)%m);
+            idx++;
+        &#125;
+        else
+        &#123;
+            last=query(1,idx-x+1,idx);
+            cout&lt;&lt;last&lt;&lt;endl;
+        &#125;
+    &#125;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
 
             
         </div>
@@ -571,7 +810,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #03a9f4">-c++ -数据结构</a>
+            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #ffa2c4">-c++ -数据结构</a>
         </span>
         
     </div>
@@ -1051,7 +1290,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/codeforces/" style="color: #00bcd4">-codeforces</a>
+            <a href="/tags/codeforces/" style="color: #03a9f4">-codeforces</a>
         </span>
         
     </div>
@@ -1166,7 +1405,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/%E5%9B%BE%E8%AE%BA-%E7%AE%97%E6%B3%95/" style="color: #00a596">-图论 -算法</a>
+            <a href="/tags/%E5%9B%BE%E8%AE%BA-%E7%AE%97%E6%B3%95/" style="color: #03a9f4">-图论 -算法</a>
         </span>
         
     </div>
@@ -1495,7 +1734,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/atcoder-C/" style="color: #ffa2c4">-atcoder -C++</a>
+            <a href="/tags/atcoder-C/" style="color: #03a9f4">-atcoder -C++</a>
         </span>
         
     </div>
@@ -1612,7 +1851,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/hexo/" style="color: #ffa2c4">hexo</a>
+            <a href="/tags/hexo/" style="color: #00a596">hexo</a>
         </span>
         
     </div>

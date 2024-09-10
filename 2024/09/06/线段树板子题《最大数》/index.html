@@ -214,7 +214,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #ffa2c4">
+                <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #00bcd4">
                     -c++ -数据结构
                 </a>
             </span>
@@ -318,6 +318,78 @@ signed main()
 &#123;
     int t=1;
     //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+struct tr
+&#123;
+    int l,r;
+    int v;
+&#125;tree[4*N];
+void build(int id,int l,int r)
+&#123;
+    tree[id]=&#123;l,r&#125;;
+    if(l==r) return;
+    int mid=(l+r)&gt;&gt;1;
+    build(id*2,l,mid);
+    build(id*2+1,mid+1,r);
+&#125;
+void update(int id)
+&#123;
+    tree[id].v=max(tree[id*2].v,tree[id*2+1].v);
+&#125;
+void change(int id,int pos,int val)
+&#123;
+    if(tree[id].r==tree[id].l) tree[id].v=val;
+    else
+    &#123;
+        int mid=(tree[id].l+tree[id].r)&gt;&gt;1;
+        if(pos&lt;=mid) change(id*2,pos,val);
+        else change(id*2+1,pos,val);
+        update(id);
+    &#125;
+&#125;
+int query(int id,int ql,int qr)
+&#123;
+    if(tree[id].l==ql&amp;&amp;tree[id].r==qr) return tree[id].v;
+    int mid=tree[id].l+tree[id].r&gt;&gt;1;
+    if(qr&lt;=mid)return query(id*2,ql,qr);
+    else if(ql&gt;mid) return query(id*2+1,ql,qr);
+    else return max(query(id*2,ql,mid),query(id*2+1,mid+1,qr));
+&#125;
+void solve()
+&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    int idx=0,last=0;
+    build(1,1,n);
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        char op;
+        int x;
+        cin&gt;&gt;op&gt;&gt;x;
+        if(op==&#39;A&#39;)
+        &#123;
+            change(1,idx+1,(x+last)%m);
+            idx++;
+        &#125;
+        else
+        &#123;
+            last=query(1,idx-x+1,idx);
+            cout&lt;&lt;last&lt;&lt;endl;
+        &#125;
+    &#125;
+&#125;
+signed main()
+&#123;
+    int t=1;
     while(t--)
     &#123;
         solve();

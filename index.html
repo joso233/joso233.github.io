@@ -314,11 +314,337 @@ git config --global user.email &quot;youremail&quot;
         
         <span class="tag">
             
-            <a href="/tags/hexo/" style="color: #03a9f4">hexo</a>
+            <a href="/tags/hexo/" style="color: #ff7d73">hexo</a>
         </span>
         
     </div>
     <a href="/2024/08/29/hello-world/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2024/09/11/%E7%8A%B6%E5%8E%8Bdp/">
+        <h2 class="post-title">状压dp</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E7%AE%97%E6%B3%95/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                算法
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/9/11
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <!-- toc -->
+
+<ul>
+<li><a href="#acwing-1064-%E5%B0%8F%E5%9B%BD%E7%8E%8B%E7%BA%BF%E6%80%A7%E7%8A%B6%E5%8E%8Bdp%E7%9B%AE%E6%A0%87%E7%8A%B6%E6%80%81%E4%BC%98%E5%8C%96">AcWing 1064. 小国王【线性状压DP+目标状态优化】</a></li>
+<li><a href="#acwing-327-%E7%8E%89%E7%B1%B3%E7%94%B0%E7%BA%BF%E6%80%A7%E7%8A%B6%E5%8E%8Bdp%E7%9B%AE%E6%A0%87%E7%8A%B6%E6%80%81%E4%BC%98%E5%8C%96">AcWing 327. 玉米田【线性状压DP+目标状态优化】</a></li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="acwing-1064-小国王线性状压dp目标状态优化">AcWing 1064. 小国王【线性状压DP+目标状态优化】</span></h1><p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240911025041124.png" alt="image-20240911025041124"></p>
+<p><img src="https://i.bmp.ovh/imgs/2022/08/03/4b0faf684f7c6dd7.png" alt="img"></p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=1e5+10;
+const int mod=1e9+7;
+int n,k;
+int cnt[N];
+int dp[12][110][3000];
+vector&lt;int&gt;head[N];
+vector&lt;int&gt;state;
+bool check(int st)&#123;
+    for(int i=0;i&lt;n;i++)
+        if((st&gt;&gt;i&amp;1)&amp;&amp;st&gt;&gt;(i+1)&amp;1) return 0;
+    return 1;
+&#125;
+int count(int st)&#123;
+    int res=0;
+    for(int i=0;i&lt;n;i++)&#123;
+        res+=st&gt;&gt;i&amp;1;
+    &#125;
+    return res;
+&#125;
+void solve()&#123;
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=0;i&lt;1&lt;&lt;n;i++)&#123;
+        if(check(i)) state.push_back(i);
+        cnt[i]=count(i);
+    &#125;
+    for(int i=0;i&lt;state.size();i++)&#123;
+        for(int j=0;j&lt;state.size();j++)&#123;
+            int x=state[i],y=state[j];
+            if(((x&amp;y)==0)&amp;&amp;check(x|y)) head[i].push_back(j);
+        &#125;
+    &#125;
+    dp[0][0][0]=1;
+    for(int i=1;i&lt;=n+1;i++)&#123;
+        for(int j=0;j&lt;=k;j++)&#123;
+            for(int a=0;a&lt;state.size();a++)&#123;
+                for(int b:head[a])&#123;
+                    int c=cnt[state[a]];
+                    if(j&gt;=c)&#123;
+                        dp[i][j][a]+=dp[i-1][j-c][b];
+                    &#125;
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+    cout&lt;&lt;dp[n+1][k][0]&lt;&lt;endl;
+&#125;
+signed main()&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)&#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="acwing-327-玉米田线性状压dp目标状态优化">AcWing 327. 玉米田【线性状压DP+目标状态优化】</span></h1><p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240911025428056.png" alt="image-20240911025428056"></p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=1e5+10;
+const int mod=1e8;
+int n,k;
+int cnt[N],a[110];
+int dp[14][1&lt;&lt;14];
+vector&lt;int&gt;head[1&lt;&lt;14];
+vector&lt;int&gt;state;
+bool check(int st)&#123;
+    return !(st&amp;st&lt;&lt;1);
+&#125;
+int count(int st)&#123;
+    int res=0;
+    for(int i=0;i&lt;n;i++)&#123;
+        res+=st&gt;&gt;i&amp;1;
+    &#125;
+    return res;
+&#125;
+void solve()&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++)&#123;
+        for(int j=1;j&lt;=m;j++)&#123;
+            cin&gt;&gt;k,a[i]|=!k&lt;&lt;(j-1);
+        &#125;
+    &#125;
+    for(int st=0;st&lt;1&lt;&lt;m;st++)&#123;
+        if(check(st)) state.push_back(st);
+    &#125;
+    for(auto it:state)&#123;
+        for(auto next_it:state)&#123;
+            if(!(it&amp;next_it)) head[it].push_back(next_it);
+        &#125;
+    &#125;
+    dp[0][0]=1;
+    for(int i=1;i&lt;=n+1;i++)&#123;
+        for(auto st:state)&#123;
+            if(!(st&amp;a[i]))&#123;
+                for(auto next_st:head[st])&#123;
+                    dp[i][st]+=dp[i-1][next_st];
+                    dp[i][st]%=mod;
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+    cout&lt;&lt;dp[n+1][0]&lt;&lt;endl;
+&#125;
+signed main()&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)&#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #03a9f4">-c++ -动态规划</a>
+        </span>
+        
+    </div>
+    <a href="/2024/09/11/%E7%8A%B6%E5%8E%8Bdp/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2024/09/10/AcWing-734-%E8%83%BD%E9%87%8F%E7%9F%B3/">
+        <h2 class="post-title">AcWing 734. 能量石</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E7%AE%97%E6%B3%95/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                算法
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/9/10
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <p>岩石怪物杜达生活在魔法森林中，他在午餐时收集了 N 块能量石准备开吃。</p>
+<p>由于他的嘴很小，所以一次只能吃一块能量石。</p>
+<p>能量石很硬，吃完需要花不少时间。</p>
+<p>吃完第 ii块能量石需要花费的时间为 Si秒。</p>
+<p>杜达靠吃能量石来获取能量。</p>
+<p>不同的能量石包含的能量可能不同。</p>
+<p>此外，能量石会随着时间流逝逐渐失去能量。</p>
+<p>第 ii块能量石最初包含 Ei 单位的能量，并且每秒将失去 Li 单位的能量。</p>
+<p>当杜达开始吃一块能量石时，他就会立即获得该能量石所含的全部能量（无论实际吃完该石头需要多少时间）。</p>
+<p>能量石中包含的能量最多降低至 0。</p>
+<p>请问杜达通过吃能量石可以获得的最大能量是多少？</p>
+<h4><span id="输入格式">输入格式</span></h4><p>第一行包含整数 T，表示共有 T 组测试数据。</p>
+<p>每组数据第一行包含整数 N，表示能量石的数量。</p>
+<p>接下来 N 行，每行包含三个整数 Si,Ei,Li</p>
+<p>输出格式</p>
+<p>每组数据输出一个结果，每个结果占一行。</p>
+<p>结果表示为 <code>Case #x: y</code>，其中 xx 是组别编号（从 1 开始），y 是可以获得的最大能量值。</p>
+<h4><span id="数据范围">数据范围</span></h4><p>1≤T≤10<br>1≤N≤100<br>1≤Si≤100<br>1≤Ei≤105<br>0≤Li≤105</p>
+<h4><span id="输入样例">输入样例：</span></h4><pre><code>3
+4
+20 10 1
+5 30 5
+100 30 1
+5 80 60
+3
+10 4 1000
+10 3 1000
+10 8 1000
+2
+12 300 50
+5 200 0
+</code></pre>
+<h4><span id="输出样例">输出样例：</span></h4><pre><code>Case #1: 105
+Case #2: 8
+Case #3: 500
+</code></pre>
+<h4><span id="样例解释">样例解释</span></h4><p>在样例＃1中，有 N&#x3D;4 个宝石。杜达可以选择的一个吃石头顺序是：</p>
+<ul>
+<li>吃第四块石头。这需要 5 秒，并给他 80 单位的能量。</li>
+<li>吃第二块石头。这需要 5 秒，并给他 5 单位的能量（第二块石头开始时具有 30 单位能量，5 秒后失去了 25 单位的能量）。</li>
+<li>吃第三块石头。这需要 100 秒，并给他 20 单位的能量（第三块石头开始时具有 30 单位能量，10 秒后失去了 10 单位的能量）。</li>
+<li>吃第一块石头。这需要 20 秒，并给他 0 单位的能量（第一块石头以 10 单位能量开始，110 秒后已经失去了所有的能量）。</li>
+</ul>
+<p>他一共获得了 105105 单位的能量，这是能获得的最大值，所以答案是 105。</p>
+<p>在样本案例＃2中，有 N&#x3D;3 个宝石。</p>
+<p>无论杜达选择吃哪块石头，剩下的两个石头的能量都会耗光。</p>
+<p>所以他应该吃第三块石头，给他提供 8 单位的能量。</p>
+<p>在样本案例＃3中，有 N&#x3D;2 个宝石。杜达可以：</p>
+<ul>
+<li>吃第一块石头。这需要 12 秒，并给他 300单位的能量。</li>
+<li>吃第二块石头。这需要 5秒，并给他 200 单位的能量（第二块石头随着时间的推移不会失去任何能量！）。</li>
+</ul>
+<p>所以答案是 500。</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+const int mod=1e9+7;
+int dp[N];
+struct tr
+&#123;
+    int s,e,l;
+    bool operator &lt; (const tr &amp;a) const&#123;
+        return s*a.l&lt;a.s*l;
+    &#125;
+&#125;tree[N];
+int t,num=0;
+void solve()
+&#123;
+    int n,m=0;
+    cin&gt;&gt;n;
+    memset(dp,-127,sizeof(dp));
+    dp[0]=0;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        int s,e,l;
+        cin&gt;&gt;s&gt;&gt;e&gt;&gt;l;
+        tree[i]=&#123;s,e,l&#125;;
+        m+=s;
+    &#125;
+    sort(tree+1,tree+1+n);
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        for(int j=m;j&gt;=tree[i].s;j--)
+        &#123;
+            dp[j]=max(dp[j],dp[j-tree[i].s]+tree[i].e-tree[i].l*(j-tree[i].s));
+        &#125;
+    &#125;
+    int ans=0;
+    for(int i=0;i&lt;=m;i++)
+    &#123;
+        ans=max(ans,dp[i]);
+    &#125;
+    cout&lt;&lt;&quot;Case #&quot;&lt;&lt;num&lt;&lt;&quot;: &quot;&lt;&lt;ans&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    cin&gt;&gt;t;
+    while(num&lt;t)
+    &#123;
+        num++;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/%E2%80%94%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-c/" style="color: #ff7d73">—动态规划 -c++</a>
+        </span>
+        
+    </div>
+    <a href="/2024/09/10/AcWing-734-%E8%83%BD%E9%87%8F%E7%9F%B3/" class="go-post">阅读全文</a>
 </div>
 
 <div class="post">
@@ -603,7 +929,7 @@ signed main() &#123;
         
         <span class="tag">
             
-            <a href="/tags/c/" style="color: #ffa2c4">c++</a>
+            <a href="/tags/c/" style="color: #03a9f4">c++</a>
         </span>
         
     </div>
@@ -823,7 +1149,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #03a9f4">-c++ -数据结构</a>
+            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #00bcd4">-c++ -数据结构</a>
         </span>
         
     </div>
@@ -1303,7 +1629,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/codeforces/" style="color: #ffa2c4">-codeforces</a>
+            <a href="/tags/codeforces/" style="color: #ff7d73">-codeforces</a>
         </span>
         
     </div>
@@ -1747,7 +2073,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/atcoder-C/" style="color: #ff7d73">-atcoder -C++</a>
+            <a href="/tags/atcoder-C/" style="color: #00a596">-atcoder -C++</a>
         </span>
         
     </div>
@@ -1796,79 +2122,11 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/codeforces/" style="color: #ffa2c4">codeforces</a>
+            <a href="/tags/codeforces/" style="color: #ff7d73">codeforces</a>
         </span>
         
     </div>
     <a href="/2024/08/31/codeforces%E7%AC%AC%E4%B8%80%E4%B8%AA4000%E5%88%86/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2024/08/30/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">
-        <h2 class="post-title">图床搭建</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E6%9D%82%E8%B0%88/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                杂谈
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/8/30
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <p><em>在搭建好博客之后，这时写博客想要实现插入图片的功能还需要一些操作，以下为使用腾讯cos及picgo软件实现图床搭建的教程</em></p>
-<h1><span id="一购买腾讯对象存储">一.购买腾讯对象存储</span></h1><p>图床的搭建方案还是很多的，比如Github仓库 + Picgo ，giteec仓库 + Picgo，但考虑到稳定性和高效性，便宜量大的云储存也是不错的选择，其中我购买的是[腾讯对象存储](<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/cos">对象存储数据处理_COS数据处理_数据处理方案-腾讯云 (tencent.com)</a>)</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830212717098.png" alt="image-20240830212717098"></p>
-<p>按照需求购买之后进入控制台，点击创建存储桶</p>
-<img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830212942566.png" alt="image-20240830212942566" style="zoom:50%;">
-
-<p><strong>这里一定要选择公有读私有写</strong></p>
-<p>之后按照提示创建即可，创建完成后进入存储桶，创建文件夹，（例如img）记住该文件夹的地址，之后要用到</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213219242.png" alt="image-20240830213219242"></p>
-<h1><span id="二下载picgo软件">二.下载Picgo软件</span></h1><p>下载地址很多，这里就不提供了，下载完成后进入图床设置</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213548018.png" alt="image-20240830213548018"></p>
-<p>按照提示填入之后，点击设为默认图床即可完成。</p>
-<blockquote>
-<p>[!NOTE]</p>
-<p>Secretld,SecretKey均在腾讯云密钥管理中获取</p>
-<p>Bucket 即为创建存储桶的名称</p>
-</blockquote>
-<h1><span id="三设置你的md编辑器">三.设置你的md编辑器</span></h1><p>这里以typor为例，进入图像相关设置，勾选上传服务为 Picgo(app)，设置正确路径即可</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213912270.png" alt="image-20240830213912270"></p>
-<p><strong>之后在插入图片的同时点击上传图片就会自动上传至腾讯云储存中了</strong></p>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/hexo/" style="color: #00a596">hexo</a>
-        </span>
-        
-    </div>
-    <a href="/2024/08/30/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/" class="go-post">阅读全文</a>
 </div>
 
 
@@ -1876,8 +2134,16 @@ signed main()
     
     <span class="current">1</span>
     
+    <a class="page-num" href="/page/2">
+        2
+    </a>
     
     
+    
+    
+    <a class="page-num" href="/page/2/">
+        <i class="fa-solid fa-caret-right fa-fw"></i>
+    </a>
     
 </div>
 

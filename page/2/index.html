@@ -76,8 +76,14 @@
 
 
     <meta name="msvalidate.01" content="BF22997B7BE5F5F14F0E8845B35BAD3F" />
+<script>
+        new Darkmode().showWidget();
+</script>
+
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body>
+
+
     <div id="layout">
         <transition name="fade">
             <div id="loading" v-show="loading">
@@ -209,6 +215,121 @@
 >
     <div id="home-posts">
         
+
+<div class="post">
+    <a href="/2024/09/01/dijkstra%E6%B1%82%E6%9C%80%E7%9F%AD%E8%B7%AF%EF%BC%88%E5%A4%9A%E6%BA%90%E7%89%88%E6%9C%AC%EF%BC%89/">
+        <h2 class="post-title">dijkstra求最短路（多源版本）</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E7%AE%97%E6%B3%95/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                算法
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/9/1
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e3;
+int u[N],v[N];
+int dist[N][N];
+vector&lt;int&gt;e[N];
+bool st[N][N];
+typedef pair&lt;int,int&gt; PII;
+void dijkstra(int root)
+&#123;
+    priority_queue&lt;PII, vector&lt;PII&gt;, greater&lt;PII&gt;&gt;heap;
+    dist[root][root]=0;
+    heap.push(&#123;0,root&#125;);
+    while(heap.size())
+    &#123;
+        auto k=heap.top();
+        heap.pop();
+        int ver=k.second;
+        int distence=k.first;
+        if(st[root][ver]) continue;
+        st[root][ver]=1;
+        for(int i=0;i&lt;e[ver].size();i++)
+        &#123;
+            if(dist[root][e[ver][i]]&gt;=distence+dist[ver][e[ver][i]])
+            &#123;
+                dist[root][e[ver][i]]=distence+dist[ver][e[ver][i]];
+                heap.push(&#123;dist[root][e[ver][i]],e[ver][i]&#125;);
+            &#125;
+        &#125;
+    &#125;
+&#125;
+void solve()
+&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    memset(dist,127,sizeof(dist));
+    for(int i=1;i&lt;=m;i++)
+    &#123;
+        int w;
+        cin&gt;&gt;u[i]&gt;&gt;v[i]&gt;&gt;w;
+        if(!st[u[i]][v[i]])
+        &#123;
+            st[u[i]][v[i]]=1;
+            st[v[i]][u[i]]=1;
+            e[u[i]].push_back(v[i]);
+            e[v[i]].push_back(u[i]);
+        &#125;
+        dist[u[i]][v[i]]=min(dist[u[i]][v[i]],w);
+        dist[v[i]][u[i]]=min(dist[v[i]][u[i]],w);
+    &#125;
+    memset(st,0,sizeof(st));
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        dijkstra(i);
+    &#125;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%9B%BE%E8%AE%BA-%E7%AE%97%E6%B3%95/" style="color: #ff7d73">-图论 -算法</a>
+        </span>
+        
+    </div>
+    <a href="/2024/09/01/dijkstra%E6%B1%82%E6%9C%80%E7%9F%AD%E8%B7%AF%EF%BC%88%E5%A4%9A%E6%BA%90%E7%89%88%E6%9C%AC%EF%BC%89/" class="go-post">阅读全文</a>
+</div>
 
 <div class="post">
     <a href="/2024/08/31/AtCoder-Beginner-Contest-369/">
@@ -581,7 +702,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/codeforces/" style="color: #00a596">codeforces</a>
+            <a href="/tags/codeforces/" style="color: #03a9f4">codeforces</a>
         </span>
         
     </div>
@@ -649,7 +770,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/hexo/" style="color: #ff7d73">hexo</a>
+            <a href="/tags/hexo/" style="color: #03a9f4">hexo</a>
         </span>
         
     </div>

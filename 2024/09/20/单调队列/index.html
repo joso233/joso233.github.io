@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
-    <title>图床搭建 | 叫兽の窝</title>
+    <title>单调队列 | 叫兽の窝</title>
     <link rel="stylesheet" href="/css/dark-mode.css">
     <script src="/js/dark-mode.js"></script>
     
@@ -200,22 +200,22 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>图床搭建</h1>
+        <h1>单调队列</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2024/8/30
+            2024/9/20
         </span>
         
         <span class="category">
-            <a href="/categories/%E6%9D%82%E8%B0%88/">
+            <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                杂谈
+                数据结构
             </a>
         </span>
         
@@ -228,8 +228,8 @@
             
             <span class="tag">
                 
-                <a href="/tags/hexo/" style="color: #00a596">
-                    hexo
+                <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #03a9f4">
+                    -c++ -数据结构
                 </a>
             </span>
             
@@ -240,26 +240,205 @@
     <!-- <div class="content" v-pre> -->
         <toc-component></toc-component>
         <div class="content" v-pre id="main-content">
-        <p><em>在搭建好博客之后，这时写博客想要实现插入图片的功能还需要一些操作，以下为使用腾讯cos及picgo软件实现图床搭建的教程</em></p>
-<h1><span id="一购买腾讯对象存储">一.购买腾讯对象存储</span></h1><p>图床的搭建方案还是很多的，比如Github仓库 + Picgo ，giteec仓库 + Picgo，但考虑到稳定性和高效性，便宜量大的云储存也是不错的选择，其中我购买的是[腾讯对象存储](<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/cos">对象存储数据处理_COS数据处理_数据处理方案-腾讯云 (tencent.com)</a>)</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830212717098.png" alt="image-20240830212717098"></p>
-<p>按照需求购买之后进入控制台，点击创建存储桶</p>
-<img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830212942566.png" alt="image-20240830212942566" style="zoom:50%;">
+        <!--toc-->
 
-<p><strong>这里一定要选择公有读私有写</strong></p>
-<p>之后按照提示创建即可，创建完成后进入存储桶，创建文件夹，（例如img）记住该文件夹的地址，之后要用到</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213219242.png" alt="image-20240830213219242"></p>
-<h1><span id="二下载picgo软件">二.下载Picgo软件</span></h1><p>下载地址很多，这里就不提供了，下载完成后进入图床设置</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213548018.png" alt="image-20240830213548018"></p>
-<p>按照提示填入之后，点击设为默认图床即可完成。</p>
-<blockquote>
-<p>[!NOTE]</p>
-<p>Secretld,SecretKey均在腾讯云密钥管理中获取</p>
-<p>Bucket 即为创建存储桶的名称</p>
-</blockquote>
-<h1><span id="三设置你的md编辑器">三.设置你的md编辑器</span></h1><p>这里以typor为例，进入图像相关设置，勾选上传服务为 Picgo(app)，设置正确路径即可</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213912270.png" alt="image-20240830213912270"></p>
-<p><strong>之后在插入图片的同时点击上传图片就会自动上传至腾讯云储存中了</strong></p>
+<h1><span id="琪露诺">琪露诺</span></h1><p>在幻想乡，琪露诺是以笨蛋闻名的冰之妖精。</p>
+<p>某一天，琪露诺又在玩速冻青蛙，就是用冰把青蛙瞬间冻起来。但是这只青蛙比以往的要聪明许多，在琪露诺来之前就已经跑到了河的对岸。于是琪露诺决定到河岸去追青蛙。</p>
+<p>小河可以看作一列格子依次编号为 $0$ 到 $N$，琪露诺只能从编号小的格子移动到编号大的格子。而且琪露诺按照一种特殊的方式进行移动，当她在格子 $i$ 时，她只移动到区间 $[i+L,i+R]$ 中的任意一格。你问为什么她这么移动，这还不简单，因为她是笨蛋啊。</p>
+<p>每一个格子都有一个冰冻指数 $A_i$，编号为 $0$ 的格子冰冻指数为 $0$。当琪露诺停留在那一格时就可以得到那一格的冰冻指数 $A_i$。琪露诺希望能够在到达对岸时，获取最大的冰冻指数，这样她才能狠狠地教训那只青蛙。</p>
+<p>但是由于她实在是太笨了，所以她决定拜托你帮它决定怎样前进。</p>
+<p>开始时，琪露诺在编号 $0$ 的格子上，只要她下一步的位置编号大于 $N$ 就算到达对岸。</p>
+<h3><span id="样例输入-1">样例输入 #1</span></h3><pre><code>5 2 3
+0 12 3 11 7 -2
+</code></pre>
+<h3><span id="样例输出-1">样例输出 #1</span></h3><pre><code>11
+</code></pre>
+<pre><code class="c++">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+#define endl &#39;\n&#39; 
+const int N=2e6;
+int a[N],dp[N],s[N];
+deque&lt;int&gt;dq1,dq2;
+int n,h;
+deque&lt;int&gt;p;         
+void solve()&#123;
+    int n,l,r;
+    cin&gt;&gt;n&gt;&gt;l&gt;&gt;r;
+    for(int i=0;i&lt;=n;i++)&#123;
+        cin&gt;&gt;a[i];
+    &#125;
+    memset(dp,-127,sizeof(dp));
+    int j=0;
+    dp[0]=0;
+    for(int i=l;i&lt;=n;i++)&#123;
+        while(j&lt;=i-l)&#123;
+            while(!p.empty()&amp;&amp;dp[j]&gt;=dp[p.back()])&#123;
+                p.pop_back();
+            &#125;
+            p.push_back(j);
+            j++;
+        &#125;
+        if(!p.empty()&amp;&amp;p.front()&lt;i-r) p.pop_front();
+        dp[i]=dp[p.front()]+a[i];
+    &#125;
+    int ans=-1e9;
+    for(int i=n-r+1;i&lt;=n;i++)&#123;
+       ans=max(ans,dp[i]);
+    &#125;
+    cout&lt;&lt;ans&lt;&lt;endl;
+
+&#125;
+
+signed main() &#123;
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout &lt;&lt; fixed &lt;&lt; setprecision(12);
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)&#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="noip2017-普及组-跳房子">[NOIP2017 普及组] 跳房子</span></h1><p>跳房子，也叫跳飞机，是一种世界性的儿童游戏，也是中国民间传统的体育游戏之一。</p>
+<p>跳房子的游戏规则如下：</p>
+<p>在地面上确定一个起点，然后在起点右侧画 $n$ 个格子，这些格子都在同一条直线上。每个格子内有一个数字（整数），表示到达这个 格子能得到的分数。玩家第一次从起点开始向右跳，跳到起点右侧的一个格子内。第二次再从当前位置继续向右跳，依此类推。规则规定：</p>
+<p>玩家每次都必须跳到当前位置右侧的一个格子内。玩家可以在任意时刻结束游戏，获得的分数为曾经到达过的格子中的数字之和。</p>
+<p>现在小 R 研发了一款弹跳机器人来参加这个游戏。但是这个机器人有一个非常严重的缺陷，它每次向右弹跳的距离只能为固定的 $d$。小 R 希望改进他的机器人，如果他花 $g$ 个金币改进他的机器人，那么他的机器人灵活性就能增加 $g$，但是需要注意的是，每 次弹跳的距离至少为 $1$。具体而言，当 $g&lt;d$ 时，他的机器人每次可以选择向右弹跳的距离为 $d-g,d-g+1,d-g+2,\ldots,d+g-1,d+g$；否则当 $g \geq d$ 时，他的机器人每次可以选择向右弹跳的距离为 $1,2,3,\ldots,d+g-1,d+g$。</p>
+<p>现在小 R 希望获得至少 $k$ 分，请问他至少要花多少金币来改造他的机器人。</p>
+<p>若无论如何他都无法获得至少 $k$ 分，输出 $-1$。</p>
+<h3><span id="样例输入-1">样例输入 #1</span></h3><pre><code>7 4 10
+2 6
+5 -3
+10 3
+11 -3
+13 1
+17 6
+20 2
+</code></pre>
+<h3><span id="样例输出-1">样例输出 #1</span></h3><pre><code>2
+</code></pre>
+<pre><code class="c++">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+#define endl &#39;\n&#39; 
+const int N=2e6;
+int n,d,k;
+int x[N],s[N];
+int dp[N];
+deque&lt;int&gt;p;         
+bool check(int mid)&#123;
+    memset(dp,-127,sizeof(dp));
+    p.clear();
+    int l=max((int)1,d-mid);
+    int r=min(d+mid,x[n]);
+    int idx=0;
+    int num=0;
+    dp[0]=0;
+    for(int i=1;i&lt;=n;i++)&#123;
+        if(x[i]&gt;=l&amp;&amp;x[i]&lt;=r)&#123;
+            idx=i;
+            dp[idx]=s[idx];
+            num=dp[idx];
+            break;
+        &#125;
+    &#125;
+    if(idx==0) return 0;
+    for(int i=2;i&lt;=n;i++)&#123;
+        while(x[idx]&lt;=x[i]-l)&#123;
+            while(!p.empty()&amp;&amp;dp[idx]&gt;=dp[p.back()])&#123;
+                p.pop_back();
+            &#125;
+            p.push_back(idx);
+            idx++;
+        &#125;
+        while(!p.empty()&amp;&amp;x[p.front()]&lt;x[i]-r) p.pop_front();
+        if(!p.empty())
+            dp[i]=dp[p.front()]+s[i];
+        num=max(num,dp[i]);
+    &#125;
+    if(num&gt;=k) return 1;
+    else return 0;
+&#125;
+void solve()&#123;
+    cin&gt;&gt;n&gt;&gt;d&gt;&gt;k;
+    for(int i=1;i&lt;=n;i++)&#123;
+        cin&gt;&gt;x[i]&gt;&gt;s[i];
+    &#125;
+    int l=0;
+    int r=1e9;
+    while(l&lt;r)&#123;
+        int mid=l+r&gt;&gt;1;
+        if(check(mid)) r=mid;
+        else l=mid+1;
+    &#125;
+    if(l&gt;=1e9) l=-1;
+    cout&lt;&lt;l&lt;&lt;endl;
+&#125;
+
+signed main() &#123;
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout &lt;&lt; fixed &lt;&lt; setprecision(12);
+    int t=1;
+    while(t--)&#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="切蛋糕">切蛋糕</span></h1><p>今天是小 Z 的生日，同学们为他带来了一块蛋糕。这块蛋糕是一个长方体，被用不同色彩分成了 $n$ 个相同的小块，每小块都有对应的幸运值。</p>
+<p>小 Z 作为寿星，自然希望吃到的蛋糕的幸运值总和最大，但小 Z 最多又只能吃 $m(m\le n)$ 小块的蛋糕。</p>
+<p>请你帮他从这 $n$ 小块中找出<strong>连续</strong>的 $k(1 \le k\le m)$ 块蛋糕，使得其上的总幸运值最大。</p>
+<p><strong>形式化地</strong>，在数列 ${p_n}$ 中，找出一个子段 $[l,r](r-l+1\le m)$，最大化 $\sum\limits_{i&#x3D;l}^rp_i$。</p>
+<h3><span id="样例输入-1">样例输入 #1</span></h3><pre><code>5 2
+1 2 3 4 5
+</code></pre>
+<h3><span id="样例输出-1">样例输出 #1</span></h3><pre><code>9
+</code></pre>
+<pre><code class="c++">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+#define endl &#39;\n&#39; 
+const int N=2e6;
+int a[N],dp[N],s[N];
+deque&lt;int&gt;dq1,dq2;
+int n,h;
+deque&lt;int&gt;p;         
+void solve()&#123;
+   int n,m;
+   cin&gt;&gt;n&gt;&gt;m;
+   int ans=0;
+   for(int i=1;i&lt;=n;i++)&#123;
+       cin&gt;&gt;a[i];
+       s[i]=s[i-1]+a[i];
+    &#125;
+    int j=1;
+    for(int i=1;i&lt;=n;i++)&#123;
+        while(j&lt;=min(i+m-1,n))&#123;
+            while(!p.empty()&amp;&amp;s[j]&gt;=s[p.back()])&#123;
+                p.pop_back();
+            &#125;
+            p.push_back(j);
+            j++;
+        &#125;
+        if(p.front()&lt;i) p.pop_front();
+        ans=max(ans,s[p.front()]-s[i-1]);
+    &#125;
+    cout&lt;&lt;ans&lt;&lt;endl;
+&#125;
+
+signed main() &#123;
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout &lt;&lt; fixed &lt;&lt; setprecision(12);
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)&#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
 
     </div>
     

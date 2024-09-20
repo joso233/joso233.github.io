@@ -4,6 +4,10 @@
 <head>
     <meta charset="utf-8" />
     <title>AcWing 734. 能量石 | 叫兽の窝</title>
+    <link rel="stylesheet" href="/css/dark-mode.css">
+    <script src="/js/dark-mode.js"></script>
+    
+
     <meta name="author" content="joso" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -61,6 +65,11 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
+
+    <script src="/js/lib/toc.js"></script>
+
+
+
 <script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
 <script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
 <link
@@ -71,7 +80,7 @@
     rel="stylesheet"
     id="highlight-style-dark"
     disabled
-    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/.min.css"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github-dark.min.css"
 />
 <script src="/js/lib/highlight.js"></script>
 
@@ -84,7 +93,6 @@
 
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body>
-
 
     <div id="layout">
         <transition name="fade">
@@ -229,7 +237,9 @@
         
     </div>
     
-    <div class="content" v-pre>
+    <!-- <div class="content" v-pre> -->
+        <toc-component></toc-component>
+        <div class="content" v-pre id="main-content">
         <p>岩石怪物杜达生活在魔法森林中，他在午餐时收集了 N 块能量石准备开吃。</p>
 <p>由于他的嘴很小，所以一次只能吃一块能量石。</p>
 <p>能量石很硬，吃完需要花不少时间。</p>
@@ -403,20 +413,20 @@ signed main()
 
     
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"left","width":150,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"dialog":{"enable":true,"hitokoto":true},"log":false});</script></body>
-// <script src="https://giscus.app/client.js"
-//         data-repo="joso233/remark"
-//         data-repo-id="R_kgDOMqyotg"
-//         data-category="Announcements"
-//         data-category-id="DIC_kwDOMqyots4CiGn3"
-//         data-mapping="title"
-//         data-strict="0"
-//         data-reactions-enabled="1"
-//         data-emit-metadata="0"
-//         data-input-position="top"
-//         data-theme="light"
-//         data-lang="zh-CN"
-//         data-loading="lazy"
-//         crossorigin="anonymous"
-//         async>
-// </script>
+<script src="https://giscus.app/client.js"
+        data-repo="joso233/remark"
+        data-repo-id="R_kgDOMqyotg"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOMqyots4CiGn3"
+        data-mapping="title"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="light"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+ </script>
 </html>

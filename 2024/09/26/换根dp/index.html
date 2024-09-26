@@ -4,6 +4,10 @@
 <head>
     <meta charset="utf-8" />
     <title>换根dp | 叫兽の窝</title>
+    <link rel="stylesheet" href="/css/dark-mode.css">
+    <script src="/js/dark-mode.js"></script>
+    
+
     <meta name="author" content="joso" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -12,6 +16,14 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
     />
     <link rel="icon" href="/images/avatar.jpg" />
+    <canvas id="fireworks" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 32767"></canvas>
+    <script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+    <script src="/js/fireworks.min.js"></script>
+    <canvas id="background" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1"></canvas>
+    <script src="/js/background.min.js"></script>
+    <div id="cursor"></div>
+    <link rel="stylesheet" href="/css/cursor.min.css">
+    <script src="/js/cursor.min.js"></script>
     <link rel="preconnect" href="https://s4.zstatic.net" />
 <script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
 <link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
@@ -32,17 +44,13 @@
     rel="stylesheet"
     href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
 />
-<link 
-    rel="stylesheet"
-    id="hljs-style-dark"
-    disabled
-    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github-dark.min.css"
-/>
 <script src="/js/lib/highlight.js"></script>
 
 
-
-<script src="/js/lib/darkmode.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
 
 
 <script src="/js/lib/preview.js"></script>
@@ -57,8 +65,35 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
+
+    <script src="/js/lib/toc.js"></script>
+
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<link 
+    rel="stylesheet"
+    id="highlight-style-dark"
+    disabled
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github-dark.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+    <meta name="msvalidate.01" content="BF22997B7BE5F5F14F0E8845B35BAD3F" />
+<script>
+        new Darkmode().showWidget();
+</script>
+
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body>
+
     <div id="layout">
         <transition name="fade">
             <div id="loading" v-show="loading">
@@ -77,35 +112,29 @@
         
         <a href="/">
             <i class="fa-solid fa-house fa-fw"></i>
-            <span>&ensp;Home</span>
+            <span>&ensp;主页</span>
         </a>
         
         <a href="/about">
             <i class="fa-solid fa-id-card fa-fw"></i>
-            <span>&ensp;About</span>
+            <span>&ensp;关于</span>
         </a>
         
         <a href="/archives">
             <i class="fa-solid fa-box-archive fa-fw"></i>
-            <span>&ensp;Archives</span>
+            <span>&ensp;博客</span>
         </a>
         
         <a href="/categories">
             <i class="fa-solid fa-bookmark fa-fw"></i>
-            <span>&ensp;Categories</span>
+            <span>&ensp;分类</span>
         </a>
         
         <a href="/tags">
             <i class="fa-solid fa-tags fa-fw"></i>
-            <span>&ensp;Tags</span>
+            <span>&ensp;标签</span>
         </a>
         
-        
-            <i
-                :class="[theme === 'light' ? 'fa-sun' : 'fa-moon', 'fa-solid', 'fa-fw', 'theme-switcher']"
-                @click="handleThemeSwitch"
-            ></i>
-            
     </nav>
     <nav id="mobile-menu">
         <div class="title" @click="showMenuItems = !showMenuItems">
@@ -120,7 +149,7 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-house fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">主页</div>
                     </div>
                 </a>
                 
@@ -129,7 +158,7 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-id-card fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">关于</div>
                     </div>
                 </a>
                 
@@ -138,7 +167,7 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-box-archive fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">博客</div>
                     </div>
                 </a>
                 
@@ -147,7 +176,7 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-bookmark fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">分类</div>
                     </div>
                 </a>
                 
@@ -156,20 +185,10 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-tags fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">标签</div>
                     </div>
                 </a>
                 
-                
-                    <div class="item theme-switcher" @click="handleThemeSwitch">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i :class="[theme === 'light' ? 'fa-sun' : 'fa-moon', 'fa-solid', 'fa-fw']"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">
-                            Theme: {{ theme === 'light' ? 'Light' : 'Dark' }}
-                        </div>
-                    </div>
-                    
             </div>
         </transition>
     </nav>
@@ -209,7 +228,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #ff7d73">
+                <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #03a9f4">
                     -c++ -动态规划
                 </a>
             </span>
@@ -218,8 +237,20 @@
         
     </div>
     
-    <div class="content" v-pre>
-        <!--toc-->
+    <!-- <div class="content" v-pre> -->
+        <toc-component></toc-component>
+        <div class="content" v-pre id="main-content">
+        <!-- toc -->
+
+<ul>
+<li><a href="#%E6%A0%91%E7%9A%84%E6%9C%80%E9%95%BF%E8%B7%AF%E5%BE%84">树的最长路径</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE">题目</a></li>
+<li><a href="#%E6%80%9D%E8%B7%AF">思路</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81">代码</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
 
 <h1><span id="树的最长路径">树的最长路径</span></h1><h2><span id="题目">题目</span></h2><p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240926193757033.png" alt="image-20240926193757033"></p>
 <h2><span id="思路">思路</span></h2><p>这道题的前置知识点可以参考[树的最长路径](<a target="_blank" rel="noopener" href="https://www.acwing.com/problem/content/1074/">1072. 树的最长路径 - AcWing题库</a>)easy版，核心代码如下：</p>
@@ -240,14 +271,12 @@
 </code></pre>
 <p>以某点为根的子树的最长路径即为以该点为根的最长路与次长路的长度和，一遍dfs即可求出所有子树的最长路径，但在这个题里，显然某点的最长路径不一定存在于某点的子树中，而存在于该点的根节点里面，这个时候就需要引入<strong>换根</strong>的概念了</p>
 <p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//img1b396cad67460d0e5dd0ad21f18fc608.jpg" alt="img"></p>
-<p>​	如图给出了一颗树，当以1为根时，显然他的最长直径为路径1-3-7-11（$$f[1] [2]&#x3D;3$$,一维表示以1为根，二维表示第2长的路）与路径1-4-9-13-15（$$f[1] [1]&#x3D;4$$）的长度和7.</p>
-<p>​	但当我们考虑结点4时,第一遍dfs跑出来的结果$$p[4] [1]&#x3D;3,p[4] [2]&#x3D;2$$,显然不是最优的，因为把结点1看作他的子节点时，$$f[4] [1]$$可以被$$f[1][2]+1$$替换，同理$$f[3][1]$$可以被$$f[1] [1]+1$$替换，$$f[3] [2]$$继承 $$f[3] [1]$$。</p>
-<p>​	如果此时我们对每个节点都跑一遍dfs的话可以解决这个问题，但其时间复杂度为$$O(n^2)$$ 的，显然不符合题面的要求，所有需要考虑怎么在$$O(n)$$的时间复杂度下得出每点的答案，这个时候对每个结点观察可以看出，答案是否需要更新只和他的根节点信息有关，当根节点长度大于$$p[i][1]$$或者$$p[i][2]$$时按需求更新答案即可。</p>
+<p>​	如图给出了一颗树，当以1为根时，显然他的最长直径为路径1-3-7-11（f[1] [2]&#x3D;3,一维表示以1为根，二维表示第2长的路）与路径1-4-9-13-15（f[1] [1]&#x3D;4）的长度和7.</p>
+<p>​	但当我们考虑结点4时,第一遍dfs跑出来的结果p[4] [1]&#x3D;3,p[4] [2]&#x3D;2,显然不是最优的，因为把结点1看作他的子节点时，f[4] [1]可以被f[1] [2]+1替换，同理f[3] [1]可以被f[1] [1]+1替换，f[3] [2]继承 f[3] [1]。</p>
+<p>​	如果此时我们对每个节点都跑一遍dfs的话可以解决这个问题，但其时间复杂度为O(n^2) 的，显然不符合题面的要求，所有需要考虑怎么在O(n)的时间复杂度下得出每点的答案，这个时候对每个结点观察可以看出，答案是否需要更新只和他的根节点信息有关，当根节点长度大于p[i][1]或者p[i][2]时按需求更新答案即可。</p>
 <p>​	具体的更新答案的情况有两类，一种是子节点v被父节点u的第一长路径覆盖，另一种则是被第二长路径覆盖或不被覆盖。</p>
-<p>​	当我们考虑第一种情况是，对应图中的v&#x3D;4号结点，当前结点v被根节点u的第一长的路径包括在内，v的第一长的路径长度一定是最优的，但需要考虑$$f[v] [2]$$与$$f[u] [2]+1$$的关系。第二种情况对应v&#x3D;2或者v&#x3D;3，此时根节点u中一定存在一条最优的路径大于$$p[v] [1]$$与$$p[v] [2]$$，因为根结点在寻找最长路径时没有考虑经过子节点v，所以子节点v中的任何路径都是非最优解，那么直接将$$p[v] [2]$$更新为$$p[v] [1]$$,并用$$p[u] [1]+1$$替换$$p[v] [1]$$。</p>
-<pre><code> 注意在每一次更新都要维护当前的结点所选的每一条路都要经过的那个子节点，用来后续判断某个点是否为父节点所选。
-</code></pre>
-<p>​	</p>
+<p>​	当我们考虑第一种情况是，对应图中的v&#x3D;4号结点，当前结点v被根节点u的第一长的路径包括在内，v的第一长的路径长度一定是最优的，但需要考虑f[v] [2]与f[u] [2]+1的关系。第二种情况对应v&#x3D;2或者v&#x3D;3，此时根节点u中一定存在一条最优的路径大于p[v] [1]与p[v] [2]，因为根结点在寻找最长路径时没有考虑经过子节点v，所以子节点v中的任何路径都是非最优解，那么直接将p[v] [2]更新为p[v] [1],并用p[u] [1]+1替换p[v] [1]。</p>
+<p>​	注意在每一次更新都要维护当前的结点所选的每一条路都要经过的那个子节点，用来后续判断某个点是否为父节点所选</p>
 <h2><span id="代码">代码</span></h2><pre><code class="c++">#include &lt;bits/stdc++.h&gt;
 using namespace std;
 #define int long long
@@ -334,6 +363,10 @@ signed main()&#123;
     
     
     
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
+    
     
     
     
@@ -369,10 +402,43 @@ signed main()&#123;
     <script src="/js/main.js"></script>
     
     
+<script
+    src="https://giscus.app/client.js"
+    data-repo=""
+    data-repo-id=""
+    data-category=""
+    data-category-id=""
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang=""
+    crossorigin
+    async
+></script>
+
 
 
 
 
     
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"left","width":150,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"dialog":{"enable":true,"hitokoto":true},"log":false});</script></body>
+<script src="https://giscus.app/client.js"
+        data-repo="joso233/remark"
+        data-repo-id="R_kgDOMqyotg"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOMqyots4CiGn3"
+        data-mapping="title"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="light"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+ </script>
 </html>

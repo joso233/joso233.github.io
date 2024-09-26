@@ -4,10 +4,6 @@
 <head>
     <meta charset="utf-8" />
     <title>about | 叫兽の窝</title>
-    <link rel="stylesheet" href="/css/dark-mode.css">
-    <script src="/js/dark-mode.js"></script>
-    
-
     <meta name="author" content="joso" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -16,14 +12,6 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
     />
     <link rel="icon" href="/images/avatar.jpg" />
-    <canvas id="fireworks" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 32767"></canvas>
-    <script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
-    <script src="/js/fireworks.min.js"></script>
-    <canvas id="background" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1"></canvas>
-    <script src="/js/background.min.js"></script>
-    <div id="cursor"></div>
-    <link rel="stylesheet" href="/css/cursor.min.css">
-    <script src="/js/cursor.min.js"></script>
     <link rel="preconnect" href="https://s4.zstatic.net" />
 <script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
 <link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
@@ -44,13 +32,17 @@
     rel="stylesheet"
     href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
 />
+<link 
+    rel="stylesheet"
+    id="hljs-style-dark"
+    disabled
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github-dark.min.css"
+/>
 <script src="/js/lib/highlight.js"></script>
 
 
-<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
-<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
-<script src="/js/lib/math.js"></script>
+
+<script src="/js/lib/darkmode.js"></script>
 
 
 <script src="/js/lib/preview.js"></script>
@@ -65,35 +57,8 @@
 
 <link rel="stylesheet" href="/css/main.css" />
 
-
-    <script src="/js/lib/toc.js"></script>
-
-
-
-<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
-<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
-<link
-    rel="stylesheet"
-    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
-/>
-<link 
-    rel="stylesheet"
-    id="highlight-style-dark"
-    disabled
-    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github-dark.min.css"
-/>
-<script src="/js/lib/highlight.js"></script>
-
-
-
-    <meta name="msvalidate.01" content="BF22997B7BE5F5F14F0E8845B35BAD3F" />
-<script>
-        new Darkmode().showWidget();
-</script>
-
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body>
-
     <div id="layout">
         <transition name="fade">
             <div id="loading" v-show="loading">
@@ -112,29 +77,35 @@
         
         <a href="/">
             <i class="fa-solid fa-house fa-fw"></i>
-            <span>&ensp;主页</span>
+            <span>&ensp;Home</span>
         </a>
         
         <a href="/about">
             <i class="fa-solid fa-id-card fa-fw"></i>
-            <span>&ensp;关于</span>
+            <span>&ensp;About</span>
         </a>
         
         <a href="/archives">
             <i class="fa-solid fa-box-archive fa-fw"></i>
-            <span>&ensp;博客</span>
+            <span>&ensp;Archives</span>
         </a>
         
         <a href="/categories">
             <i class="fa-solid fa-bookmark fa-fw"></i>
-            <span>&ensp;分类</span>
+            <span>&ensp;Categories</span>
         </a>
         
         <a href="/tags">
             <i class="fa-solid fa-tags fa-fw"></i>
-            <span>&ensp;标签</span>
+            <span>&ensp;Tags</span>
         </a>
         
+        
+            <i
+                :class="[theme === 'light' ? 'fa-sun' : 'fa-moon', 'fa-solid', 'fa-fw', 'theme-switcher']"
+                @click="handleThemeSwitch"
+            ></i>
+            
     </nav>
     <nav id="mobile-menu">
         <div class="title" @click="showMenuItems = !showMenuItems">
@@ -149,7 +120,7 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-house fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">主页</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
                     </div>
                 </a>
                 
@@ -158,7 +129,7 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-id-card fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">关于</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
                     </div>
                 </a>
                 
@@ -167,7 +138,7 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-box-archive fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">博客</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
                     </div>
                 </a>
                 
@@ -176,7 +147,7 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-bookmark fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">分类</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
                     </div>
                 </a>
                 
@@ -185,10 +156,20 @@
                         <div style="min-width: 20px; max-width: 50px; width: 10%">
                             <i class="fa-solid fa-tags fa-fw"></i>
                         </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">标签</div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
                     </div>
                 </a>
                 
+                
+                    <div class="item theme-switcher" @click="handleThemeSwitch">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i :class="[theme === 'light' ? 'fa-sun' : 'fa-moon', 'fa-solid', 'fa-fw']"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">
+                            Theme: {{ theme === 'light' ? 'Light' : 'Dark' }}
+                        </div>
+                    </div>
+                    
             </div>
         </transition>
     </nav>
@@ -213,9 +194,7 @@
         
     </div>
     
-    <!-- <div class="content" v-pre> -->
-        <toc-component></toc-component>
-        <div class="content" v-pre id="main-content">
+    <div class="content" v-pre>
         <p><em>在所有表现方法中，摄影是唯一的能把精确的和转瞬即逝的瞬间丝毫不差地固定下来的一种手段。</em></p>
 <p>​																					<em>——亨利·卡蒂埃-布列松</em> </p>
 <p>计科在读学生，姑且算是一位acmer,无聊时间喜欢玩玩摄影，<del>作为自己找不到工作的后路</del></p>
@@ -225,10 +204,6 @@
     
     
     
-    
-    <div id="comment">
-        <div id="giscus-container" class="giscus"></div>
-    </div>
     
     
     
@@ -265,43 +240,10 @@
     <script src="/js/main.js"></script>
     
     
-<script
-    src="https://giscus.app/client.js"
-    data-repo=""
-    data-repo-id=""
-    data-category=""
-    data-category-id=""
-    data-mapping="pathname"
-    data-strict="0"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="bottom"
-    data-theme="preferred_color_scheme"
-    data-lang=""
-    crossorigin
-    async
-></script>
-
 
 
 
 
     
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"left","width":150,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"dialog":{"enable":true,"hitokoto":true},"log":false});</script></body>
-<script src="https://giscus.app/client.js"
-        data-repo="joso233/remark"
-        data-repo-id="R_kgDOMqyotg"
-        data-category="Announcements"
-        data-category-id="DIC_kwDOMqyots4CiGn3"
-        data-mapping="title"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="top"
-        data-theme="light"
-        data-lang="zh-CN"
-        data-loading="lazy"
-        crossorigin="anonymous"
-        async>
- </script>
 </html>

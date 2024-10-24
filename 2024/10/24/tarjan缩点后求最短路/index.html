@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
-    <title>Tags: c++ | 叫兽の窝</title>
+    <title>tarjan缩点后求最短路 | 叫兽の窝</title>
     <link rel="stylesheet" href="/css/dark-mode.css">
     <script src="/js/dark-mode.js"></script>
     
@@ -54,6 +54,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -194,195 +198,172 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
+            <div class="article">
+    <div>
+        <h1>tarjan缩点后求最短路</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/10/24
+        </span>
         
-        
-        
-        <span>
-            <a href="/tags/%E2%80%94%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-c/" style="background: #03a9f4">
+        <span class="category">
+            <a href="/categories/%E7%AE%97%E6%B3%95-%E5%9B%BE%E8%AE%BA/">
                 <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                —动态规划 -c++
+                -算法 -图论
             </a>
         </span>
         
         
-        
-        <span>
-            <a href="/tags/atcoder-C/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -atcoder -C++
-            </a>
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE%E8%AE%BA-tarjan-%E6%9C%80%E7%9F%AD%E8%B7%AF/" style="color: #00a596">
+                    -c++ -数据结构 -图论 -tarjan -最短路
+                </a>
+            </span>
+            
         </span>
-        
-        
-        
-        <span>
-            <a href="/tags/codeforces/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -codeforces
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/ICPC/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -ICPC
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/hexo/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                hexo
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/codeforces/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                codeforces
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -c++ -数据结构
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/%E5%9B%BE%E8%AE%BA-%E7%AE%97%E6%B3%95/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -图论 -算法
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                c++
-            </a>
-        </span>
-        
-        
-        
-        
-        
-        <span>
-            <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -c++ -动态规划
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE%E8%AE%BA-%E7%94%9F%E6%88%90%E6%A0%91-lca-%E5%80%8D%E5%A2%9E/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -c++ -数据结构 -图论 -生成树 -lca -倍增
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE%E8%AE%BA-tarjan-%E6%9C%80%E7%9F%AD%E8%B7%AF/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -c++ -数据结构 -图论 -tarjan -最短路
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE%E8%AE%BA/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -c++ -动态规划 -数据结构 -图论
-            </a>
-        </span>
-        
         
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/9/6</div>
-            <a href="/2024/09/06/%E7%89%9B%E5%AE%A2%E5%B0%8F%E7%99%BD%E6%9C%88%E8%B5%9B100-E/">
-                <h3>牛客小白月赛100 E</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E9%A2%98%E8%A7%A3/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        题解
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/c/" style="color: #03a9f4">
-                            c++
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <!-- <div class="content" v-pre> -->
+        <toc-component></toc-component>
+        <div class="content" v-pre id="main-content">
+        <h1><span id="正则表达式">正则表达式</span></h1><h2><span id="题目背景">题目背景</span></h2><p>小Z童鞋一日意外的看到小X写了一个正则表达式的高级程序，这个正则表达式程序仅仅由字符“0”,“1”，“.”和“*”构成，但是他能够匹配出所有在OJ上都AC的程序的核心代码！小Z大为颇感好奇，于是他决定入侵小X的电脑上去获得这个正则表达式的高级程序。</p>
+<h2><span id="题目描述">题目描述</span></h2><p>在 Internet 网络中的每台电脑并不是直接一对一连通的，而是某些电脑之间存在单向的网络连接，也就是说存在 $A$ 到 $B$ 的连接不一定存在 $B$ 到 $A$ 的连接，并且有些连接传输速度很快，有些则很慢，所以不同连接传输所花的时间是有大有小的。另外，如果存在 $A$ 到 $B$ 的连接的同时也存在 $B$ 到 $A$ 的连接的话，那么 $A$ 和 $B$ 实际上处于同一局域网内，可以通过本地传输，这样花费的传输时间为 $0$。</p>
+<p>现在小 Z 告诉你整个网络的构成情况，他希望知道从他的电脑（编号为 $1$），到小 X 的电脑（编号为 $n$）所需要的最短传输时间。</p>
+<h2><span id="输入格式">输入格式</span></h2><p>第一行两个整数 $n,m$，表示有 $n$ 台电脑，$m$ 个连接关系。</p>
+<p>接下来 $m$ 行，每行三个整数 $u,v,w$，表示从电脑 $u$ 到电脑 $v$ 传输信息的时间为 $w$。</p>
+<h2><span id="输出格式">输出格式</span></h2><p>输出文件仅一行为最短传输时间。</p>
+<h3><span id="样例输入">样例输入</span></h3><pre><code>5 5
+1 2 1
+2 3 6
+3 4 1
+4 2 1
+3 5 2
+</code></pre>
+<h3><span id="样例输出">样例输出</span></h3><pre><code>3
+</code></pre>
+<h2><span id="实现">实现</span></h2><p>​	简述一下题目，存在一有向有环图，在任意强连通块里面的路径权值均可看作0，求1号点到n号点最短路。</p>
+<p>​	在<strong>tarjan缩点</strong>得到的有向无环图上跑一遍<strong>Dijkstra</strong>即可得到答案</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+constexpr int inf32 = 1e9 + 7;
+constexpr int inf64 = 1e9 + 7;
+const int N=2e5;
+struct tree&#123;
+    int to;
+    int w;
+&#125;;
+vector&lt;tree&gt;e[N];
+vector&lt;tree&gt;e_dist[N];
+int cnt,idx,num;
+int dfn[N],instk[N],low[N];
+int belong[N];
+stack&lt;int&gt; stk;
+vector&lt;int&gt;scc[N];
+int dout[N];
+typedef pair&lt;int,int&gt; PII;
+void tarjan(int u)&#123;
+    dfn[u]=low[u]=++idx;
+    stk.push(u);
+    instk[u]=1;
+    for(auto V:e[u])&#123;
+        int v=V.to;
+        if(!dfn[v])&#123;
+            tarjan(v);
+            low[u]=min(low[u],low[v]);
+        &#125;
+        else if(instk[v])&#123;
+            low[u]=min(low[u],dfn[v]);
+        &#125;
+    &#125;
+    if(low[u]==dfn[u])&#123;
+        cnt++;
+        int v;
+        do&#123;
+            v=stk.top();
+            stk.pop();
+            instk[v]=0;
+            scc[cnt].push_back(v);
+            belong[v]=cnt;
+        &#125;while(v!=u);
+    &#125;
+&#125;
+int dist[N];
+void dijkstra(int u)&#123;
+    priority_queue&lt;PII,vector&lt;PII&gt;,greater&lt;PII&gt;&gt; q;
+    dist[u]=0;
+    q.push(&#123;0,u&#125;);
+    while(!q.empty())&#123;
+        auto [distance,k]=q.top();
+        q.pop();
+        for(auto V:e_dist[k])&#123;
+            int v=V.to;
+            int w=V.w;
+            if(dist[v]&gt;distance+w)&#123;
+                dist[v]=distance+w;
+                q.push(&#123;dist[v],v&#125;);
+            &#125;
+        &#125;
+    &#125;
+&#125;
+void solve()&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    memset(dist,127,sizeof(dist));
+    for(int i=1;i&lt;=m;i++)&#123;
+        int u,v,w;
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        e[u].push_back(&#123;v,w&#125;);
+    &#125;
+    for(int i=1;i&lt;=n;i++)&#123;
+        if(!dfn[i]) tarjan(i);
+    &#125;
+    for(int i=1;i&lt;=cnt;i++)&#123;
+        for(auto u:scc[i])&#123;
+            for(auto v:e[u])&#123;
+                e_dist[i].push_back(&#123;belong[v.to],v.w&#125;);
+            &#125;
+        &#125;
+    &#125;
+    dijkstra(belong[1]);
+    cout&lt;&lt;dist[belong[n]]&lt;&lt;endl;
+&#125;
+    
+signed main()&#123;
+    ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)&#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
     </div>
+    
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
+    
+    
+    
     
 </div>
 
@@ -414,6 +395,29 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo=""
+    data-repo-id=""
+    data-category=""
+    data-category-id=""
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang=""
+    crossorigin
+    async
+></script>
+
+
+
+
+
     
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"left","width":150,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"dialog":{"enable":true,"hitokoto":true},"log":false});</script></body>
 <script src="https://giscus.app/client.js"

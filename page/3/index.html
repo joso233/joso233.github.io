@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
-    <title>Tags: -c++ -数据结构 -图论 -tarjan -最短路 | 叫兽の窝</title>
+    <title>叫兽の窝</title>
     <link rel="stylesheet" href="/css/dark-mode.css">
     <script src="/js/dark-mode.js"></script>
     
@@ -58,6 +58,8 @@
 
 
 
+
+<script src="/js/lib/home.js"></script>
 
 <link rel="stylesheet" href="/css/main.css" />
 
@@ -194,194 +196,144 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
+            <div id="home-head">
+    <div
+        id="home-background"
+        ref="homeBackground"
+        data-images="/images/background.jpg"
+    ></div>
+    <div id="home-info" @click="homeClick">
+        <span class="loop"></span>
+        <span class="loop"></span>
+        <span class="loop"></span>
+        <span class="loop"></span>
+        <span class="info">
+            <div class="wrap">
+                <h1>叫兽の窝</h1>
+                <h3></h3>
+                <h5></h5>
+            </div>
+        </span>
+    </div>
+</div>
+<div
+    id="home-posts-wrap"
+    ref="homePostsWrap"
+    true
+>
+    <div id="home-posts">
         
+
+<div class="post">
+    <a href="/2024/08/30/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">
+        <h2 class="post-title">图床搭建</h2>
+    </a>
+    <div class="category-and-date">
         
-        
-        <span>
-            <a href="/tags/%E2%80%94%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-c/" style="background: #00a596">
+        <span class="category">
+            <a href="/categories/%E6%9D%82%E8%B0%88/">
                 <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                —动态规划 -c++
+                杂谈
             </a>
         </span>
         
-        
-        
-        <span>
-            <a href="/tags/atcoder-C/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -atcoder -C++
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/codeforces/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -codeforces
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/ICPC/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -ICPC
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/hexo/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                hexo
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/codeforces/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                codeforces
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -c++ -数据结构
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/%E5%9B%BE%E8%AE%BA-%E7%AE%97%E6%B3%95/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -图论 -算法
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                c++
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -c++ -动态规划
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE%E8%AE%BA-%E7%94%9F%E6%88%90%E6%A0%91-lca-%E5%80%8D%E5%A2%9E/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -c++ -数据结构 -图论 -生成树 -lca -倍增
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE%E8%AE%BA-tarjan-%E6%9C%80%E7%9F%AD%E8%B7%AF/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -c++ -数据结构 -图论 -tarjan -最短路
-            </a>
-        </span>
-        
-        
-        
-        
-        
-        <span>
-            <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE%E8%AE%BA/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                -c++ -动态规划 -数据结构 -图论
-            </a>
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/8/30
         </span>
         
         
     </div>
-    
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/10/24</div>
-            <a href="/2024/10/24/tarjan%E7%BC%A9%E7%82%B9%E5%90%8E%E6%B1%82%E6%9C%80%E7%9F%AD%E8%B7%AF/">
-                <h3>tarjan缩点后求最短路</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E7%AE%97%E6%B3%95-%E5%9B%BE%E8%AE%BA/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        -算法 -图论
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE%E8%AE%BA-tarjan-%E6%9C%80%E7%9F%AD%E8%B7%AF/" style="color: #00a596">
-                            -c++ -数据结构 -图论 -tarjan -最短路
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <p><em>在搭建好博客之后，这时写博客想要实现插入图片的功能还需要一些操作，以下为使用腾讯cos及picgo软件实现图床搭建的教程</em></p>
+<h1><span id="一购买腾讯对象存储">一.购买腾讯对象存储</span></h1><p>图床的搭建方案还是很多的，比如Github仓库 + Picgo ，giteec仓库 + Picgo，但考虑到稳定性和高效性，便宜量大的云储存也是不错的选择，其中我购买的是[腾讯对象存储](<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/cos">对象存储数据处理_COS数据处理_数据处理方案-腾讯云 (tencent.com)</a>)</p>
+<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830212717098.png" alt="image-20240830212717098"></p>
+<p>按照需求购买之后进入控制台，点击创建存储桶</p>
+<img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830212942566.png" alt="image-20240830212942566" style="zoom:50%;">
+
+<p><strong>这里一定要选择公有读私有写</strong></p>
+<p>之后按照提示创建即可，创建完成后进入存储桶，创建文件夹，（例如img）记住该文件夹的地址，之后要用到</p>
+<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213219242.png" alt="image-20240830213219242"></p>
+<h1><span id="二下载picgo软件">二.下载Picgo软件</span></h1><p>下载地址很多，这里就不提供了，下载完成后进入图床设置</p>
+<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213548018.png" alt="image-20240830213548018"></p>
+<p>按照提示填入之后，点击设为默认图床即可完成。</p>
+<blockquote>
+<p>[!NOTE]</p>
+<p>Secretld,SecretKey均在腾讯云密钥管理中获取</p>
+<p>Bucket 即为创建存储桶的名称</p>
+</blockquote>
+<h1><span id="三设置你的md编辑器">三.设置你的md编辑器</span></h1><p>这里以typor为例，进入图像相关设置，勾选上传服务为 Picgo(app)，设置正确路径即可</p>
+<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213912270.png" alt="image-20240830213912270"></p>
+<p><strong>之后在插入图片的同时点击上传图片就会自动上传至腾讯云储存中了</strong></p>
+
+            
         </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/hexo/" style="color: #00bcd4">hexo</a>
+        </span>
+        
+    </div>
+    <a href="/2024/08/30/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/" class="go-post">阅读全文</a>
+</div>
+
+
+        <div class="page-current">
+    
+    <a class="page-num" href="/page/2/">
+        <i class="fa-solid fa-caret-left fa-fw"></i>
+    </a>
+    <a class="page-num" href="/">1</a>
+    <span class="page-omit">...</span>
+    
+    <span class="current">3</span>
+    
+    
+    
+    
+</div>
+
+    </div>
+    
+    <div id="home-card">
+        <div id="card-style">
+    <div id="card-div">
+        <div class="avatar">
+            <img src="/images/avatar.jpg" alt="avatar" />
+        </div>
+        <div class="name">joso</div>
+        <div class="description">
+            <p>齐鲁工业大学（山东省科学院）</p>
+
+        </div>
+        
+        
+        <div class="friend-links">
+            
+            <div class="friend-link">
+                <a target="_blank" rel="noopener" href="https://joso233.github.io/">joso&#39;blog</a>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+
     </div>
     
 </div>

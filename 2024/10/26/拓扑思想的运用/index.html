@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <title>拓扑思想的运用 | 叫兽の窝</title>
+    <link rel="stylesheet" href="/css/dark-mode.css">
+    <script src="/js/dark-mode.js"></script>
+    
+
+    <meta name="author" content="joso" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <canvas id="fireworks" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 32767"></canvas>
+    <script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+    <script src="/js/fireworks.min.js"></script>
+    <canvas id="background" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1"></canvas>
+    <script src="/js/background.min.js"></script>
+    <div id="cursor"></div>
+    <link rel="stylesheet" href="/css/cursor.min.css">
+    <script src="/js/cursor.min.js"></script>
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+
+    <script src="/js/lib/toc.js"></script>
+
+
+
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css"
+/>
+<link 
+    rel="stylesheet"
+    id="highlight-style-dark"
+    disabled
+    href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github-dark.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+    <meta name="msvalidate.01" content="BF22997B7BE5F5F14F0E8845B35BAD3F" />
+<script>
+        new Darkmode().showWidget();
+</script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>叫兽の窝</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;主页</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;关于</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;博客</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;分类</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;标签</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;叫兽の窝</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">主页</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">关于</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">博客</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">分类</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">标签</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>拓扑思想的运用</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/10/26
+        </span>
+        
+        <span class="category">
+            <a href="/categories/C/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                C++
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/tuposort/" style="color: #00bcd4">
+                    tuposort
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E9%98%9F%E5%88%97/" style="color: #03a9f4">
+                    队列
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <!-- <div class="content" v-pre> -->
+        <toc-component></toc-component>
+        <div class="content" v-pre id="main-content">
+        <!--toc-->
+
+<h1><span id="icpc第13届山东省赛">ICPC第13届山东省赛</span></h1><h2><span id="题面">题面</span></h2><p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20241026175921438.png" alt="image-20241026175921438"></p>
+<h2><span id="思路">思路</span></h2><p>模拟一下拓扑序列的思想，把需求抽象成一种边，每一种尚未满足的需求都是一个入度，按顺序把解决的需求对应的项目入度减一，定义一个队列，把所有入度为0的项目全部加进去，当这个队列为空时，所有可解决的项目均被记录，退出循环输出答案即可</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+constexpr int inf32 = 1e9 + 7;
+constexpr int inf64 = 1e9 + 7;
+const int N=2e5;
+typedef pair&lt;int,int&gt; PII;
+map&lt;int,int&gt;have;                                           //当前有的员工的对应数量
+map&lt;int,priority_queue&lt;PII,vector&lt;PII&gt;,greater&lt;PII&gt;&gt;&gt; need; //所有需求，及对应的任务标号，用优先队列存
+vector&lt;PII&gt;reward[N];                                       //解决某个任务之后获得的奖励人数
+int din[N];
+int x,n;
+int ans;                    
+void solve()&#123;
+    cin&gt;&gt;x;
+    for(int i=1;i&lt;=x;i++)&#123;
+        int a,b;
+        cin&gt;&gt;a&gt;&gt;b;
+        have[a]+=b;
+    &#125;
+    cin&gt;&gt;n;
+    queue&lt;int&gt;accord;
+    for(int i=1;i&lt;=n;i++)&#123;
+        int m1,m2;
+        cin&gt;&gt;m1;                            //第i项目有m1个需求
+        for(int j=1;j&lt;=m1;j++)&#123;     
+            int a,b;    
+            cin&gt;&gt;a&gt;&gt;b;    
+            if(have[a]&lt;b)&#123;                  //只有当前的需求尚未被满足，才增加一个入度
+                din[i]++;
+                need[a].push(&#123;b,i&#125;);        //员工标号为a的增加一个数量为b的需求，该需求对因项目i
+            &#125;    
+        &#125;
+        cin&gt;&gt;m2;                    
+        for(int j=1;j&lt;=m2;j++)&#123;
+            int a,b;
+            cin&gt;&gt;a&gt;&gt;b;
+            reward[i].push_back(&#123;a,b&#125;);     //reward[i]表示解决项目i后获得的所有奖励
+        &#125;
+        if(!din[i]) accord.push(i);         //若入度为0则已经被解决
+    &#125;
+    while(!accord.empty())&#123;                 //已经被解决的条件
+        int idx=accord.front();
+        accord.pop();
+        ans++;
+        for(auto [id,num]:reward[idx])&#123;     //遍历得到的新员工可以解决的需求，若出现新入度为0的点，加入队列
+            have[id]+=num;
+            while(!need[id].empty())&#123;
+                if(need[id].top().first&lt;=have[id])&#123;
+                    din[need[id].top().second]--;
+                    if(din[need[id].top().second]==0) accord.push(need[id].top().second);
+                    need[id].pop();
+                &#125;
+                else break;
+            &#125;
+        &#125;
+    &#125;
+    cout&lt;&lt;ans&lt;&lt;endl;
+&#125;
+signed main()&#123;
+    ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)&#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 叫兽の窝
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;joso
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo=""
+    data-repo-id=""
+    data-category=""
+    data-category-id=""
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang=""
+    crossorigin
+    async
+></script>
+
+
+
+
+
+    
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"left","width":150,"height":350},"mobile":{"show":true},"react":{"opacity":0.7},"dialog":{"enable":true,"hitokoto":true},"log":false});</script></body>
+<script src="https://giscus.app/client.js"
+        data-repo="joso233/remark"
+        data-repo-id="R_kgDOMqyotg"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOMqyots4CiGn3"
+        data-mapping="title"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="light"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+ </script>
+</html>

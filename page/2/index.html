@@ -225,6 +225,164 @@
         
 
 <div class="post">
+    <a href="/2024/09/13/%E8%AE%B0%E5%BD%95%E6%9C%80%E4%BC%98%E6%96%B9%E6%A1%88%E6%95%B0%E7%9A%84dp/">
+        <h2 class="post-title">记录最优方案数的dp</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E7%AE%97%E6%B3%95/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                算法
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/9/13
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <h1><span id="低价购买">低价购买</span></h1><h2><span id="题目描述">题目描述</span></h2><p>“低价购买”这条建议是在奶牛股票市场取得成功的一半规则。要想被认为是伟大的投资者，你必须遵循以下的问题建议:“低价购买；再低价购买”。每次你购买一支股票,你必须用低于你上次购买它的价格购买它。买的次数越多越好!你的目标是在遵循以上建议的前提下，求你最多能购买股票的次数。你将被给出一段时间内一支股票每天的出售价，你可以选择在哪些天购买这支股票。每次购买都必须遵循“低价购买；再低价购买”的原则。写一个程序计算最大购买次数。</p>
+<p>这里是某支股票的价格清单：</p>
+<p>$$<br>\def\arraystretch{1.5}<br>\begin{array}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline<br>\textsf{日期} &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 6 &amp; 7 &amp; 8 &amp; 9 &amp; 10 &amp; 11 &amp; 12 \cr\hline<br>\textsf{价格} &amp; 68 &amp; 69 &amp; 54 &amp; 64 &amp; 68 &amp; 64 &amp; 70 &amp; 67 &amp; 78 &amp; 62&amp; 98 &amp; 87 \cr\hline<br>\end{array}<br>$$<br>最优秀的投资者可以购买最多 $4$ 次股票，可行方案中的一种是：<br>$$<br>\def\arraystretch{1.5}<br>\begin{array}{|c|c|c|c|c|}\hline<br>\textsf{日期} &amp; 2 &amp; 5 &amp; 6 &amp; 10 \cr\hline<br>\textsf{价格} &amp; 69 &amp; 68 &amp; 64 &amp; 62 \cr\hline<br>\end{array}<br>$$</p>
+<h2><span id="输入格式">输入格式</span></h2><p>第一行共一个整数 $N\ (1  \le  N  \le 5000)$，股票发行天数</p>
+<p>第二行一行 $N$ 个整数，是每天的股票价格。保证是大小不超过 $2^{16}$ 的正整数。</p>
+<h2><span id="输出格式">输出格式</span></h2><p>输出共一行两个整数，分别为最大购买次数和拥有最大购买次数的方案数（数据保证 $ \le 2^{31}$）当二种方案“看起来一样”时（就是说它们构成的价格队列一样的时候）,这 $2$ 种方案被认为是相同的。</p>
+<h3><span id="样例输入-1">样例输入 #1</span></h3><pre><code>12
+68 69 54 64 68 64 70 67 78 62 98 87
+</code></pre>
+<h3><span id="样例输出-1">样例输出 #1</span></h3><pre><code>4 2
+</code></pre>
+<h2><span id="思路">思路</span></h2><p>令<strong>f[i]<strong>表示以数字</strong>a[i]<strong>结尾且长度为</strong>dp[i]<strong>的方案数，那么当</strong>a[i]!&#x3D;a[j]<strong>时，出现</strong>dp[i]&#x3D;dp[j]+1</strong>的情况，直接在**f[i]<strong>加上</strong>f[j]<strong>，但当</strong>a[j]&#x3D;a[i]<strong>时，因为我们对</strong>f[i]<strong>的定义可得，</strong>f[i]<strong>和</strong>f[j]**此时是有重合的，也就是说只保留一个最多方案的f[i]即可</p>
+<p>最后遍历一遍数组，加上所有等于答案长度的方案数即可</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+//#define int long long
+const int N=1e5+10;
+const int mod=1e9+7;
+int dp[N],a[N];
+int f[N];
+void solve()
+&#123;
+    int n;
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++)&#123;
+          cin&gt;&gt;a[i];
+          dp[i]=f[i]=1;
+    &#125;
+    int ans1=1;
+    for(int i = 2; i &lt;= n; i++) &#123;
+          for(int j = 1; j &lt; i; j++)&#123;
+               if(a[i] &lt; a[j]) &#123;
+                    if(dp[i]&lt;dp[j]+1)&#123;
+                         dp[i] = max(dp[i], dp[j] + 1);
+                         f[i]=f[j];
+                    &#125;
+                    else if(dp[i]==dp[j]+1) f[i]+=f[j];
+               &#125;
+               if(a[i]==a[j]) dp[j]=f[j]=0;
+          &#125;
+          ans1 = max(ans1, dp[i]);
+     &#125;
+     int num=0;
+     for(int i=1;i&lt;=n;i++)&#123;
+          if(dp[i]==ans1) num+=f[i];
+     &#125;
+     cout&lt;&lt;ans1&lt;&lt;&#39; &#39;&lt;&lt;num&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<p><strong>同样的记录背包最优方案数在acwing有一道板题</strong></p>
+<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240913105957884.png" alt="image-20240913105957884"></p>
+<p><strong>这里用g[i]表示背包体积为i时的最优方案数</strong></p>
+<p><strong>如果选第i个物品能做到让价值增加，那么舍弃掉原先的方案数，用g[j-v]的值来覆盖掉g[j];</strong></p>
+<p><strong>如果选与不选对结果没有影响，即价值一样时，需要把两种状态的方案汇总到一起，g[j]+&#x3D;g[j-v];</strong></p>
+<p><strong>最后的g[V]即是最优情况下的方案总和</strong></p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+const int mod=1e9+7;
+int dp[N];
+int a[N],b[N];
+int n,V;
+vector&lt;int&gt;e[N];
+int g[N];
+
+void solve()
+&#123;
+   int n,V;
+   cin&gt;&gt;n&gt;&gt;V;
+   for(int i=0;i&lt;=V;i++) g[i]=1;
+   for(int i=1;i&lt;=n;i++)
+   &#123;
+        int v,w;
+        cin&gt;&gt;v&gt;&gt;w;
+        for(int j=V;j&gt;=v;j--)
+        &#123;
+            if(dp[j]&lt;dp[j-v]+w)
+            &#123;
+                dp[j]=dp[j-v]+w;
+                g[j]=g[j-v];
+            &#125;
+            else if(dp[j]==dp[j-v]+w)
+            &#123;
+                g[j]+=g[j-v];
+                g[j]%=mod;
+            &#125;
+        &#125;
+   &#125;
+   cout&lt;&lt;g[V]&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #ffa2c4">-c++ -动态规划</a>
+        </span>
+        
+    </div>
+    <a href="/2024/09/13/%E8%AE%B0%E5%BD%95%E6%9C%80%E4%BC%98%E6%96%B9%E6%A1%88%E6%95%B0%E7%9A%84dp/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2024/09/11/%E7%8A%B6%E5%8E%8Bdp/">
         <h2 class="post-title">状压dp</h2>
     </a>
@@ -473,7 +631,12 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #03a9f4">-c++ -动态规划</a>
+            <a href="/tags/c/" style="color: #00bcd4">c++</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #00a596">动态规划</a>
         </span>
         
     </div>
@@ -806,7 +969,7 @@ signed main() &#123;
         
         <span class="tag">
             
-            <a href="/tags/atcoder-C/" style="color: #00a596">-atcoder -C++</a>
+            <a href="/tags/atcoder-C/" style="color: #03a9f4">-atcoder -C++</a>
         </span>
         
     </div>
@@ -1135,7 +1298,12 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #00a596">-c++ -数据结构</a>
+            <a href="/tags/c/" style="color: #00a596">c++</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #00bcd4">数据结构</a>
         </span>
         
     </div>
@@ -1730,7 +1898,12 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/%E5%9B%BE%E8%AE%BA-%E7%AE%97%E6%B3%95/" style="color: #03a9f4">-图论 -算法</a>
+            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #00bcd4">图论</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E7%AE%97%E6%B3%95/" style="color: #00a596">算法</a>
         </span>
         
     </div>
@@ -2059,7 +2232,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/atcoder-C/" style="color: #00bcd4">-atcoder -C++</a>
+            <a href="/tags/atcoder-C/" style="color: #00a596">-atcoder -C++</a>
         </span>
         
     </div>
@@ -2115,74 +2288,6 @@ signed main()
     <a href="/2024/08/31/codeforces%E7%AC%AC%E4%B8%80%E4%B8%AA4000%E5%88%86/" class="go-post">阅读全文</a>
 </div>
 
-<div class="post">
-    <a href="/2024/08/30/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">
-        <h2 class="post-title">图床搭建</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E6%9D%82%E8%B0%88/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                杂谈
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/8/30
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <p><em>在搭建好博客之后，这时写博客想要实现插入图片的功能还需要一些操作，以下为使用腾讯cos及picgo软件实现图床搭建的教程</em></p>
-<h1><span id="一购买腾讯对象存储">一.购买腾讯对象存储</span></h1><p>图床的搭建方案还是很多的，比如Github仓库 + Picgo ，giteec仓库 + Picgo，但考虑到稳定性和高效性，便宜量大的云储存也是不错的选择，其中我购买的是[腾讯对象存储](<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/cos">对象存储数据处理_COS数据处理_数据处理方案-腾讯云 (tencent.com)</a>)</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830212717098.png" alt="image-20240830212717098"></p>
-<p>按照需求购买之后进入控制台，点击创建存储桶</p>
-<img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830212942566.png" alt="image-20240830212942566" style="zoom:50%;">
-
-<p><strong>这里一定要选择公有读私有写</strong></p>
-<p>之后按照提示创建即可，创建完成后进入存储桶，创建文件夹，（例如img）记住该文件夹的地址，之后要用到</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213219242.png" alt="image-20240830213219242"></p>
-<h1><span id="二下载picgo软件">二.下载Picgo软件</span></h1><p>下载地址很多，这里就不提供了，下载完成后进入图床设置</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213548018.png" alt="image-20240830213548018"></p>
-<p>按照提示填入之后，点击设为默认图床即可完成。</p>
-<blockquote>
-<p>[!NOTE]</p>
-<p>Secretld,SecretKey均在腾讯云密钥管理中获取</p>
-<p>Bucket 即为创建存储桶的名称</p>
-</blockquote>
-<h1><span id="三设置你的md编辑器">三.设置你的md编辑器</span></h1><p>这里以typor为例，进入图像相关设置，勾选上传服务为 Picgo(app)，设置正确路径即可</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240830213912270.png" alt="image-20240830213912270"></p>
-<p><strong>之后在插入图片的同时点击上传图片就会自动上传至腾讯云储存中了</strong></p>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/hexo/" style="color: #00bcd4">hexo</a>
-        </span>
-        
-    </div>
-    <a href="/2024/08/30/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/" class="go-post">阅读全文</a>
-</div>
-
 
         <div class="page-current">
     
@@ -2194,8 +2299,16 @@ signed main()
     
     <span class="current">2</span>
     
+    <a class="page-num" href="/page/3">
+        3
+    </a>
     
     
+    
+    
+    <a class="page-num" href="/page/3/">
+        <i class="fa-solid fa-caret-right fa-fw"></i>
+    </a>
     
 </div>
 

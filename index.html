@@ -328,11 +328,136 @@ git config --global user.email &quot;youremail&quot;
         
         <span class="tag">
             
-            <a href="/tags/hexo/" style="color: #00a596">hexo</a>
+            <a href="/tags/hexo/" style="color: #00bcd4">hexo</a>
         </span>
         
     </div>
     <a href="/2024/08/29/hello-world/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2024/10/26/%E6%8B%93%E6%89%91%E6%80%9D%E6%83%B3%E7%9A%84%E8%BF%90%E7%94%A8/">
+        <h2 class="post-title">拓扑思想的运用</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/C/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                C++
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/10/26
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <!--toc-->
+
+<h1><span id="icpc第13届山东省赛">ICPC第13届山东省赛</span></h1><h2><span id="题面">题面</span></h2><p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20241026175921438.png" alt="image-20241026175921438"></p>
+<h2><span id="思路">思路</span></h2><p>模拟一下拓扑序列的思想，把需求抽象成一种边，每一种尚未满足的需求都是一个入度，按顺序把解决的需求对应的项目入度减一，定义一个队列，把所有入度为0的项目全部加进去，当这个队列为空时，所有可解决的项目均被记录，退出循环输出答案即可</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+constexpr int inf32 = 1e9 + 7;
+constexpr int inf64 = 1e9 + 7;
+const int N=2e5;
+typedef pair&lt;int,int&gt; PII;
+map&lt;int,int&gt;have;                                           //当前有的员工的对应数量
+map&lt;int,priority_queue&lt;PII,vector&lt;PII&gt;,greater&lt;PII&gt;&gt;&gt; need; //所有需求，及对应的任务标号，用优先队列存
+vector&lt;PII&gt;reward[N];                                       //解决某个任务之后获得的奖励人数
+int din[N];
+int x,n;
+int ans;                    
+void solve()&#123;
+    cin&gt;&gt;x;
+    for(int i=1;i&lt;=x;i++)&#123;
+        int a,b;
+        cin&gt;&gt;a&gt;&gt;b;
+        have[a]+=b;
+    &#125;
+    cin&gt;&gt;n;
+    queue&lt;int&gt;accord;
+    for(int i=1;i&lt;=n;i++)&#123;
+        int m1,m2;
+        cin&gt;&gt;m1;                            //第i项目有m1个需求
+        for(int j=1;j&lt;=m1;j++)&#123;     
+            int a,b;    
+            cin&gt;&gt;a&gt;&gt;b;    
+            if(have[a]&lt;b)&#123;                  //只有当前的需求尚未被满足，才增加一个入度
+                din[i]++;
+                need[a].push(&#123;b,i&#125;);        //员工标号为a的增加一个数量为b的需求，该需求对因项目i
+            &#125;    
+        &#125;
+        cin&gt;&gt;m2;                    
+        for(int j=1;j&lt;=m2;j++)&#123;
+            int a,b;
+            cin&gt;&gt;a&gt;&gt;b;
+            reward[i].push_back(&#123;a,b&#125;);     //reward[i]表示解决项目i后获得的所有奖励
+        &#125;
+        if(!din[i]) accord.push(i);         //若入度为0则已经被解决
+    &#125;
+    while(!accord.empty())&#123;                 //已经被解决的条件
+        int idx=accord.front();
+        accord.pop();
+        ans++;
+        for(auto [id,num]:reward[idx])&#123;     //遍历得到的新员工可以解决的需求，若出现新入度为0的点，加入队列
+            have[id]+=num;
+            while(!need[id].empty())&#123;
+                if(need[id].top().first&lt;=have[id])&#123;
+                    din[need[id].top().second]--;
+                    if(din[need[id].top().second]==0) accord.push(need[id].top().second);
+                    need[id].pop();
+                &#125;
+                else break;
+            &#125;
+        &#125;
+    &#125;
+    cout&lt;&lt;ans&lt;&lt;endl;
+&#125;
+signed main()&#123;
+    ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)&#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/tuposort/" style="color: #ffa2c4">tuposort</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E9%98%9F%E5%88%97/" style="color: #00a596">队列</a>
+        </span>
+        
+    </div>
+    <a href="/2024/10/26/%E6%8B%93%E6%89%91%E6%80%9D%E6%83%B3%E7%9A%84%E8%BF%90%E7%94%A8/" class="go-post">阅读全文</a>
 </div>
 
 <div class="post">
@@ -342,11 +467,11 @@ git config --global user.email &quot;youremail&quot;
     <div class="category-and-date">
         
         <span class="category">
-            <a href="/categories/%E7%AE%97%E6%B3%95-%E5%9B%BE%E8%AE%BA/">
+            <a href="/categories/%E7%AE%97%E6%B3%95/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                -算法 -图论
+                算法
             </a>
         </span>
         
@@ -488,7 +613,27 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE%E8%AE%BA-tarjan-%E6%9C%80%E7%9F%AD%E8%B7%AF/" style="color: #ff7d73">-c++ -数据结构 -图论 -tarjan -最短路</a>
+            <a href="/tags/c/" style="color: #ff7d73">c++</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #00a596">数据结构</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #ffa2c4">图论</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/tarjan/" style="color: #ff7d73">tarjan</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%9C%80%E7%9F%AD%E8%B7%AF/" style="color: #00a596">最短路</a>
         </span>
         
     </div>
@@ -675,7 +820,32 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE%E8%AE%BA-%E7%94%9F%E6%88%90%E6%A0%91-lca-%E5%80%8D%E5%A2%9E/" style="color: #00a596">-c++ -数据结构 -图论 -生成树 -lca -倍增</a>
+            <a href="/tags/c/" style="color: #ff7d73">c++</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #ffa2c4">数据结构</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #ff7d73">图论</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E7%94%9F%E6%88%90%E6%A0%91/" style="color: #ffa2c4">生成树</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/lca/" style="color: #00a596">lca</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%80%8D%E5%A2%9E/" style="color: #00bcd4">倍增</a>
         </span>
         
     </div>
@@ -827,7 +997,22 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%9B%BE%E8%AE%BA/" style="color: #00bcd4">-c++ -动态规划 -数据结构 -图论</a>
+            <a href="/tags/c/" style="color: #00bcd4">c++</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #03a9f4">数据结构</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #ff7d73">图论</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #00a596">动态规划</a>
         </span>
         
     </div>
@@ -992,7 +1177,7 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #00bcd4">-c++ -动态规划</a>
+            <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #00a596">-c++ -动态规划</a>
         </span>
         
     </div>
@@ -1197,7 +1382,7 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/atcoder-C/" style="color: #00bcd4">-atcoder -C++</a>
+            <a href="/tags/atcoder-C/" style="color: #ffa2c4">-atcoder -C++</a>
         </span>
         
     </div>
@@ -1444,7 +1629,7 @@ signed main() &#123;
         
         <span class="tag">
             
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #00a596">-c++ -数据结构</a>
+            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #03a9f4">-c++ -数据结构</a>
         </span>
         
     </div>
@@ -1577,7 +1762,7 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/ICPC/" style="color: #ff7d73">-ICPC</a>
+            <a href="/tags/ICPC/" style="color: #ffa2c4">-ICPC</a>
         </span>
         
     </div>
@@ -1691,169 +1876,11 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/codeforces/" style="color: #ff7d73">-codeforces</a>
+            <a href="/tags/codeforces/" style="color: #00a596">-codeforces</a>
         </span>
         
     </div>
     <a href="/2024/09/16/Codeforces-Round-972-Div-2/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2024/09/13/%E8%AE%B0%E5%BD%95%E6%9C%80%E4%BC%98%E6%96%B9%E6%A1%88%E6%95%B0%E7%9A%84dp/">
-        <h2 class="post-title">记录最优方案数的dp</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E7%AE%97%E6%B3%95/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                算法
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/9/13
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <h1><span id="低价购买">低价购买</span></h1><h2><span id="题目描述">题目描述</span></h2><p>“低价购买”这条建议是在奶牛股票市场取得成功的一半规则。要想被认为是伟大的投资者，你必须遵循以下的问题建议:“低价购买；再低价购买”。每次你购买一支股票,你必须用低于你上次购买它的价格购买它。买的次数越多越好!你的目标是在遵循以上建议的前提下，求你最多能购买股票的次数。你将被给出一段时间内一支股票每天的出售价，你可以选择在哪些天购买这支股票。每次购买都必须遵循“低价购买；再低价购买”的原则。写一个程序计算最大购买次数。</p>
-<p>这里是某支股票的价格清单：</p>
-<p>$$<br>\def\arraystretch{1.5}<br>\begin{array}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline<br>\textsf{日期} &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 6 &amp; 7 &amp; 8 &amp; 9 &amp; 10 &amp; 11 &amp; 12 \cr\hline<br>\textsf{价格} &amp; 68 &amp; 69 &amp; 54 &amp; 64 &amp; 68 &amp; 64 &amp; 70 &amp; 67 &amp; 78 &amp; 62&amp; 98 &amp; 87 \cr\hline<br>\end{array}<br>$$<br>最优秀的投资者可以购买最多 $4$ 次股票，可行方案中的一种是：<br>$$<br>\def\arraystretch{1.5}<br>\begin{array}{|c|c|c|c|c|}\hline<br>\textsf{日期} &amp; 2 &amp; 5 &amp; 6 &amp; 10 \cr\hline<br>\textsf{价格} &amp; 69 &amp; 68 &amp; 64 &amp; 62 \cr\hline<br>\end{array}<br>$$</p>
-<h2><span id="输入格式">输入格式</span></h2><p>第一行共一个整数 $N\ (1  \le  N  \le 5000)$，股票发行天数</p>
-<p>第二行一行 $N$ 个整数，是每天的股票价格。保证是大小不超过 $2^{16}$ 的正整数。</p>
-<h2><span id="输出格式">输出格式</span></h2><p>输出共一行两个整数，分别为最大购买次数和拥有最大购买次数的方案数（数据保证 $ \le 2^{31}$）当二种方案“看起来一样”时（就是说它们构成的价格队列一样的时候）,这 $2$ 种方案被认为是相同的。</p>
-<h3><span id="样例输入-1">样例输入 #1</span></h3><pre><code>12
-68 69 54 64 68 64 70 67 78 62 98 87
-</code></pre>
-<h3><span id="样例输出-1">样例输出 #1</span></h3><pre><code>4 2
-</code></pre>
-<h2><span id="思路">思路</span></h2><p>令<strong>f[i]<strong>表示以数字</strong>a[i]<strong>结尾且长度为</strong>dp[i]<strong>的方案数，那么当</strong>a[i]!&#x3D;a[j]<strong>时，出现</strong>dp[i]&#x3D;dp[j]+1</strong>的情况，直接在**f[i]<strong>加上</strong>f[j]<strong>，但当</strong>a[j]&#x3D;a[i]<strong>时，因为我们对</strong>f[i]<strong>的定义可得，</strong>f[i]<strong>和</strong>f[j]**此时是有重合的，也就是说只保留一个最多方案的f[i]即可</p>
-<p>最后遍历一遍数组，加上所有等于答案长度的方案数即可</p>
-<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
-using namespace std;
-//#define int long long
-const int N=1e5+10;
-const int mod=1e9+7;
-int dp[N],a[N];
-int f[N];
-void solve()
-&#123;
-    int n;
-    cin&gt;&gt;n;
-    for(int i=1;i&lt;=n;i++)&#123;
-          cin&gt;&gt;a[i];
-          dp[i]=f[i]=1;
-    &#125;
-    int ans1=1;
-    for(int i = 2; i &lt;= n; i++) &#123;
-          for(int j = 1; j &lt; i; j++)&#123;
-               if(a[i] &lt; a[j]) &#123;
-                    if(dp[i]&lt;dp[j]+1)&#123;
-                         dp[i] = max(dp[i], dp[j] + 1);
-                         f[i]=f[j];
-                    &#125;
-                    else if(dp[i]==dp[j]+1) f[i]+=f[j];
-               &#125;
-               if(a[i]==a[j]) dp[j]=f[j]=0;
-          &#125;
-          ans1 = max(ans1, dp[i]);
-     &#125;
-     int num=0;
-     for(int i=1;i&lt;=n;i++)&#123;
-          if(dp[i]==ans1) num+=f[i];
-     &#125;
-     cout&lt;&lt;ans1&lt;&lt;&#39; &#39;&lt;&lt;num&lt;&lt;endl;
-&#125;
-signed main()
-&#123;
-    int t=1;
-    //cin&gt;&gt;t;
-    while(t--)
-    &#123;
-        solve();
-    &#125;
-&#125;
-</code></pre>
-<p><strong>同样的记录背包最优方案数在acwing有一道板题</strong></p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240913105957884.png" alt="image-20240913105957884"></p>
-<p><strong>这里用g[i]表示背包体积为i时的最优方案数</strong></p>
-<p><strong>如果选第i个物品能做到让价值增加，那么舍弃掉原先的方案数，用g[j-v]的值来覆盖掉g[j];</strong></p>
-<p><strong>如果选与不选对结果没有影响，即价值一样时，需要把两种状态的方案汇总到一起，g[j]+&#x3D;g[j-v];</strong></p>
-<p><strong>最后的g[V]即是最优情况下的方案总和</strong></p>
-<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
-using namespace std;
-#define int long long
-const int N=2e5+10;
-const int mod=1e9+7;
-int dp[N];
-int a[N],b[N];
-int n,V;
-vector&lt;int&gt;e[N];
-int g[N];
-
-void solve()
-&#123;
-   int n,V;
-   cin&gt;&gt;n&gt;&gt;V;
-   for(int i=0;i&lt;=V;i++) g[i]=1;
-   for(int i=1;i&lt;=n;i++)
-   &#123;
-        int v,w;
-        cin&gt;&gt;v&gt;&gt;w;
-        for(int j=V;j&gt;=v;j--)
-        &#123;
-            if(dp[j]&lt;dp[j-v]+w)
-            &#123;
-                dp[j]=dp[j-v]+w;
-                g[j]=g[j-v];
-            &#125;
-            else if(dp[j]==dp[j-v]+w)
-            &#123;
-                g[j]+=g[j-v];
-                g[j]%=mod;
-            &#125;
-        &#125;
-   &#125;
-   cout&lt;&lt;g[V]&lt;&lt;endl;
-&#125;
-signed main()
-&#123;
-    int t=1;
-    //cin&gt;&gt;t;
-    while(t--)
-    &#123;
-        solve();
-    &#125;
-&#125;
-</code></pre>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/c-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #00a596">-c++ -动态规划</a>
-        </span>
-        
-    </div>
-    <a href="/2024/09/13/%E8%AE%B0%E5%BD%95%E6%9C%80%E4%BC%98%E6%96%B9%E6%A1%88%E6%95%B0%E7%9A%84dp/" class="go-post">阅读全文</a>
 </div>
 
 
@@ -1865,6 +1892,10 @@ signed main()
         2
     </a>
     
+    
+    <a class="page-num" href="/page/3">
+        3
+    </a>
     
     
     

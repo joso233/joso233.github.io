@@ -225,6 +225,1209 @@
         
 
 <div class="post">
+    <a href="/2024/09/06/%E7%BA%BF%E6%AE%B5%E6%A0%91%E6%9D%BF%E5%AD%90%E9%A2%98%E3%80%8A%E6%9C%80%E5%A4%A7%E6%95%B0%E3%80%8B/">
+        <h2 class="post-title">线段树板子题《最大数》</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E7%AE%97%E6%B3%95/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                算法
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/9/6
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <h1><span id="jsoi2008-最大数">[JSOI2008] 最大数</span></h1><h2><span id="题目描述">题目描述</span></h2><p>现在请求你维护一个数列，要求提供以下两种操作：</p>
+<ol>
+<li>查询操作。</li>
+</ol>
+<p>语法：<code>Q L</code></p>
+<p>功能：查询当前数列中末尾 $L$ 个数中的最大的数，并输出这个数的值。</p>
+<p>限制：$L$ 不超过当前数列的长度。$(L &gt; 0)$</p>
+<ol start="2">
+<li>插入操作。</li>
+</ol>
+<p>语法：<code>A n</code></p>
+<p>功能：将 $n$ 加上 $t$，其中 $t$ 是最近一次查询操作的答案（如果还未执行过查询操作，则 $t&#x3D;0$），并将所得结果对一个固定的常数 $D$ 取模，将所得答案插入到数列的末尾。</p>
+<p>限制：$n$ 是整数（可能为负数）并且在长整范围内。</p>
+<p>注意：初始时数列是空的，没有一个数。</p>
+<h2><span id="输入格式">输入格式</span></h2><p>第一行两个整数，$M$ 和 $D$，其中 $M$ 表示操作的个数，$D$ 如上文中所述。</p>
+<p>接下来的 $M$ 行，每行一个字符串，描述一个具体的操作。语法如上文所述。</p>
+<h2><span id="输出格式">输出格式</span></h2><p>对于每一个查询操作，你应该按照顺序依次输出结果，每个结果占一行。</p>
+<h2><span id="样例-1">样例 #1</span></h2><h3><span id="样例输入-1">样例输入 #1</span></h3><pre><code>5 100
+A 96
+Q 1
+A 97
+Q 1
+Q 2
+</code></pre>
+<h3><span id="样例输出-1">样例输出 #1</span></h3><pre><code>96
+93
+96
+</code></pre>
+<h2><span id="提示">提示</span></h2><h4><span id="数据规模与约定">数据规模与约定</span></h4><p>对于全部的测试点，保证 $1 \leq M \leq 2 \times 10^5$，$1 \leq D \leq 2 \times 10^9$。</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+const int mod=1e9+7; 
+struct ty
+&#123;
+    int minv;
+&#125;tree[4*N];
+void update(int id)
+&#123;
+    tree[id].minv=max(tree[id*2].minv,tree[id*2+1].minv);
+&#125;
+int query(int id,int l,int r,int ql,int qr)
+&#123;
+    if(l==ql&amp;&amp;r==qr) return tree[id].minv;
+    int mid=(l+r)&gt;&gt;1;
+    if(qr&lt;=mid) return query(id*2,l,mid,ql,qr);
+    else if(ql&gt;mid) return query(id*2+1,mid+1,r,ql,qr);
+    else return max(query(id*2,l,mid,ql,mid),query(id*2+1,mid+1,r,mid+1,qr));
+&#125;
+void change(int id,int l,int r,int pos,int val)
+&#123;
+    if(l==r) tree[id].minv=val;
+    else
+    &#123;
+        int mid=(l+r)&gt;&gt;1;
+        if(pos&lt;=mid) change(id*2,l,mid,pos,val);
+        else change(id*2+1,mid+1,r,pos,val);
+        update(id);
+    &#125;
+&#125;
+void solve()
+&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+
+    //build(1,1,n);
+    int last=0;
+    int idx=0;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        char op;
+        cin&gt;&gt;op;
+        if(op==&#39;A&#39;) 
+        &#123;
+            int x;
+            cin&gt;&gt;x;
+            change(1,1,n,idx+1,(x+last)%m);
+            idx++;
+        &#125;
+        else
+        &#123;
+            int x;
+            cin&gt;&gt;x;
+            last=query(1,1,n,idx-x+1,idx);
+            cout&lt;&lt;last&lt;&lt;endl;
+        &#125;
+
+    &#125;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+struct tr
+&#123;
+    int l,r;
+    int v;
+&#125;tree[4*N];
+void build(int id,int l,int r)
+&#123;
+    tree[id]=&#123;l,r&#125;;
+    if(l==r) return;
+    int mid=(l+r)&gt;&gt;1;
+    build(id*2,l,mid);
+    build(id*2+1,mid+1,r);
+&#125;
+void update(int id)
+&#123;
+    tree[id].v=max(tree[id*2].v,tree[id*2+1].v);
+&#125;
+void change(int id,int pos,int val)
+&#123;
+    if(tree[id].r==tree[id].l) tree[id].v=val;
+    else
+    &#123;
+        int mid=(tree[id].l+tree[id].r)&gt;&gt;1;
+        if(pos&lt;=mid) change(id*2,pos,val);
+        else change(id*2+1,pos,val);
+        update(id);
+    &#125;
+&#125;
+int query(int id,int ql,int qr)
+&#123;
+    if(tree[id].l==ql&amp;&amp;tree[id].r==qr) return tree[id].v;
+    int mid=tree[id].l+tree[id].r&gt;&gt;1;
+    if(qr&lt;=mid)return query(id*2,ql,qr);
+    else if(ql&gt;mid) return query(id*2+1,ql,qr);
+    else return max(query(id*2,ql,mid),query(id*2+1,mid+1,qr));
+&#125;
+void solve()
+&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    int idx=0,last=0;
+    build(1,1,n);
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        char op;
+        int x;
+        cin&gt;&gt;op&gt;&gt;x;
+        if(op==&#39;A&#39;)
+        &#123;
+            change(1,idx+1,(x+last)%m);
+            idx++;
+        &#125;
+        else
+        &#123;
+            last=query(1,idx-x+1,idx);
+            cout&lt;&lt;last&lt;&lt;endl;
+        &#125;
+    &#125;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/c/" style="color: #ff7d73">c++</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #03a9f4">数据结构</a>
+        </span>
+        
+    </div>
+    <a href="/2024/09/06/%E7%BA%BF%E6%AE%B5%E6%A0%91%E6%9D%BF%E5%AD%90%E9%A2%98%E3%80%8A%E6%9C%80%E5%A4%A7%E6%95%B0%E3%80%8B/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2024/09/02/Codeforces-Round-970-Div-3/">
+        <h2 class="post-title">Codeforces Round 970 (Div. 3)</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E9%A2%98%E8%A7%A3/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                题解
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/9/2
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <!-- toc -->
+
+<ul>
+<li><a href="#a-sakurakos-exam">A. Sakurako’s Exam</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0">实现</a></li>
+</ul>
+</li>
+<li><a href="#b-square-or-not">B. Square or Not</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-1">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-1">实现</a></li>
+</ul>
+</li>
+<li><a href="#c-longest-good-array">C. Longest Good Array</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-2">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-2">实现</a></li>
+</ul>
+</li>
+<li><a href="#d-sakurakos-hobby">D. Sakurako’s Hobby</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-3">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-3">实现</a></li>
+</ul>
+</li>
+<li><a href="#e-alternating-string">E. Alternating String</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-4">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-4">实现</a></li>
+</ul>
+</li>
+<li><a href="#f-sakurakos-box">F. Sakurako’s Box</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-5">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-5">实现</a></li>
+</ul>
+</li>
+<li><a href="#g-sakurakos-task">G. Sakurako’s Task</a><ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-6">题目</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-6">实现</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="a-sakurakos-exam">A. Sakurako’s Exam</span></h1><h2><span id="题目">题目</span></h2><p>Today, Sakurako has a math exam. The teacher gave the array, consisting of $a$ ones and $b$ twos.</p>
+<p>In an array, Sakurako <strong>must</strong> place either a ‘+’ or a ‘-‘ in front of each element so that the sum of all elements in the array equals $0$.</p>
+<p>Sakurako is not sure if it is possible to solve this problem, so determine whether there is a way to assign signs such that the sum of all elements in the array equals $0$.</p>
+<h2><span id="实现">实现</span></h2><pre><code class="c++">
+  #include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+const int mod=1e9+7; 
+void solve()
+&#123;
+    int a,b;
+    cin&gt;&gt;a&gt;&gt;b;
+    int now=a+b*2;
+    while(b&gt;0 and now&gt;=4)
+    &#123;
+        b--;
+        now-=4;
+    &#125;
+    while(a&gt;0 and now&gt;=2)
+    &#123;
+        a--;
+        now-=2;
+    &#125;
+    if(now==0) cout&lt;&lt;&quot;YES&quot;&lt;&lt;endl;
+    else cout&lt;&lt;&quot;NO&quot;&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="b-square-or-not">B. Square or Not</span></h1><h2><span id="题目">题目</span></h2><p>A beautiful binary matrix is a matrix that has ones on its edges and zeros inside.</p>
+<p><img src="https://espresso.codeforces.com/afad8366aa93c86fcb39360ee5ee76aa44941a37.png"></p>
+<p>Today, Sakurako was playing with a beautiful binary matrix of size $r \times c$ and created a binary string $s$ by writing down all the rows of the matrix, starting from the first and ending with the $r$-th. More formally, the element from the matrix in the $i$-th row and $j$-th column corresponds to the $((i-1)*c+j)$-th element of the string.</p>
+<p>You need to check whether the beautiful matrix from which the string $s$ was obtained could be <strong>squared</strong>. In other words, you need to check whether the string $s$ could have been build from a <strong>square</strong> beautiful binary matrix (i.e., one where $r&#x3D;c$).</p>
+<h2><span id="实现">实现</span></h2><pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+void solve()
+&#123;
+   int n;
+   cin&gt;&gt;n;
+   string s;
+   cin&gt;&gt;s;
+   if(sqrt(n)*sqrt(n)!=n) 
+   &#123;
+        cout&lt;&lt;&quot;No&quot;&lt;&lt;endl;
+        return;
+   &#125;
+   s=&#39; &#39;+s;   
+   if(n==4||s==&quot; 1111&quot;)
+   &#123;
+        cout&lt;&lt;&quot;Yes&quot;&lt;&lt;endl;
+        return;
+   &#125;
+   int num=sqrt(n);
+   for(int i=num+1;i&lt;=n-num;i++)
+   &#123;
+        if((i%num==1||i%num==0)&amp;&amp;s[i]==&#39;0&#39;) 
+        &#123;
+            cout&lt;&lt;&quot;No&quot;&lt;&lt;endl;
+            return;
+        &#125;
+        if((i%num)!=1&amp;&amp;((i%num)!=0))
+        &#123;
+            if(s[i]==&#39;1&#39;)
+            &#123;
+                cout&lt;&lt;&quot;No&quot;&lt;&lt;endl;
+                return;
+            &#125;
+        &#125;
+   &#125;
+   cout&lt;&lt;&quot;Yes&quot;&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="c-longest-good-array">C. Longest Good Array</span></h1><h2><span id="题目">题目</span></h2><p>Today, Sakurako was studying arrays. An array $a$ of length $n$ is considered good if and only if:</p>
+<ul>
+<li>the array $a$ is increasing, meaning $a_{i - 1} &lt; a_i$ for all $2 \le i \le n$;</li>
+<li>the differences between adjacent elements are increasing, meaning $a_i - a_{i-1} &lt; a_{i+1} - a_i$ for all $2 \le i &lt; n$.</li>
+</ul>
+<p>Sakurako has come up with boundaries $l$ and $r$ and wants to construct a good array of maximum length, where $l \le a_i \le r$ for all $a_i$.</p>
+<p>Help Sakurako find the maximum length of a good array for the given $l$ and $r$.</p>
+<h2><span id="实现">实现</span></h2><pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e3;
+const int M=2e5+10;
+void solve()
+&#123;
+   int n;
+   cin&gt;&gt;n;
+   for(int i=1;i&lt;=n;i++)
+   &#123;
+        int l,r;
+        cin&gt;&gt;l&gt;&gt;r;
+        int num=0;
+        for(;num*(num+1)/2&lt;=r-l;num++)
+        &#123;
+            ;
+        &#125;
+        if(num*(num+1)/2&gt;r-l) num--;
+        cout&lt;&lt;num+1&lt;&lt;endl;
+   &#125;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="d-sakurakos-hobby">D. Sakurako’s Hobby</span></h1><h2><span id="题目">题目</span></h2><p>For a certain permutation $p$$^{\text{∗}}$ Sakurako calls an integer $j$ reachable from an integer $i$ if it is possible to make $i$ equal to $j$ by assigning $i&#x3D;p_i$ a certain number of times.</p>
+<p>If $p&#x3D;[3,5,6,1,2,4]$, then, for example, $4$ is reachable from $1$, because: $i&#x3D;1$ $\rightarrow$ $i&#x3D;p_1&#x3D;3$ $\rightarrow$ $i&#x3D;p_3&#x3D;6$ $\rightarrow$ $i&#x3D;p_6&#x3D;4$. Now $i&#x3D;4$, so $4$ is reachable from $1$.</p>
+<p>Each number in the permutation is colored either black or white.</p>
+<p>Sakurako defines the function $F(i)$ as the number of black integers that are reachable from $i$.</p>
+<p>Sakurako is interested in $F(i)$ for each $1\le i\le n$, but calculating all values becomes very difficult, so she asks you, as her good friend, to compute this.</p>
+<p>$^{\text{∗}}$A permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation (the number $2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n&#x3D;3$, but the array contains $4$).</p>
+<h2><span id="实现">实现</span></h2><pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+//const int M=2e5+10;
+int dp[N];
+int a[N],b[N];
+int p[N];
+int find(int x)
+&#123;
+    if(x!=p[x]) p[x]=find(p[x]);
+    return p[x];
+&#125;
+void solve()
+&#123;
+   int n;
+   cin&gt;&gt;n;
+   for(int i=1;i&lt;=n;i++)
+   &#123;
+        cin&gt;&gt;a[i];
+        p[i]=i;
+   &#125;
+   string s;
+   cin&gt;&gt;s;
+   s=&#39; &#39;+s;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        p[find(a[i])]=find(i);
+    &#125;
+    map&lt;int,int&gt;mp;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        if(s[i]==&#39;0&#39;) mp[find(i)]++;
+    &#125;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        cout&lt;&lt;mp[find(i)]&lt;&lt;&#39; &#39;;
+    &#125;
+    cout&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="e-alternating-string">E. Alternating String</span></h1><h2><span id="题目">题目</span></h2><p>Sakurako really loves alternating strings. She calls a string $s$ of lowercase Latin letters an alternating string if characters in the even positions are the same, if characters in the odd positions are the same, and the length of the string is <strong>even</strong>.</p>
+<p>For example, the strings ‘abab’ and ‘gg’ are alternating, while the strings ‘aba’ and ‘ggwp’ are not.</p>
+<p>As a good friend, you decided to gift such a string, but you couldn’t find one. Luckily, you can perform two types of operations on the string:</p>
+<ol>
+<li>Choose an index $i$ and delete the $i$-th character from the string, which will reduce the length of the string by $1$. This type of operation can be performed <strong>no more than $1$ time</strong>;</li>
+<li>Choose an index $i$ and replace $s_i$ with any other letter.</li>
+</ol>
+<p>Since you are in a hurry, you need to determine the minimum number of operations required to make the string an alternating one.</p>
+<h2><span id="实现">实现</span></h2><p>考虑两种状态，一种n为偶数，一种为奇数，偶数必不进行删除操作，那只需要贪心选最小成本即可，奇数要枚举删除的位置，删完之后的位置奇偶的顺序会发生变化，因此记录一下i号位当前的各字母出现情况，注意区分奇偶序列，从1到n枚举，每次贪心选出最后剩什么字母的成本，取最小即可</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+//const int M=2e5+10;
+int dp[N];
+int a[N],b[N];
+int ch1[N][27];
+int ch2[N][27];
+void solve()
+&#123;
+    int n;
+    cin&gt;&gt;n;
+    string s;
+    cin&gt;&gt;s;
+    s=&#39; &#39;+s;
+    map&lt;char,int&gt;mp1;
+    map&lt;char,int&gt;mp2;
+    if(n%2==0)
+    &#123;
+        for(int i=1;i&lt;=n;i++)
+        &#123;
+            if(i%2==1) mp1[s[i]]++;
+            else mp2[s[i]]++;
+        &#125;
+        int ans1=0;
+        int ans2=0;
+        for(auto it:mp1) ans1=max(ans1,it.second);
+        for(auto it:mp2) ans2=max(ans2,it.second);
+        cout&lt;&lt;n-ans1-ans2&lt;&lt;endl;
+    &#125;
+    else
+    &#123;
+        for(int i=1;i&lt;=n;i++)
+        &#123;
+            for(int j=0;j&lt;=26;j++)
+            &#123;
+                ch1[i][j]=0;
+                ch2[i][j]=0;
+            &#125;
+            if(i%2==1)
+            &#123;
+                ch1[i][s[i]-&#39;a&#39;]++;
+                for(int j=0;j&lt;26;j++)
+                &#123;
+                    ch1[i][j]+=ch1[i-1][j];
+                    ch2[i][j]+=ch2[i-1][j];
+                &#125;
+            &#125;
+            else
+            &#123;
+                ch2[i][s[i]-&#39;a&#39;]++;
+                for(int j=0;j&lt;26;j++)
+                &#123;
+                    ch1[i][j]+=ch1[i-1][j];
+                    ch2[i][j]+=ch2[i-1][j];
+                &#125;
+            &#125;
+        &#125;
+        int ans=0;
+        for(int i=1;i&lt;=n;i++)
+        &#123;
+            int max1=0;
+            int max2=0;
+            for(int j=0;j&lt;26;j++)
+            &#123;
+                max1=max(ch2[n][j]-ch2[i][j]+ch1[i-1][j],max1);
+                max2=max(ch1[n][j]-ch1[i][j]+ch2[i-1][j],max2);
+            &#125;
+            ans=max(ans,max1+max2);
+        &#125;
+        cout&lt;&lt;n-ans&lt;&lt;endl;
+    &#125;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="f-sakurakos-box">F. Sakurako’s Box</span></h1><h2><span id="题目">题目</span></h2><p>Sakurako has a box with $n$ balls. Each ball has it’s value. She wants to bet with her friend that if the friend randomly picks two balls from the box (it could be two distinct balls, but they may have the same value), the product of their values will be the same as the number that Sakurako guessed.</p>
+<p>Since Sakurako has a PhD in probability, she knows that the best number to pick is <a target="_blank" rel="noopener" href="http://tiny.cc/matozh_en">the expected value</a>, but she forgot how to calculate it. Help Sakurako and find the expected value of the product of two elements from the array.</p>
+<p>It can be shown that the expected value has the form $\frac{P}{Q}$, where $P$ and $Q$ are non-negative integers, and $Q \ne 0$. Report the value of $P \cdot Q^{-1}(\bmod 10^9+7)$.</p>
+<h2><span id="实现">实现</span></h2><p>我恨取模</p>
+<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240903002706846.png" alt="image-20240903002706846"></p>
+<p>算贡献+组合数+逆元</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+int dp[N];
+int a[N],b[N];
+const int mod=1e9+7; 
+int quick_pow(int a,int b)
+&#123;
+    int ans=1;
+    while(b)&#123;
+        if(b&amp;1) ans=(ans*a)%mod;
+        b&gt;&gt;=1;
+        a=(a*a)%mod;
+    &#125;
+    return ans;
+&#125;
+int inv(int a,int b)
+&#123;
+    return (a*quick_pow(b,mod-2))%mod;
+&#125;
+void solve()
+&#123;
+    int n;
+    cin&gt;&gt;n;
+    int sum=0;
+    for(int i=1;i&lt;=n;i++) cin&gt;&gt;a[i],sum+=a[i],sum%=mod;
+    int num=(n-1)*n/2;
+    num%=mod;
+    int d1=0;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        sum-=a[i];
+        d1+=(a[i]%mod)*((sum+mod)%mod);
+        d1%=mod;
+    &#125;
+    int ans=inv(d1,num);
+    cout&lt;&lt;(ans+mod)%mod&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="g-sakurakos-task">G. Sakurako’s Task</span></h1><h2><span id="题目">题目</span></h2><p>Sakurako has prepared a task for you:</p>
+<p>She gives you an array of $n$ integers and allows you to choose $i$ and $j$ such that $i \neq j$ and $a_i \ge a_j$, and then assign $a_i &#x3D; a_i - a_j$ or $a_i &#x3D; a_i + a_j$. You can perform this operation any number of times for any $i$ and $j$, as long as they satisfy the conditions.</p>
+<p>Sakurako asks you what is the maximum possible value of $mex_k$$^{\text{∗}}$ of the array after any number of operations.</p>
+<p>$^{\text{∗}}$$mex_k$ is the $k$-th non-negative integer that is absent in the array. For example, $mex_1({1,2,3 })&#x3D;0$, since $0$ is the first element that is not in the array, and $mex_2({0,2,4 })&#x3D;3$, since $3$ is the second element that is not in the array.</p>
+<h2><span id="实现">实现</span></h2><p>尽可能让所有的数字变小就是最优解，手动模拟一下会发现最后的数组排列为i*数组最大公因数（0&lt;&#x3D;i&lt;&#x3D;n）</p>
+<p>将k按顺序插入即是最答案</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5+10;
+const int mod=1e9+7; 
+int a[N];
+int gcd(int a,int b)
+&#123;
+    if(a%b==0) return b;
+    else return gcd(b,a%b);
+&#125;
+void solve()
+&#123;
+    int n,k;
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        cin&gt;&gt;a[i];
+    &#125;
+    int num=0;
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        if(!num) num=a[i];
+        else num=gcd(num,a[i]);
+    &#125;
+    if(n == 1)
+    &#123;
+       if(k&gt;a[1]) cout&lt;&lt;k&lt;&lt;endl;
+       else cout&lt;&lt;k-1&lt;&lt;endl;
+    &#125;
+    else
+    &#123;
+        if(num==1) cout&lt;&lt;n-1+k&lt;&lt;endl;
+        else
+        &#123;
+            int sum=((k+num-2)/(num-1));
+            sum=min(sum,n);
+            cout&lt;&lt;k+sum-1&lt;&lt;endl;
+        &#125;
+    &#125;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/codeforces/" style="color: #00bcd4">-codeforces</a>
+        </span>
+        
+    </div>
+    <a href="/2024/09/02/Codeforces-Round-970-Div-3/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2024/09/01/dijkstra%E6%B1%82%E6%9C%80%E7%9F%AD%E8%B7%AF%EF%BC%88%E5%A4%9A%E6%BA%90%E7%89%88%E6%9C%AC%EF%BC%89/">
+        <h2 class="post-title">dijkstra求最短路（多源版本）</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E7%AE%97%E6%B3%95/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                算法
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/9/1
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e3;
+int u[N],v[N];
+int dist[N][N];
+vector&lt;int&gt;e[N];
+bool st[N][N];
+typedef pair&lt;int,int&gt; PII;
+void dijkstra(int root)
+&#123;
+    priority_queue&lt;PII, vector&lt;PII&gt;, greater&lt;PII&gt;&gt;heap;
+    dist[root][root]=0;
+    heap.push(&#123;0,root&#125;);
+    while(heap.size())
+    &#123;
+        auto k=heap.top();
+        heap.pop();
+        int ver=k.second;
+        int distence=k.first;
+        if(st[root][ver]) continue;
+        st[root][ver]=1;
+        for(int i=0;i&lt;e[ver].size();i++)
+        &#123;
+            if(dist[root][e[ver][i]]&gt;=distence+dist[ver][e[ver][i]])
+            &#123;
+                dist[root][e[ver][i]]=distence+dist[ver][e[ver][i]];
+                heap.push(&#123;dist[root][e[ver][i]],e[ver][i]&#125;);
+            &#125;
+        &#125;
+    &#125;
+&#125;
+void solve()
+&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    memset(dist,127,sizeof(dist));
+    for(int i=1;i&lt;=m;i++)
+    &#123;
+        int w;
+        cin&gt;&gt;u[i]&gt;&gt;v[i]&gt;&gt;w;
+        if(!st[u[i]][v[i]])
+        &#123;
+            st[u[i]][v[i]]=1;
+            st[v[i]][u[i]]=1;
+            e[u[i]].push_back(v[i]);
+            e[v[i]].push_back(u[i]);
+        &#125;
+        dist[u[i]][v[i]]=min(dist[u[i]][v[i]],w);
+        dist[v[i]][u[i]]=min(dist[v[i]][u[i]],w);
+    &#125;
+    memset(st,0,sizeof(st));
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        dijkstra(i);
+    &#125;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #00a596">图论</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E7%AE%97%E6%B3%95/" style="color: #ff7d73">算法</a>
+        </span>
+        
+    </div>
+    <a href="/2024/09/01/dijkstra%E6%B1%82%E6%9C%80%E7%9F%AD%E8%B7%AF%EF%BC%88%E5%A4%9A%E6%BA%90%E7%89%88%E6%9C%AC%EF%BC%89/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2024/08/31/AtCoder-Beginner-Contest-369/">
+        <h2 class="post-title">AtCoder Beginner Contest 369</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E9%A2%98%E8%A7%A3/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                题解
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/8/31
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <!-- toc -->
+
+<ul>
+<li><a href="#a-369"><strong>A - 369</strong></a><ul>
+<li><a href="#%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0">问题陈述</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0">实现</a></li>
+</ul>
+</li>
+<li><a href="#b-piano-3"><strong>B - Piano 3</strong></a><ul>
+<li><a href="#%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0-1">问题陈述</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-1">实现</a></li>
+</ul>
+</li>
+<li><a href="#c-count-arithmetic-subarrays"><strong>C - Count Arithmetic Subarrays</strong></a><ul>
+<li><a href="#%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0-2">问题陈述</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-2">实现</a></li>
+</ul>
+</li>
+<li><a href="#d-bonus-exp"><strong>D - Bonus EXP</strong></a><ul>
+<li><a href="#%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0-3">问题陈述</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-3">实现</a></li>
+</ul>
+</li>
+<li><a href="#e-sightseeing-tour"><strong>E - Sightseeing Tour</strong></a><ul>
+<li><a href="#%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0-4">问题陈述</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0-4">实现</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="a-369"><strong>A - 369</strong></span></h1><h2><span id="问题陈述">问题陈述</span></h2><p>给你两个整数 $A$ 和 $B$ 。</p>
+<p>有多少个整数 $x$ 满足以下条件？</p>
+<ul>
+<li>条件：可以将三个整数 $A$ 、 $B$ 和 $x$ 按一定顺序排列，组成一个算术序列。</li>
+</ul>
+<p>当且仅当 $q-p$ 等于 $r-q$ 时，三个整数 $p$ ， $q$ 和 $r$ 按此顺序排列的序列是算术序列。</p>
+<h2><span id="实现">实现</span></h2><pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5;
+void solve()
+&#123;
+   int a,b;
+   cin&gt;&gt;a&gt;&gt;b;
+   if(a==b)
+   &#123;
+         cout&lt;&lt;1&lt;&lt;endl;
+         return ;
+   &#125;
+   if(abs(b-a)%2==0) cout&lt;&lt;3&lt;&lt;endl;
+   else cout&lt;&lt;2&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="b-piano-3"><strong>B - Piano 3</strong></span></h1><h2><span id="问题陈述">问题陈述</span></h2><p>高桥有一架钢琴，上面有 $100$ 个排成一行的琴键。从左边开始的第 $i$ 个键叫做 $i$ 键。</p>
+<p>他要逐个按下 $N$ 个键来演奏音乐。在按下 $i$ &#x2F;th键时，他将用左手按下 $A_i$ 键，如果是 $S_i&#x3D;$ ，则用右手按下 $A_i$ 键。如果按 $S_i&#x3D;$ 则用左手，如果按 $S_i&#x3D;$ 则用右手。<code>R</code>.</p>
+<p>开始演奏前，他可以将双手放在任意键上，此时他的<strong>疲劳度</strong>为 0。在演奏过程中，如果他将一只手从键 $x$ 移动到键 $y$ ，疲劳度会增加 $|y-x|$ （反之，除移动双手外，疲劳度不会增加）。用手按下某个键时，该手必须放在该键上。</p>
+<p>找出表演结束时可能的最低疲劳度。</p>
+<h2><span id="实现">实现</span></h2><p>简单模拟即可</p>
+<pre><code>#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5;
+void solve()
+&#123;
+   int n;
+   cin&gt;&gt;n;
+   int l=0;
+   int r=0;
+   int ans=0;
+   for(int i=1;i&lt;=n;i++)
+   &#123;
+        int x;
+        char ch;
+        cin&gt;&gt;x&gt;&gt;ch;
+        if(ch==&#39;L&#39;) 
+        &#123;
+            if(l==0) l=x;
+            else ans+=(abs(l-x)),l=x;
+        &#125;
+        else
+        &#123;
+            if(r==0) r=x;
+            else ans+=(abs(r-x)),r=x;
+        &#125;
+   &#125;
+   cout&lt;&lt;ans&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="c-count-arithmetic-subarrays"><strong>C - Count Arithmetic Subarrays</strong></span></h1><h2><span id="问题陈述">问题陈述</span></h2><p>给你一个由 $N$ 个正整数 $A&#x3D;(A_1,A_2,\dots,A_N)$ 组成的序列。</p>
+<p>求满足 $1\leq l\leq r\leq N$ 的一对整数 $(l,r)$ 中，子序列 $(A_l,A_{l+1},\dots,A_r)$ 构成算术级数的个数。</p>
+<p>当且仅当存在一个 $d$ 使得 $x_{i+1}-x_i&#x3D;d\ (1\leq i &lt; |x|)$ 是算术级数时，序列 $(x_1,x_2,\dots,x_{|x|})$ 才是算术级数。特别地，长度为 $1$ 的序列总是算术级数。</p>
+<h2><span id="实现">实现</span></h2><pre><code>#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5;
+int a[N];
+int b[N];
+void solve()
+&#123;
+   int n;
+   cin&gt;&gt;n;
+   for(int i=1;i&lt;=n;i++) cin&gt;&gt;a[i];
+   for(int i=1;i&lt;n;i++)
+   &#123;
+        b[i]=(a[i+1]-a[i]);
+   &#125;
+   int r=1;
+   int ans=n;
+   for(int l=1;l&lt;n;l++)
+   &#123;
+        while(b[r+1]==b[l]&amp;&amp;r+1&lt;n) r++;
+        int num=r-l+1;
+        //cout&lt;&lt;num&lt;&lt;&#39; &#39;;
+        ans+=(num)*(num+1)/2;
+        l=r;
+   &#125;
+   cout&lt;&lt;ans&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="d-bonus-exp"><strong>D - Bonus EXP</strong></span></h1><h2><span id="问题陈述">问题陈述</span></h2><p>高桥将依次遇到 $N$ 只怪物。 $i$ 个怪物 $(1\leq i\leq N)$ 的力量为 $A &#95; i$ 。</p>
+<p>对于每只怪物，他都可以选择放走或打败它。<br>每次行动都会获得以下经验值：</p>
+<ul>
+<li>如果放走怪物，他将获得 $0$ 点经验值。</li>
+<li>如果他以 $X$ 的力量击败了怪物，则会获得 $X$ 点经验值。<br>  如果击败的是偶数怪物(第 2 个、第 4 个……)，他将额外获得 $X$ 点经验值。</li>
+</ul>
+<p>求他能从 $N$ 个怪物身上获得的经验值上限。</p>
+<h2><span id="实现">实现</span></h2><pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e5;
+int a[N];
+int b[N];
+int dp[N][2][2];
+void solve()
+&#123;
+   int n;
+   cin&gt;&gt;n;
+   for(int i=1;i&lt;=n;i++) cin&gt;&gt;a[i];
+   for(int i=1;i&lt;=n;i++)
+   &#123;
+        dp[i][0][1]=max(dp[i-1][0][1],dp[i-1][1][1]);
+        dp[i][0][0]=max(dp[i-1][0][0],dp[i-1][1][0]);
+        dp[i][1][1]=max(dp[i-1][1][0],dp[i-1][0][0])+a[i];
+        if(i==1) continue;
+        dp[i][1][0]=max(dp[i-1][1][1],dp[i-1][0][1])+2*a[i];
+   &#125;
+   cout&lt;&lt;max(dp[n][1][0],dp[n][1][1])&lt;&lt;endl;
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+<h1><span id="e-sightseeing-tour"><strong>E - Sightseeing Tour</strong></span></h1><h2><span id="问题陈述">问题陈述</span></h2><p>有 $N$ 个岛屿和 $M$ 座双向桥梁连接两个岛屿。这些岛屿和桥梁的编号分别为 $1$ 、 $2$ 、 $\ldots$ 、 $N$ 和 $1$ 、 $2$ 、 $\ldots$ 、 $M$ 。<br>大桥 $i$ 连接着岛屿 $U_i$ 和 $V_i$ ，从任一方向穿过大桥所需的时间为 $T_i$ 。<br>没有一座桥将一个岛屿与它自己连接起来，但是有可能两座岛屿被不止一座桥直接连接起来。<br>人们可以通过一些桥梁来往于任意两个岛屿之间。</p>
+<p>给你 $Q$ 个问题，请逐一回答。 $i$ -th 查询如下：</p>
+<blockquote>
+<p>给出了 $K_i$ 个不同的桥：桥 $B_{i,1}, B_{i,2}, \ldots, B_{i,K_i}$ 。<br>求从岛屿 $1$ 到岛屿 $N$ 所需的最少时间，每座桥梁至少使用一次。<br>只考虑过桥的时间。<br>你可以以任何顺序和方向通过给定的桥梁。</p>
+</blockquote>
+<h2><span id="实现">实现</span></h2><p>​	求n遍dijkstral算出各点间的最短路，接着通过全排列枚举必走k个不同桥的走法，要注意不止枚举桥的顺序，还要枚举从u到v还是从v到u，每架桥对应两种状态，因此用01表示，则共2的k次方种选法。</p>
+<p>​	dist[i] [j]表示从上一次走的桥的出口在i，要走到这一次桥的入口j，当选择的是第一架桥时，从1号点出发，到达第x&#x3D;1架桥的入口,下次循x&#x3D;2时则要选择从x-1出发，走到x,表示为dist[b[x-1]] [b[x]],所以最后一架桥作为出口时，此时循环了x&#x3D;k+1次，表示为dist[b[k]] [n]到达n号点</p>
+<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+const int N=2e3;
+const int M=2e5+10;
+int u[M],v[M],w[M];
+int dist[N][N];
+vector&lt;int&gt;e[M];
+bool st[N][N];
+int b[M];
+typedef pair&lt;int,int&gt; PII;
+
+void dijkstra(int root)
+&#123;
+    priority_queue&lt;PII, vector&lt;PII&gt;, greater&lt;PII&gt;&gt;heap;
+    dist[root][root]=0;
+    heap.push(&#123;0,root&#125;);
+    while(heap.size())
+    &#123;
+        auto k=heap.top();
+        heap.pop();
+        int ver=k.second;
+        int distence=k.first;
+        if(st[root][ver]) continue;
+        st[root][ver]=1;
+        for(int i=0;i&lt;e[ver].size();i++)
+        &#123;
+            if(dist[root][e[ver][i]]&gt;=distence+dist[ver][e[ver][i]])
+            &#123;
+                dist[root][e[ver][i]]=distence+dist[ver][e[ver][i]];
+                heap.push(&#123;dist[root][e[ver][i]],e[ver][i]&#125;);
+            &#125;
+        &#125;
+    &#125;
+&#125;
+void solve()
+&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    memset(dist,127,sizeof(dist));
+    for(int i=1;i&lt;=m;i++)
+    &#123;
+        cin&gt;&gt;u[i]&gt;&gt;v[i]&gt;&gt;w[i];
+        if(!st[u[i]][v[i]])
+        &#123;
+            st[u[i]][v[i]]=1;
+            st[v[i]][u[i]]=1;
+            e[u[i]].push_back(v[i]);
+            e[v[i]].push_back(u[i]);
+        &#125;
+        dist[u[i]][v[i]]=min(dist[u[i]][v[i]],w[i]);
+        dist[v[i]][u[i]]=min(dist[v[i]][u[i]],w[i]);
+    &#125;
+    memset(st,0,sizeof(st));
+    for(int i=1;i&lt;=n;i++)
+    &#123;
+        dijkstra(i);
+    &#125;
+    int q;
+    cin&gt;&gt;q;
+    while(q--)
+    &#123;
+        int k;
+        cin&gt;&gt;k;
+        for(int i=1;i&lt;=k;i++) cin&gt;&gt;b[i];
+        sort(b+1,b+1+k);
+        int ans=1e12;
+        do
+        &#123;
+            for(int j=0;j&lt;1&lt;&lt;k;j++)
+            &#123;
+                int cur=0;
+                for(int i=1;i&lt;=k;i++)cur+=w[b[i]];
+                for(int i=1;i&lt;=k+1;i++)cur+=dist[i==1?1:(j&gt;&gt;i-2)&amp;1?v[b[i-1]]:u[b[i-1]]][i&gt;k?n:(j&gt;&gt;i-1)&amp;1?u[b[i]]:v[b[i]]];
+                ans=min(ans,cur);
+            &#125;
+        &#125; while (next_permutation(b+1,b+1+k));
+        cout&lt;&lt;ans&lt;&lt;endl;
+    &#125;   
+&#125;
+signed main()
+&#123;
+    int t=1;
+    //cin&gt;&gt;t;
+    while(t--)
+    &#123;
+        solve();
+    &#125;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/atcoder-C/" style="color: #ffa2c4">-atcoder -C++</a>
+        </span>
+        
+    </div>
+    <a href="/2024/08/31/AtCoder-Beginner-Contest-369/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2024/08/31/codeforces%E7%AC%AC%E4%B8%80%E4%B8%AA4000%E5%88%86/">
+        <h2 class="post-title">codeforces第一个4000分！</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E6%9D%82%E8%B0%88/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                杂谈
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/8/31
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <h1><span id="见证历史codeforces上第一个红黑名tourist">见证历史，codeforces上第一个红黑名——<strong>tourist</strong>！</span></h1><p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240831112043330.png" alt="image-20240831112043330"></p>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/codeforces/" style="color: #00bcd4">codeforces</a>
+        </span>
+        
+    </div>
+    <a href="/2024/08/31/codeforces%E7%AC%AC%E4%B8%80%E4%B8%AA4000%E5%88%86/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2024/08/30/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">
         <h2 class="post-title">图床搭建</h2>
     </a>
@@ -285,7 +1488,7 @@
         
         <span class="tag">
             
-            <a href="/tags/hexo/" style="color: #00bcd4">hexo</a>
+            <a href="/tags/hexo/" style="color: #ff7d73">hexo</a>
         </span>
         
     </div>

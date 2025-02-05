@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
-    <title>categories | 叫兽の窝</title>
+    <title>单调队列优化dp | 叫兽の窝</title>
     <link rel="stylesheet" href="/css/dark-mode.css">
     <script src="/js/dark-mode.js"></script>
     
@@ -54,6 +54,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -194,25 +198,20 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
-        
-        
-        
-        <span>
-            <a href="/categories/%E7%AE%97%E6%B3%95/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                算法
-            </a>
+            <div class="article">
+    <div>
+        <h1>单调队列优化dp</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/2/4
         </span>
         
-        
-        
-        <span>
-            <a href="/categories/%E9%A2%98%E8%A7%A3/" style="background: #03a9f4">
+        <span class="category">
+            <a href="/categories/%E9%A2%98%E8%A7%A3/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
@@ -221,62 +220,104 @@
         </span>
         
         
-        
-        <span>
-            <a href="/categories/%E6%9D%82%E8%B0%88/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                杂谈
-            </a>
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #ff7d73">
+                    动态规划
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" style="color: #00bcd4">
+                    单调队列
+                </a>
+            </span>
+            
         </span>
-        
-        
-        
-        <span>
-            <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                数据结构
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                图论
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/C/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                C++
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/C/%E9%A2%98%E8%A7%A3/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                题解
-            </a>
-        </span>
-        
         
     </div>
+    
+    <!-- <div class="content" v-pre> -->
+        <toc-component></toc-component>
+        <div class="content" v-pre id="main-content">
+        <!--toc-->
+
+<hr>
+<h2><span id="题意">题意</span></h2><p>伯纳德喜欢去看鲁道夫，但他总是迟到。问题是伯纳德需要乘坐渡船过河。鲁道夫决定帮助他的朋友解决这个问题。</p>
+<p>河流是一个 $n$ 行 $m$ 列的网格。第 $i$ 行和第 $j$ 列的交点包含对应单元格的深度 $a_{i,j}$。所有的 <strong>第一列</strong> 和 <strong>最后一列</strong> 的单元格对应河岸，所以它们的深度为 0。</p>
+<p><img src="https://espresso.codeforces.com/816a5df3aef86d5882f59471315c4a5e3c241fef.png"> </p>
+<p>鲁道夫可以选择某一行 $(i,1), (i,2), \ldots, (i,m)$ 来建造一座桥梁。在这一行的每个单元格上，他可以安装一个桥梁支撑。安装支撑的成本为该单元格的深度加1，即 $a_{i,j}+1$。支撑必须安装满足以下条件：</p>
+<ol>
+<li>必须在单元格 $(i,1)$ 安装支撑；</li>
+<li>必须在单元格 $(i,m)$ 安装支撑；</li>
+<li>任意相邻支撑之间的距离必须 <strong>不超过</strong> $d$。支撑之间的距离定义为 $|j_1 - j_2| - 1$，其中 $(i, j_1)$ 和 $(i, j_2)$ 是两个支撑。</li>
+</ol>
+<p>建造一座桥梁很无聊。因此，鲁道夫决定在 <strong>连续的 k 行</strong> 上建造桥梁，即选择某些行 $i$ （$1 \leq i \leq n - k + 1$），并独立地在第 $i$ 行到第 $i + k - 1$ 行上建造桥梁。帮助鲁道夫 <strong>最小化</strong> 安装支撑的总成本。</p>
+<h2><span id="思路">思路</span></h2><p>很明显的dp问题，设dp[i]为在截至到i号位置，且i号位置建造支撑的最小花费，需要从[i-d-1,i-1]的位置这个区间中挑一个最优的位置转移过来，这里直接用单调队列维护合法区间内成本最小的位置。</p>
+<p>解出每一行的dp[m]，计算前缀和，枚举出一个最优区间即可。</p>
+<h2><span id="代码">代码</span></h2><pre><code class="c++">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+#define all(x) (x).begin(), (x).end()
+const int N = 2e5 + 10;
+int a[110][N], b[N], ans[N];
+void solve() &#123;
+    int n,m,k,d;
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;k&gt;&gt;d;
+    for(int i=1;i&lt;=n;i++)&#123;
+        for(int j=1;j&lt;=m;j++)&#123;
+            cin&gt;&gt;a[i][j];
+        &#125;
+    &#125;
+    vector&lt;int&gt;ans;
+    for(int i=1;i&lt;=n;i++)&#123;
+        deque&lt;int&gt;dq;
+        vector&lt;int&gt; dp(m+10);
+        dp[1]=1;
+        dq.push_back(1);
+        for(int j=2;j&lt;=m;j++)&#123;
+            if(!dq.empty()&amp;&amp;j-dq.front()-1&gt;d) dq.pop_front();
+            dp[j]=dp[dq.front()]+a[i][j]+1;
+            while(!dq.empty()&amp;&amp;dp[j]&lt;=dp[dq.back()]) dq.pop_back();
+            dq.push_back(j);
+        &#125;
+
+        ans.push_back(dp[m]);
+    &#125;
+    int res=1e9;
+    for(int i=1;i&lt;ans.size();i++) ans[i]+=ans[i-1];
+    res=ans[k-1];
+    for(int i=k;i&lt;ans.size();i++) res=min(res,ans[i]-ans[i-k]);
+    cout&lt;&lt;res&lt;&lt;endl;
+&#125;
+signed main() &#123;
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    int T=1;
+    cin &gt;&gt; T;
+    while (T--) solve();
+    return 0;
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
+    
+    
+    
     
 </div>
 
@@ -308,6 +349,29 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo=""
+    data-repo-id=""
+    data-category=""
+    data-category-id=""
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang=""
+    crossorigin
+    async
+></script>
+
+
+
+
+
     
 </body>
 <script src="https://giscus.app/client.js"

@@ -328,11 +328,388 @@ git config --global user.email &quot;youremail&quot;
         
         <span class="tag">
             
-            <a href="/tags/hexo/" style="color: #00a596">hexo</a>
+            <a href="/tags/hexo/" style="color: #00bcd4">hexo</a>
         </span>
         
     </div>
     <a href="/2024/08/29/hello-world/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2025/02/16/%E5%85%B3%E4%BA%8E%E5%9B%A0%E6%95%B0%E5%88%86%E8%A7%A3%E5%92%8C%E8%B4%A8%E6%95%B0%E8%A1%A8/">
+        <h2 class="post-title">关于因数分解和质数表</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E6%95%B0%E8%AE%BA/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                数论
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/2/16
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <h1><span id="求因数">求因数</span></h1><h2><span id="1暴力枚举法">1.暴力枚举法</span></h2><p>一般来说，因数分解常用方法为暴力枚举，其时间复杂度为$O(\sqrt{n}$)</p>
+<pre><code class="c++">vector&lt;int&gt; factor(int n) &#123;
+    vector&lt;int&gt; factors;
+    for (int i = 1; i * i &lt;= n; i++) &#123;
+       if(n%i==0)&#123;
+            if(n/i!=i)&#123;
+                factors.push_back(i);
+                factors.push_back(n/i);
+            &#125;
+            else factors.push_back(i);
+       &#125;
+    &#125;
+    return factors;
+&#125;
+</code></pre>
+<p>这种方法代码简单，无需预处理，适用于少量查询，但当需要查询的数字过多，暴力法则变得不那么优秀，需引入其他更优解</p>
+<h2><span id="2预计算所有数的因数表">2.预计算所有数的因数表</span></h2><p>时间复杂度$O(nlog{n})$，单次查询$O(1)$ </p>
+<pre><code class="c++">vector&lt;int&gt;factors[N];
+void factor()&#123;
+    for(int i=1e6;i&gt;=1;i--)&#123;
+        for(int j=i;j&lt;=1e6;j+=i)&#123;
+            factors[j].push_back(i);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h2><span id="3spf-线性筛">3.SPF 线性筛</span></h2><p><strong>核心思路</strong>：</p>
+<ol>
+<li><strong>使用 SPF（Smallest Prime Factor）线性筛</strong>，预计算 <code>spf[i]</code>（最小质因子）。</li>
+<li><strong>使用 SPF 快速分解 <code>n</code> 的质因子</strong>，时间复杂度 <code>O(log n)</code>。</li>
+<li><strong>枚举所有可能的因数</strong>，利用回溯法<strong>生成所有因数</strong>，时间复杂度 <code>O(d)</code>（<code>d</code> 为因数个数，通常远小于 <code>n</code>）。</li>
+</ol>
+<p><strong>时间复杂度分析：</strong></p>
+<ol>
+<li><p><strong>预处理 SPF 线性筛</strong>：<code>O(n)</code>（一次性计算）。</p>
+</li>
+<li><p>单次查询</p>
+<ul>
+<li><strong>因数分解</strong>：<code>O(log n)</code>（因为 <code>spf[n]</code> 查询次数至多 <code>log n</code>）。</li>
+<li><strong>生成所有因数</strong>：<code>O(d)</code>，其中 <code>d</code> 是因数个数，通常 $d &#x3D; O(n^{1&#x2F;3})$。</li>
+</ul>
+</li>
+</ol>
+<pre><code class="c++">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;set&gt;
+
+using namespace std;
+
+const int MAXN = 1000000; // 预处理范围
+vector&lt;int&gt; spf(MAXN + 1); // 存储最小质因子
+
+// **线性筛** 预计算 SPF
+void sieve_spf(int N) &#123;
+    for (int i = 1; i &lt;= N; i++) spf[i] = i;  // 先设为自身
+    for (int i = 2; i &lt;= N; i++) &#123;
+        if (spf[i] == i) &#123;  // i 是质数
+            for (int j = i * 2; j &lt;= N; j += i) &#123;
+                if (spf[j] == j) spf[j] = i; // 记录最小质因子
+            &#125;
+        &#125;
+    &#125;
+&#125;
+
+// **用 SPF 进行因数分解**
+vector&lt;pair&lt;int, int&gt;&gt; factorize(int n) &#123;
+    vector&lt;pair&lt;int, int&gt;&gt; factors; // 记录 (质因子, 指数)
+    while (n &gt; 1) &#123;
+        int prime = spf[n], count = 0;
+        while (n % prime == 0) &#123;
+            n /= prime;
+            count++;
+        &#125;
+        factors.push_back(&#123;prime, count&#125;);
+    &#125;
+    return factors;
+&#125;
+
+// **基于质因子分解，枚举所有因数**
+void generate_divisors(int index, int current, vector&lt;pair&lt;int, int&gt;&gt;&amp; factors, vector&lt;int&gt;&amp; divisors) &#123;
+    if (index == factors.size()) &#123;
+        divisors.push_back(current);
+        return;
+    &#125;
+    int prime = factors[index].first, exponent = factors[index].second;
+    for (int i = 0; i &lt;= exponent; i++) &#123;
+        generate_divisors(index + 1, current, factors, divisors);
+        current *= prime;
+    &#125;
+&#125;
+
+// **查询 n 的所有因数**
+vector&lt;int&gt; get_divisors(int n) &#123;
+    vector&lt;pair&lt;int, int&gt;&gt; factors = factorize(n); // O(log n) 分解
+    vector&lt;int&gt; divisors;
+    generate_divisors(0, 1, factors, divisors); // O(d) 生成因数
+    sort(divisors.begin(), divisors.end()); // 让因数按顺序输出
+    return divisors;
+&#125;
+
+int main() &#123;
+    sieve_spf(MAXN); // 预计算最小质因子
+
+    int num;
+    cout &lt;&lt; &quot;输入要查询的数: &quot;;
+    cin &gt;&gt; num;
+
+    if (num &lt;= 0 || num &gt; MAXN) &#123;
+        cout &lt;&lt; &quot;数值超出范围!\n&quot;;
+        return 1;
+    &#125;
+
+    vector&lt;int&gt; divisors = get_divisors(num);
+    cout &lt;&lt; &quot;所有因数: &quot;;
+    for (int d : divisors) &#123;
+        cout &lt;&lt; d &lt;&lt; &quot; &quot;;
+    &#125;
+    cout &lt;&lt; endl;
+
+    return 0;
+&#125;
+</code></pre>
+<h2><span id="总结">总结</span></h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>预处理时间</th>
+<th>单次查询</th>
+<th>适用情况</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>暴力 <code>O(√n)</code> 枚举</strong></td>
+<td><code>O(1)</code></td>
+<td><code>O(√n)</code></td>
+<td>适用于少量查询</td>
+</tr>
+<tr>
+<td><strong>SPF 线性筛 + <code>O(log n)</code> 因数分解 + <code>O(d)</code> 枚举</strong></td>
+<td><code>O(n)</code></td>
+<td><code>O(log n + d)</code></td>
+<td>最优解，适用于大量查询</td>
+</tr>
+<tr>
+<td><strong>预计算所有因数 <code>O(n log n)</code></strong></td>
+<td><code>O(n log n)</code></td>
+<td><code>O(1)</code></td>
+<td>超大规模查询（全部 <code>1 ~ n</code>）</td>
+</tr>
+</tbody></table>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%9B%A0%E6%95%B0%E5%88%86%E8%A7%A3/" style="color: #00bcd4">因数分解</a>
+        </span>
+        
+    </div>
+    <a href="/2025/02/16/%E5%85%B3%E4%BA%8E%E5%9B%A0%E6%95%B0%E5%88%86%E8%A7%A3%E5%92%8C%E8%B4%A8%E6%95%B0%E8%A1%A8/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2025/02/13/%E5%8F%AF%E6%8C%81%E4%B9%85%E5%8C%96%E7%BA%BF%E6%AE%B5%E6%A0%91/">
+        <h2 class="post-title">可持久化线段树</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E7%AE%97%E6%B3%95/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                算法
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/2/13
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <h1><span id="一查询区间lr第k大">一.查询区间[l,r]第k大</span></h1><p>离散化版本</p>
+<pre><code class="c++">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 3e5 + 5;
+struct tree&#123;
+    int ch[2];
+    int s;
+&#125;tr[N&lt;&lt;5];
+int idx=0;
+int root[N];
+vector&lt;int&gt;v;
+int getid(int x)&#123;
+    return lower_bound(v.begin(),v.end(),x)-v.begin()+1;
+&#125;
+void build(int &amp;x,int l,int r)&#123;
+    x=++idx;
+    if(l==r) return;
+    int m=(l+r)&gt;&gt;1;
+    build(tr[x].ch[0],l,m);
+    build(tr[x].ch[1],m+1,r);
+&#125;
+void modify(int x,int &amp;y,int l,int r,int v)&#123;
+    y=++idx;
+    tr[y]=tr[x];
+    tr[y].s++;
+    if(l==r) return;
+    int m=(l+r)&gt;&gt;1;
+    if(v&lt;=m) modify(tr[x].ch[0],tr[y].ch[0],l,m,v);
+    else modify(tr[x].ch[1],tr[y].ch[1],m+1,r,v);
+&#125;
+int query(int x,int y,int l,int r,int val)&#123;
+    if(l==r) return l;
+    int m=(l+r)&gt;&gt;1;
+    int s=tr[tr[y].ch[0]].s-tr[tr[x].ch[0]].s;
+    if(val&lt;=s) return query(tr[x].ch[0],tr[y].ch[0],l,m,val);
+    else return query(tr[x].ch[1],tr[y].ch[1],m+1,r,val-s); 
+&#125;
+void solve()&#123;
+    int n, m;
+    cin &gt;&gt; n &gt;&gt; m;
+    vector&lt;int&gt; a(n+1);
+    for (int i = 1; i &lt;= n; i++)&#123;
+        cin &gt;&gt; a[i];
+        v.push_back(a[i]);
+    &#125;
+    sort(v.begin(), v.end());
+    v.erase(unique(v.begin(), v.end()), v.end());
+    int vn = v.size();
+    build(root[0], 1, vn);
+    for (int i = 1; i &lt;= n; i++)
+        modify(root[i-1], root[i], 1, vn, getid(a[i]));
+    
+    for (int i = 1; i &lt;= m; i++)&#123;
+        int l, r, k;
+        cin &gt;&gt; l &gt;&gt; r &gt;&gt; k;
+        int id = query(root[l-1], root[r], 1, vn, k) - 1;
+        cout &lt;&lt; v[id] &lt;&lt; endl;
+    &#125;
+&#125;
+signed main() &#123;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int T=1;
+    //cin &gt;&gt; T;
+    while (T--) &#123;
+        solve();
+    &#125;
+    return 0;
+&#125;
+</code></pre>
+<h1><span id="二查询区间lr中有多少个数字小于ak">二.查询区间[l,r]中有多少个数字小于a[k]</span></h1><pre><code class="c++">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 3e5 + 5;
+struct tree&#123;
+    int ch[2];
+    int s;
+&#125;tr[N&gt;&gt;5];
+int idx=0;
+int root[N];
+void build(int &amp;x,int l,int r)&#123;
+    x=++idx;
+    if(l==r) return;
+    int m=(l+r)&gt;&gt;1;
+    build(tr[x].ch[0],l,m);
+    build(tr[x].ch[1],m+1,r);
+&#125;
+void modify(int x,int &amp;y,int l,int r,int v)&#123;
+    y=++idx;
+    tr[y]=tr[x];
+    tr[y].s++;
+    if(l==r) return;
+    int m=(l+r)&gt;&gt;1;
+    if(v&lt;=m) modify(tr[x].ch[0],tr[y].ch[0],l,m,v);
+    else modify(tr[x].ch[1],tr[y].ch[1],m+1,r,v);
+&#125;
+int query(int x,int y,int l,int r,int val)&#123;
+    if(r&lt;=val) return tr[y].s-tr[x].s;
+    int m=l+r&gt;&gt;1;
+    if(val&lt;=m)&#123;
+        return query(tr[x].ch[0],tr[y].ch[0],l,m,val);
+    &#125;
+    else&#123;
+        return query(tr[x].ch[0],tr[y].ch[0],l,m,val)+query(tr[x].ch[1],tr[y].ch[1],m+1,r,val);
+    &#125;
+&#125;
+void solve()&#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    build(root[0],1,n);
+    vector&lt;int&gt;a(n+1);
+    for(int i=1;i&lt;=n;i++)&#123;
+        cin&gt;&gt;a[i];
+        modify(root[i-1],root[i],1,n,a[i]);
+    &#125;
+    for(int i=1;i&lt;=m;i++)&#123;
+        int num,l,r;
+        cin&gt;&gt;l&gt;&gt;r&gt;&gt;num;
+        cout&lt;&lt;query(root[l-1],root[r],1,n,a[num])+l-1&lt;&lt;endl;
+    &#125;
+&#125;
+signed main() &#123;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int T=1;
+    cin &gt;&gt; T;
+    while (T--) &#123;
+        solve();
+    &#125;
+    return 0;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #03a9f4">数据结构</a>
+        </span>
+        
+    </div>
+    <a href="/2025/02/13/%E5%8F%AF%E6%8C%81%E4%B9%85%E5%8C%96%E7%BA%BF%E6%AE%B5%E6%A0%91/" class="go-post">阅读全文</a>
 </div>
 
 <div class="post">
@@ -435,12 +812,12 @@ signed main() &#123;
         
         <span class="tag">
             
-            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #00bcd4">动态规划</a>
+            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #00a596">动态规划</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" style="color: #03a9f4">单调队列</a>
+            <a href="/tags/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" style="color: #ff7d73">单调队列</a>
         </span>
         
     </div>
@@ -560,12 +937,12 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/tuposort/" style="color: #03a9f4">tuposort</a>
+            <a href="/tags/tuposort/" style="color: #ffa2c4">tuposort</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E9%98%9F%E5%88%97/" style="color: #00a596">队列</a>
+            <a href="/tags/%E9%98%9F%E5%88%97/" style="color: #ff7d73">队列</a>
         </span>
         
     </div>
@@ -725,27 +1102,27 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/c/" style="color: #03a9f4">c++</a>
+            <a href="/tags/c/" style="color: #00a596">c++</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #ff7d73">数据结构</a>
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #ffa2c4">数据结构</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #ffa2c4">图论</a>
+            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #03a9f4">图论</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/tarjan/" style="color: #03a9f4">tarjan</a>
+            <a href="/tags/tarjan/" style="color: #00bcd4">tarjan</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E6%9C%80%E7%9F%AD%E8%B7%AF/" style="color: #00bcd4">最短路</a>
+            <a href="/tags/%E6%9C%80%E7%9F%AD%E8%B7%AF/" style="color: #00a596">最短路</a>
         </span>
         
     </div>
@@ -952,12 +1329,12 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/lca/" style="color: #00a596">lca</a>
+            <a href="/tags/lca/" style="color: #ffa2c4">lca</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E5%80%8D%E5%A2%9E/" style="color: #03a9f4">倍增</a>
+            <a href="/tags/%E5%80%8D%E5%A2%9E/" style="color: #ff7d73">倍增</a>
         </span>
         
     </div>
@@ -1119,12 +1496,12 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #ff7d73">图论</a>
+            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #ffa2c4">图论</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #00bcd4">动态规划</a>
+            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #00a596">动态规划</a>
         </span>
         
     </div>
@@ -1289,7 +1666,7 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/c/" style="color: #00bcd4">c++</a>
+            <a href="/tags/c/" style="color: #00a596">c++</a>
         </span>
         
         <span class="tag">
@@ -1499,391 +1876,11 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/atcoder-C/" style="color: #ffa2c4">-atcoder -C++</a>
+            <a href="/tags/atcoder-C/" style="color: #ff7d73">-atcoder -C++</a>
         </span>
         
     </div>
     <a href="/2024/09/24/AtCoder-Beginner-Contest-372/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2024/09/20/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/">
-        <h2 class="post-title">单调队列</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                数据结构
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/9/20
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <!--toc-->
-
-<h1><span id="琪露诺">琪露诺</span></h1><p>在幻想乡，琪露诺是以笨蛋闻名的冰之妖精。</p>
-<p>某一天，琪露诺又在玩速冻青蛙，就是用冰把青蛙瞬间冻起来。但是这只青蛙比以往的要聪明许多，在琪露诺来之前就已经跑到了河的对岸。于是琪露诺决定到河岸去追青蛙。</p>
-<p>小河可以看作一列格子依次编号为 $0$ 到 $N$，琪露诺只能从编号小的格子移动到编号大的格子。而且琪露诺按照一种特殊的方式进行移动，当她在格子 $i$ 时，她只移动到区间 $[i+L,i+R]$ 中的任意一格。你问为什么她这么移动，这还不简单，因为她是笨蛋啊。</p>
-<p>每一个格子都有一个冰冻指数 $A_i$，编号为 $0$ 的格子冰冻指数为 $0$。当琪露诺停留在那一格时就可以得到那一格的冰冻指数 $A_i$。琪露诺希望能够在到达对岸时，获取最大的冰冻指数，这样她才能狠狠地教训那只青蛙。</p>
-<p>但是由于她实在是太笨了，所以她决定拜托你帮它决定怎样前进。</p>
-<p>开始时，琪露诺在编号 $0$ 的格子上，只要她下一步的位置编号大于 $N$ 就算到达对岸。</p>
-<h3><span id="样例输入-1">样例输入 #1</span></h3><pre><code>5 2 3
-0 12 3 11 7 -2
-</code></pre>
-<h3><span id="样例输出-1">样例输出 #1</span></h3><pre><code>11
-</code></pre>
-<pre><code class="c++">#include &lt;bits/stdc++.h&gt;
-using namespace std;
-#define int long long
-#define endl &#39;\n&#39; 
-const int N=2e6;
-int a[N],dp[N],s[N];
-deque&lt;int&gt;dq1,dq2;
-int n,h;
-deque&lt;int&gt;p;         
-void solve()&#123;
-    int n,l,r;
-    cin&gt;&gt;n&gt;&gt;l&gt;&gt;r;
-    for(int i=0;i&lt;=n;i++)&#123;
-        cin&gt;&gt;a[i];
-    &#125;
-    memset(dp,-127,sizeof(dp));
-    int j=0;
-    dp[0]=0;
-    for(int i=l;i&lt;=n;i++)&#123;
-        while(j&lt;=i-l)&#123;
-            while(!p.empty()&amp;&amp;dp[j]&gt;=dp[p.back()])&#123;
-                p.pop_back();
-            &#125;
-            p.push_back(j);
-            j++;
-        &#125;
-        if(!p.empty()&amp;&amp;p.front()&lt;i-r) p.pop_front();
-        dp[i]=dp[p.front()]+a[i];
-    &#125;
-    int ans=-1e9;
-    for(int i=n-r+1;i&lt;=n;i++)&#123;
-       ans=max(ans,dp[i]);
-    &#125;
-    cout&lt;&lt;ans&lt;&lt;endl;
-
-&#125;
-
-signed main() &#123;
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout &lt;&lt; fixed &lt;&lt; setprecision(12);
-    int t=1;
-    //cin&gt;&gt;t;
-    while(t--)&#123;
-        solve();
-    &#125;
-&#125;
-</code></pre>
-<h1><span id="noip2017-普及组-跳房子">[NOIP2017 普及组] 跳房子</span></h1><p>跳房子，也叫跳飞机，是一种世界性的儿童游戏，也是中国民间传统的体育游戏之一。</p>
-<p>跳房子的游戏规则如下：</p>
-<p>在地面上确定一个起点，然后在起点右侧画 $n$ 个格子，这些格子都在同一条直线上。每个格子内有一个数字（整数），表示到达这个 格子能得到的分数。玩家第一次从起点开始向右跳，跳到起点右侧的一个格子内。第二次再从当前位置继续向右跳，依此类推。规则规定：</p>
-<p>玩家每次都必须跳到当前位置右侧的一个格子内。玩家可以在任意时刻结束游戏，获得的分数为曾经到达过的格子中的数字之和。</p>
-<p>现在小 R 研发了一款弹跳机器人来参加这个游戏。但是这个机器人有一个非常严重的缺陷，它每次向右弹跳的距离只能为固定的 $d$。小 R 希望改进他的机器人，如果他花 $g$ 个金币改进他的机器人，那么他的机器人灵活性就能增加 $g$，但是需要注意的是，每 次弹跳的距离至少为 $1$。具体而言，当 $g&lt;d$ 时，他的机器人每次可以选择向右弹跳的距离为 $d-g,d-g+1,d-g+2,\ldots,d+g-1,d+g$；否则当 $g \geq d$ 时，他的机器人每次可以选择向右弹跳的距离为 $1,2,3,\ldots,d+g-1,d+g$。</p>
-<p>现在小 R 希望获得至少 $k$ 分，请问他至少要花多少金币来改造他的机器人。</p>
-<p>若无论如何他都无法获得至少 $k$ 分，输出 $-1$。</p>
-<h3><span id="样例输入-1">样例输入 #1</span></h3><pre><code>7 4 10
-2 6
-5 -3
-10 3
-11 -3
-13 1
-17 6
-20 2
-</code></pre>
-<h3><span id="样例输出-1">样例输出 #1</span></h3><pre><code>2
-</code></pre>
-<pre><code class="c++">#include &lt;bits/stdc++.h&gt;
-using namespace std;
-#define int long long
-#define endl &#39;\n&#39; 
-const int N=2e6;
-int n,d,k;
-int x[N],s[N];
-int dp[N];
-deque&lt;int&gt;p;         
-bool check(int mid)&#123;
-    memset(dp,-127,sizeof(dp));
-    p.clear();
-    int l=max((int)1,d-mid);
-    int r=min(d+mid,x[n]);
-    int idx=0;
-    int num=0;
-    dp[0]=0;
-    for(int i=1;i&lt;=n;i++)&#123;
-        if(x[i]&gt;=l&amp;&amp;x[i]&lt;=r)&#123;
-            idx=i;
-            dp[idx]=s[idx];
-            num=dp[idx];
-            break;
-        &#125;
-    &#125;
-    if(idx==0) return 0;
-    for(int i=2;i&lt;=n;i++)&#123;
-        while(x[idx]&lt;=x[i]-l)&#123;
-            while(!p.empty()&amp;&amp;dp[idx]&gt;=dp[p.back()])&#123;
-                p.pop_back();
-            &#125;
-            p.push_back(idx);
-            idx++;
-        &#125;
-        while(!p.empty()&amp;&amp;x[p.front()]&lt;x[i]-r) p.pop_front();
-        if(!p.empty())
-            dp[i]=dp[p.front()]+s[i];
-        num=max(num,dp[i]);
-    &#125;
-    if(num&gt;=k) return 1;
-    else return 0;
-&#125;
-void solve()&#123;
-    cin&gt;&gt;n&gt;&gt;d&gt;&gt;k;
-    for(int i=1;i&lt;=n;i++)&#123;
-        cin&gt;&gt;x[i]&gt;&gt;s[i];
-    &#125;
-    int l=0;
-    int r=1e9;
-    while(l&lt;r)&#123;
-        int mid=l+r&gt;&gt;1;
-        if(check(mid)) r=mid;
-        else l=mid+1;
-    &#125;
-    if(l&gt;=1e9) l=-1;
-    cout&lt;&lt;l&lt;&lt;endl;
-&#125;
-
-signed main() &#123;
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout &lt;&lt; fixed &lt;&lt; setprecision(12);
-    int t=1;
-    while(t--)&#123;
-        solve();
-    &#125;
-&#125;
-</code></pre>
-<h1><span id="切蛋糕">切蛋糕</span></h1><p>今天是小 Z 的生日，同学们为他带来了一块蛋糕。这块蛋糕是一个长方体，被用不同色彩分成了 $n$ 个相同的小块，每小块都有对应的幸运值。</p>
-<p>小 Z 作为寿星，自然希望吃到的蛋糕的幸运值总和最大，但小 Z 最多又只能吃 $m(m\le n)$ 小块的蛋糕。</p>
-<p>请你帮他从这 $n$ 小块中找出<strong>连续</strong>的 $k(1 \le k\le m)$ 块蛋糕，使得其上的总幸运值最大。</p>
-<p><strong>形式化地</strong>，在数列 ${p_n}$ 中，找出一个子段 $[l,r](r-l+1\le m)$，最大化 $\sum\limits_{i&#x3D;l}^rp_i$。</p>
-<h3><span id="样例输入-1">样例输入 #1</span></h3><pre><code>5 2
-1 2 3 4 5
-</code></pre>
-<h3><span id="样例输出-1">样例输出 #1</span></h3><pre><code>9
-</code></pre>
-<pre><code class="c++">#include &lt;bits/stdc++.h&gt;
-using namespace std;
-#define int long long
-#define endl &#39;\n&#39; 
-const int N=2e6;
-int a[N],dp[N],s[N];
-deque&lt;int&gt;dq1,dq2;
-int n,h;
-deque&lt;int&gt;p;         
-void solve()&#123;
-   int n,m;
-   cin&gt;&gt;n&gt;&gt;m;
-   int ans=0;
-   for(int i=1;i&lt;=n;i++)&#123;
-       cin&gt;&gt;a[i];
-       s[i]=s[i-1]+a[i];
-    &#125;
-    int j=1;
-    for(int i=1;i&lt;=n;i++)&#123;
-        while(j&lt;=min(i+m-1,n))&#123;
-            while(!p.empty()&amp;&amp;s[j]&gt;=s[p.back()])&#123;
-                p.pop_back();
-            &#125;
-            p.push_back(j);
-            j++;
-        &#125;
-        if(p.front()&lt;i) p.pop_front();
-        ans=max(ans,s[p.front()]-s[i-1]);
-    &#125;
-    cout&lt;&lt;ans&lt;&lt;endl;
-&#125;
-
-signed main() &#123;
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout &lt;&lt; fixed &lt;&lt; setprecision(12);
-    int t=1;
-    //cin&gt;&gt;t;
-    while(t--)&#123;
-        solve();
-    &#125;
-&#125;
-</code></pre>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/c-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #ff7d73">-c++ -数据结构</a>
-        </span>
-        
-    </div>
-    <a href="/2024/09/20/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2024/09/17/The-2022-ICPC-Asia-Nanjing-Regional-Contest/">
-        <h2 class="post-title">The 2022 ICPC Asia Nanjing Regional Contest</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E9%A2%98%E8%A7%A3/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                题解
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/9/17
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <!--toc-->
-
-<h1><span id="d-chat-program">D. Chat Program</span></h1><h2><span id="题目">题目</span></h2><p>You’re the researcher of the International Chat Program Company (ICPC). Today, you discover the following chat history when reviewing some research data.</p>
-<p><strong>SUA (2022&#x2F;12&#x2F;04 23:01:25)</strong></p>
-<p>I’m out of ideas for competitive programming problems! Please give me a problem about sequences.</p>
-<p><strong>BOT (2022&#x2F;12&#x2F;04 23:01:27)</strong></p>
-<p>Sure. Here is a competitive programming problem about sequences.</p>
-<p>Given an integer sequence $a_1, a_2, \cdots, a_n$ of length $n$ and four other integers $k$, $m$, $c$ and $d$, your goal is to maximize the $k$-th largest element in the sequence.</p>
-<p>To achieve the goal, you can perform the following operation at most once: select a continuous sub-array of length $m$ and add an arithmetic sequence with length $m$, initial term $c$ and common difference $d$ to the sub-array.</p>
-<p>More formally, you can select an integer $p$ satisfying $1 \le p \le n - m + 1$ and add $(c + di)$ to $a_{p + i}$ for all $0 \le i &lt; m$.</p>
-<p>Calculate the largest possible value of the $k$-th largest element in the sequence after at most one operation.</p>
-<p>The $k$-th largest element in the sequence is the $k$-th element in the sorted sequence after sorting all elements from the largest to the smallest. For example, the $3$rd largest element in sequence ${5, 7, 1, 9}$ is $5$, while the $3$rd largest element in sequence ${9, 7, 5, 9}$ is $7$.</p>
-<p><strong>SUA (2022&#x2F;12&#x2F;05 00:15:17)</strong></p>
-<p>This problem seems difficult! Please teach me the solution.</p>
-<p><strong>BOT (2022&#x2F;12&#x2F;05 00:15:30)</strong></p>
-<p>Sure. Firstly, we can…</p>
-<p>[DATA EXPUNGED]</p>
-<p>Unfortunately, parts of the chat history are lost due to a disk failure. You’re amazed at how a chat program can create a competitive programming problem. To verify whether the chat program can create valid problems, you decide to try on this problem.</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240917151751463.png" alt="image-20240917151751463"></p>
-<h2><span id="思路">思路</span></h2><p>二分答案，如果一个数想成为数组中的第k大，那么就需要至少k-1个比他大的数存在，在check函数中，我们把比mid大的数字状态更新为1，不做考虑，所有状态为0的点在need数组中记录达到mid所需要的最小项数，现在要做的就是维护所有状态为0的点，让他们尽可能多的变成比mid大的数字，当这些数字满足&gt;&#x3D;k时，则当前的mid是满足条件的</p>
-<p>因为等差数列是连续加在数组上的，那么不妨把这个等差数列想象成一个滑动窗口m，m的第i个数代表等差数列的第i项，在移动窗口的时候窗口尾部每扫描到一个为0的点，判断一下他的need是否小于m的尾项，如果是，就加入到一个优先队列里面（优先队列用来存储当前元素弹出的下标idx，根据idx的大小关系排序，越小的弹出时间越早），否则直接略过，在每一次挪动窗口加入值之后用while循环判断当前有多少元素已经不满足条件。遍历一遍维护优先队列的最大size即可，加上之前已经大于mid的元素个数与k进行比较。</p>
-<pre><code class="c++">#include&lt;bits/stdc++.h&gt;
-using namespace std;
-#define int long long
-const int N=2e5+10;
-int n,k,m,c,d,a[N];
-bool st[N];
-int need[N];
-bool check(int mid)&#123;
-    for(int i=1;i&lt;=n;i++)&#123;  
-        if(a[i]&gt;=mid) st[i]=1;
-        else st[i]=0;
-        need[i]=0;
-    &#125;
-    for(int i=1;i&lt;=n;i++)&#123;
-        if(!st[i])&#123;
-            if(mid-a[i]&lt;=c) need[i]=1;
-            else&#123;
-                if(d==0) need[i]=1e9; //公差为0时，首项不满足，之后任何一项都不会满足，所以need[i]记录无限大
-                else
-                need[i]=(mid-a[i]-c+(d-1))/d+1; 
-            &#125;
-        &#125;
-    &#125;
-    priority_queue&lt;int,vector&lt;int&gt;,greater&lt;int&gt;&gt;q;
-    for(int i=1;i&lt;=m;i++)&#123;
-        if(st[i]==0&amp;&amp;need[i]&lt;=i) q.push(m+(i-need[i])+1);
-    &#125;
-    int ans=q.size();
-    for(int i=m+1;i&lt;=n;i++)&#123;
-        if(st[i]==0&amp;&amp;need[i]&lt;=m) q.push(i+(m-need[i])+1);
-        while(!q.empty()&amp;&amp;q.top()&lt;=i)&#123;
-            q.pop();
-        &#125;
-        ans=max(ans,(int)q.size());
-    &#125;
-    for(int i=1;i&lt;=n;i++)&#123;
-        if(st[i]) ans++;
-    &#125;
-    if(ans&gt;=k) return 0;
-    else return 1;
-&#125;
-void solve()
-&#123;
-    cin&gt;&gt;n&gt;&gt;k&gt;&gt;m&gt;&gt;c&gt;&gt;d;
-    for(int i=1;i&lt;=n;i++)&#123;
-        cin&gt;&gt;a[i];
-    &#125;
-    int l=0,r=1e17;
-    while(l&lt;r)&#123;
-        int mid=l+r+1&gt;&gt;1;
-        if(check(mid)) r=mid-1;
-        else l=mid;
-    &#125;
-    cout&lt;&lt;l&lt;&lt;endl;
-&#125;
-signed main()
-&#123;
-    int t=1;
-    while(t--)
-    &#123;
-        solve();
-    &#125;
-&#125;
-</code></pre>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/ICPC/" style="color: #ff7d73">-ICPC</a>
-        </span>
-        
-    </div>
-    <a href="/2024/09/17/The-2022-ICPC-Asia-Nanjing-Regional-Contest/" class="go-post">阅读全文</a>
 </div>
 
 

@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
-    <title>Categories: 杂谈 | 叫兽の窝</title>
+    <title>关于因数分解和质数表 | 叫兽の窝</title>
     <link rel="stylesheet" href="/css/dark-mode.css">
     <script src="/js/dark-mode.js"></script>
     
@@ -54,6 +54,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -194,93 +198,20 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
-        
-        
-        
-        <span>
-            <a href="/categories/%E7%AE%97%E6%B3%95/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                算法
-            </a>
+            <div class="article">
+    <div>
+        <h1>关于因数分解和质数表</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/2/16
         </span>
         
-        
-        
-        <span>
-            <a href="/categories/%E9%A2%98%E8%A7%A3/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                题解
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/%E6%9D%82%E8%B0%88/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                杂谈
-            </a>
-        </span>
-        
-        
-        
-        
-        
-        <span>
-            <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                数据结构
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                图论
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/C/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                C++
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/C/%E9%A2%98%E8%A7%A3/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                题解
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/%E6%95%B0%E8%AE%BA/" style="background: #00a596">
+        <span class="category">
+            <a href="/categories/%E6%95%B0%E8%AE%BA/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
@@ -289,121 +220,188 @@
         </span>
         
         
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%9B%A0%E6%95%B0%E5%88%86%E8%A7%A3/" style="color: #03a9f4">
+                    因数分解
+                </a>
+            </span>
+            
+        </span>
+        
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/8/31</div>
-            <a href="/2024/08/31/codeforces%E7%AC%AC%E4%B8%80%E4%B8%AA4000%E5%88%86/">
-                <h3>codeforces第一个4000分！</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E6%9D%82%E8%B0%88/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        杂谈
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/codeforces/" style="color: #03a9f4">
-                            codeforces
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <!-- <div class="content" v-pre> -->
+        <toc-component></toc-component>
+        <div class="content" v-pre id="main-content">
+        <h1><span id="求因数">求因数</span></h1><h2><span id="1暴力枚举法">1.暴力枚举法</span></h2><p>一般来说，因数分解常用方法为暴力枚举，其时间复杂度为$O(\sqrt{n}$)</p>
+<pre><code class="c++">vector&lt;int&gt; factor(int n) &#123;
+    vector&lt;int&gt; factors;
+    for (int i = 1; i * i &lt;= n; i++) &#123;
+       if(n%i==0)&#123;
+            if(n/i!=i)&#123;
+                factors.push_back(i);
+                factors.push_back(n/i);
+            &#125;
+            else factors.push_back(i);
+       &#125;
+    &#125;
+    return factors;
+&#125;
+</code></pre>
+<p>这种方法代码简单，无需预处理，适用于少量查询，但当需要查询的数字过多，暴力法则变得不那么优秀，需引入其他更优解</p>
+<h2><span id="2预计算所有数的因数表">2.预计算所有数的因数表</span></h2><p>时间复杂度$O(nlog{n})$，单次查询$O(1)$ </p>
+<pre><code class="c++">vector&lt;int&gt;factors[N];
+void factor()&#123;
+    for(int i=1e6;i&gt;=1;i--)&#123;
+        for(int j=i;j&lt;=1e6;j+=i)&#123;
+            factors[j].push_back(i);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h2><span id="3spf-线性筛">3.SPF 线性筛</span></h2><p><strong>核心思路</strong>：</p>
+<ol>
+<li><strong>使用 SPF（Smallest Prime Factor）线性筛</strong>，预计算 <code>spf[i]</code>（最小质因子）。</li>
+<li><strong>使用 SPF 快速分解 <code>n</code> 的质因子</strong>，时间复杂度 <code>O(log n)</code>。</li>
+<li><strong>枚举所有可能的因数</strong>，利用回溯法<strong>生成所有因数</strong>，时间复杂度 <code>O(d)</code>（<code>d</code> 为因数个数，通常远小于 <code>n</code>）。</li>
+</ol>
+<p><strong>时间复杂度分析：</strong></p>
+<ol>
+<li><p><strong>预处理 SPF 线性筛</strong>：<code>O(n)</code>（一次性计算）。</p>
+</li>
+<li><p>单次查询</p>
+<ul>
+<li><strong>因数分解</strong>：<code>O(log n)</code>（因为 <code>spf[n]</code> 查询次数至多 <code>log n</code>）。</li>
+<li><strong>生成所有因数</strong>：<code>O(d)</code>，其中 <code>d</code> 是因数个数，通常 $d &#x3D; O(n^{1&#x2F;3})$。</li>
+</ul>
+</li>
+</ol>
+<pre><code class="c++">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;set&gt;
+
+using namespace std;
+
+const int MAXN = 1000000; // 预处理范围
+vector&lt;int&gt; spf(MAXN + 1); // 存储最小质因子
+
+// **线性筛** 预计算 SPF
+void sieve_spf(int N) &#123;
+    for (int i = 1; i &lt;= N; i++) spf[i] = i;  // 先设为自身
+    for (int i = 2; i &lt;= N; i++) &#123;
+        if (spf[i] == i) &#123;  // i 是质数
+            for (int j = i * 2; j &lt;= N; j += i) &#123;
+                if (spf[j] == j) spf[j] = i; // 记录最小质因子
+            &#125;
+        &#125;
+    &#125;
+&#125;
+
+// **用 SPF 进行因数分解**
+vector&lt;pair&lt;int, int&gt;&gt; factorize(int n) &#123;
+    vector&lt;pair&lt;int, int&gt;&gt; factors; // 记录 (质因子, 指数)
+    while (n &gt; 1) &#123;
+        int prime = spf[n], count = 0;
+        while (n % prime == 0) &#123;
+            n /= prime;
+            count++;
+        &#125;
+        factors.push_back(&#123;prime, count&#125;);
+    &#125;
+    return factors;
+&#125;
+
+// **基于质因子分解，枚举所有因数**
+void generate_divisors(int index, int current, vector&lt;pair&lt;int, int&gt;&gt;&amp; factors, vector&lt;int&gt;&amp; divisors) &#123;
+    if (index == factors.size()) &#123;
+        divisors.push_back(current);
+        return;
+    &#125;
+    int prime = factors[index].first, exponent = factors[index].second;
+    for (int i = 0; i &lt;= exponent; i++) &#123;
+        generate_divisors(index + 1, current, factors, divisors);
+        current *= prime;
+    &#125;
+&#125;
+
+// **查询 n 的所有因数**
+vector&lt;int&gt; get_divisors(int n) &#123;
+    vector&lt;pair&lt;int, int&gt;&gt; factors = factorize(n); // O(log n) 分解
+    vector&lt;int&gt; divisors;
+    generate_divisors(0, 1, factors, divisors); // O(d) 生成因数
+    sort(divisors.begin(), divisors.end()); // 让因数按顺序输出
+    return divisors;
+&#125;
+
+int main() &#123;
+    sieve_spf(MAXN); // 预计算最小质因子
+
+    int num;
+    cout &lt;&lt; &quot;输入要查询的数: &quot;;
+    cin &gt;&gt; num;
+
+    if (num &lt;= 0 || num &gt; MAXN) &#123;
+        cout &lt;&lt; &quot;数值超出范围!\n&quot;;
+        return 1;
+    &#125;
+
+    vector&lt;int&gt; divisors = get_divisors(num);
+    cout &lt;&lt; &quot;所有因数: &quot;;
+    for (int d : divisors) &#123;
+        cout &lt;&lt; d &lt;&lt; &quot; &quot;;
+    &#125;
+    cout &lt;&lt; endl;
+
+    return 0;
+&#125;
+</code></pre>
+<h2><span id="总结">总结</span></h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>预处理时间</th>
+<th>单次查询</th>
+<th>适用情况</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>暴力 <code>O(√n)</code> 枚举</strong></td>
+<td><code>O(1)</code></td>
+<td><code>O(√n)</code></td>
+<td>适用于少量查询</td>
+</tr>
+<tr>
+<td><strong>SPF 线性筛 + <code>O(log n)</code> 因数分解 + <code>O(d)</code> 枚举</strong></td>
+<td><code>O(n)</code></td>
+<td><code>O(log n + d)</code></td>
+<td>最优解，适用于大量查询</td>
+</tr>
+<tr>
+<td><strong>预计算所有因数 <code>O(n log n)</code></strong></td>
+<td><code>O(n log n)</code></td>
+<td><code>O(1)</code></td>
+<td>超大规模查询（全部 <code>1 ~ n</code>）</td>
+</tr>
+</tbody></table>
+
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/8/30</div>
-            <a href="/2024/08/30/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">
-                <h3>图床搭建</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E6%9D%82%E8%B0%88/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        杂谈
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/hexo/" style="color: #00a596">
-                            hexo
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/8/29</div>
-            <a href="/2024/08/29/hello-world/">
-                <h3>搭建hexo个人博客</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E6%9D%82%E8%B0%88/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        杂谈
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/hexo/" style="color: #03a9f4">
-                            hexo
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
-    </div>
+    
+    
     
 </div>
 
@@ -435,6 +433,29 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo=""
+    data-repo-id=""
+    data-category=""
+    data-category-id=""
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang=""
+    crossorigin
+    async
+></script>
+
+
+
+
+
     
 </body>
 <script src="https://giscus.app/client.js"

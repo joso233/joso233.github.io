@@ -972,4 +972,7 @@ ol li {
     ol {
         padding-left: 20px;
     }
+    #card-div:hover{
+        background-color: #cfc9c9;
+    }
 }

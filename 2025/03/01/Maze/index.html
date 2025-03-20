@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
-    <title>可持久化线段树 | 叫兽の窝</title>
+    <title>D. Drunken Maze | 叫兽の窝</title>
     <link rel="stylesheet" href="/css/dark-mode.css">
     <script src="/js/dark-mode.js"></script>
     
@@ -200,22 +200,22 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>可持久化线段树</h1>
+        <h1>D. Drunken Maze</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/2/13
+            2025/3/1
         </span>
         
         <span class="category">
-            <a href="/categories/%E7%AE%97%E6%B3%95/">
+            <a href="/categories/%E9%A2%98%E8%A7%A3/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                算法
+                题解
             </a>
         </span>
         
@@ -228,8 +228,29 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #00bcd4">
-                    数据结构
+                <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #03a9f4">
+                    动态规划
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/bfs/" style="color: #ffa2c4">
+                    bfs
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE%EF%BC%88brute-force%EF%BC%89/" style="color: #00bcd4">
+                    暴力枚举（brute force）
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E6%9C%80%E7%9F%AD%E8%B7%AF%EF%BC%88shortest-paths%EF%BC%89/" style="color: #ffa2c4">
+                    最短路（shortest paths）
                 </a>
             </span>
             
@@ -240,131 +261,67 @@
     <!-- <div class="content" v-pre> -->
         <toc-component></toc-component>
         <div class="content" v-pre id="main-content">
-        <h1><span id="一查询区间lr第k大">一.查询区间[l,r]第k大</span></h1><p>离散化版本</p>
-<pre><code class="c++">#include &lt;bits/stdc++.h&gt;
+        <h1><span id="1题意">1.题意</span></h1><p><img src="https://espresso.codeforces.com/7dcadce65182d3b0007655152d071bd721aba768.png"></p>
+<p>给你一个有起点和终点的二维迷宫。你的任务是找出从起点到达终点的最快方法。最快的方法是走最少的步数，其中一步是向左、向右、向上或向下走。当然，你不能穿墙而过。</p>
+<p>不过，也有一个问题：如果向同一方向迈出三步以上，就会失去平衡而摔倒。因此，禁止向同一方向连续走三步以上。向右走三步，然后向左走一步，再向右走三步是可以的。这与向右走五步的效果相同，但速度较慢。</p>
+<h1><span id="2分析">2.分析</span></h1><p>典型的<strong>dp问题</strong>，题目中提到不能连续一个方向走四步，所以转移方程需要考虑到方向和沿着当前方向已经走了几步，很容易得到dp数组的形式$$dp[N][N][4][4]$$，接着考虑转移的方式，一般求最短路的题目bfs和dfs均可，但在这道题中，由于bfs沿着步数的大小开始拓展，第一次遍历到终点既是最短路径，如果选择dfs，可能在某种状态第一次的遍历中没有得到最优答案，因此选用<strong>bfs</strong></p>
+<h1><span id="3代码实现">3.代码实现</span></h1><pre><code class="c++">#include &lt;bits/stdc++.h&gt;
 using namespace std;
-const int N = 3e5 + 5;
-struct tree&#123;
-    int ch[2];
-    int s;
-&#125;tr[N&lt;&lt;5];
-int idx=0;
-int root[N];
-vector&lt;int&gt;v;
-int getid(int x)&#123;
-    return lower_bound(v.begin(),v.end(),x)-v.begin()+1;
-&#125;
-void build(int &amp;x,int l,int r)&#123;
-    x=++idx;
-    if(l==r) return;
-    int m=(l+r)&gt;&gt;1;
-    build(tr[x].ch[0],l,m);
-    build(tr[x].ch[1],m+1,r);
-&#125;
-void modify(int x,int &amp;y,int l,int r,int v)&#123;
-    y=++idx;
-    tr[y]=tr[x];
-    tr[y].s++;
-    if(l==r) return;
-    int m=(l+r)&gt;&gt;1;
-    if(v&lt;=m) modify(tr[x].ch[0],tr[y].ch[0],l,m,v);
-    else modify(tr[x].ch[1],tr[y].ch[1],m+1,r,v);
-&#125;
-int query(int x,int y,int l,int r,int val)&#123;
-    if(l==r) return l;
-    int m=(l+r)&gt;&gt;1;
-    int s=tr[tr[y].ch[0]].s-tr[tr[x].ch[0]].s;
-    if(val&lt;=s) return query(tr[x].ch[0],tr[y].ch[0],l,m,val);
-    else return query(tr[x].ch[1],tr[y].ch[1],m+1,r,val-s); 
-&#125;
-void solve()&#123;
-    int n, m;
-    cin &gt;&gt; n &gt;&gt; m;
-    vector&lt;int&gt; a(n+1);
-    for (int i = 1; i &lt;= n; i++)&#123;
-        cin &gt;&gt; a[i];
-        v.push_back(a[i]);
-    &#125;
-    sort(v.begin(), v.end());
-    v.erase(unique(v.begin(), v.end()), v.end());
-    int vn = v.size();
-    build(root[0], 1, vn);
-    for (int i = 1; i &lt;= n; i++)
-        modify(root[i-1], root[i], 1, vn, getid(a[i]));
-    
-    for (int i = 1; i &lt;= m; i++)&#123;
-        int l, r, k;
-        cin &gt;&gt; l &gt;&gt; r &gt;&gt; k;
-        int id = query(root[l-1], root[r], 1, vn, k) - 1;
-        cout &lt;&lt; v[id] &lt;&lt; endl;
-    &#125;
-&#125;
-signed main() &#123;
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int T=1;
-    //cin &gt;&gt; T;
-    while (T--) &#123;
-        solve();
-    &#125;
-    return 0;
-&#125;
-</code></pre>
-<h1><span id="二查询区间lr中有多少个数字小于ak">二.查询区间[l,r]中有多少个数字小于a[k]</span></h1><pre><code class="c++">#include &lt;bits/stdc++.h&gt;
-using namespace std;
-const int N = 3e5 + 5;
-struct tree&#123;
-    int ch[2];
-    int s;
-&#125;tr[N&gt;&gt;5];
-int idx=0;
-int root[N];
-void build(int &amp;x,int l,int r)&#123;
-    x=++idx;
-    if(l==r) return;
-    int m=(l+r)&gt;&gt;1;
-    build(tr[x].ch[0],l,m);
-    build(tr[x].ch[1],m+1,r);
-&#125;
-void modify(int x,int &amp;y,int l,int r,int v)&#123;
-    y=++idx;
-    tr[y]=tr[x];
-    tr[y].s++;
-    if(l==r) return;
-    int m=(l+r)&gt;&gt;1;
-    if(v&lt;=m) modify(tr[x].ch[0],tr[y].ch[0],l,m,v);
-    else modify(tr[x].ch[1],tr[y].ch[1],m+1,r,v);
-&#125;
-int query(int x,int y,int l,int r,int val)&#123;
-    if(r&lt;=val) return tr[y].s-tr[x].s;
-    int m=l+r&gt;&gt;1;
-    if(val&lt;=m)&#123;
-        return query(tr[x].ch[0],tr[y].ch[0],l,m,val);
-    &#125;
-    else&#123;
-        return query(tr[x].ch[0],tr[y].ch[0],l,m,val)+query(tr[x].ch[1],tr[y].ch[1],m+1,r,val);
-    &#125;
-&#125;
-void solve()&#123;
+#define int long long
+typedef pair&lt;int, int&gt; PII;
+const int N = 2e5 + 10;
+int dx[4]=&#123;1,0,-1,0&#125;;
+int dy[4]=&#123;0,1,0,-1&#125;;
+void solve() &#123;
     int n,m;
     cin&gt;&gt;n&gt;&gt;m;
-    build(root[0],1,n);
-    vector&lt;int&gt;a(n+1);
+    int x,y;
+    int nx;
+    int ny;
+    vector&lt;vector&lt;char&gt;&gt;a(n+1,vector&lt;char&gt;(m+1));
+    vector&lt;vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt;&gt;dp(n+1,vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt;(m+1,vector&lt;vector&lt;int&gt;&gt;(4,vector&lt;int&gt;(4))));
     for(int i=1;i&lt;=n;i++)&#123;
-        cin&gt;&gt;a[i];
-        modify(root[i-1],root[i],1,n,a[i]);
+        for(int j=1;j&lt;=m;j++)&#123;
+            cin&gt;&gt;a[i][j];
+            if(a[i][j]==&#39;S&#39;) x=i,y=j;
+            if(a[i][j]==&#39;T&#39;) nx=i,ny=j;
+        &#125;
     &#125;
-    for(int i=1;i&lt;=m;i++)&#123;
-        int num,l,r;
-        cin&gt;&gt;l&gt;&gt;r&gt;&gt;num;
-        cout&lt;&lt;query(root[l-1],root[r],1,n,a[num])+l-1&lt;&lt;endl;
+    queue&lt;array&lt;int,4&gt;&gt;q;
+    q.push(&#123;x,y,0,0&#125;);
+    while(!q.empty())&#123;
+        auto [x,y,dir,step]=q.front();
+        q.pop();
+        for(int i=0;i&lt;4;i++)&#123;
+            if(a[x+dx[i]][y+dy[i]]==&#39;#&#39;) continue;
+            if(i==dir)&#123;
+                if(step==3||dp[x+dx[i]][y+dy[i]][i][step+1]) continue;
+                q.push(&#123;x+dx[i],y+dy[i],dir,step+1&#125;);
+                dp[x+dx[i]][y+dy[i]][i][step+1]=dp[x][y][i][step]+1;
+                continue;
+            &#125;
+            if(dp[x+dx[i]][y+dy[i]][i][1]) continue;
+            q.push(&#123;x+dx[i],y+dy[i],i,1&#125;);
+            dp[x+dx[i]][y+dy[i]][i][1]=dp[x][y][dir][step]+1;
+        &#125;
     &#125;
+    int ans=1e9;
+    for(int i=0;i&lt;4;i++)&#123;
+        for(int j=0;j&lt;4;j++)&#123;
+            if(dp[nx][ny][i][j])&#123;
+                ans=min(ans,dp[nx][ny][i][j]);
+            &#125;
+        &#125;
+    &#125;
+    if(ans==1e9) ans=-1;
+    cout&lt;&lt;ans&lt;&lt;endl;
 &#125;
+
 signed main() &#123;
     ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    cin.tie(0);
     int T=1;
-    cin &gt;&gt; T;
+    //cin &gt;&gt; T;
     while (T--) &#123;
         solve();
     &#125;

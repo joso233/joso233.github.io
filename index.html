@@ -328,11 +328,141 @@ git config --global user.email &quot;youremail&quot;
         
         <span class="tag">
             
-            <a href="/tags/hexo/" style="color: #00bcd4">hexo</a>
+            <a href="/tags/hexo/" style="color: #00a596">hexo</a>
         </span>
         
     </div>
     <a href="/2024/08/29/hello-world/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2025/03/01/Maze/">
+        <h2 class="post-title">D. Drunken Maze</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E9%A2%98%E8%A7%A3/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                题解
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/3/1
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <h1><span id="1题意">1.题意</span></h1><p><img src="https://espresso.codeforces.com/7dcadce65182d3b0007655152d071bd721aba768.png"></p>
+<p>给你一个有起点和终点的二维迷宫。你的任务是找出从起点到达终点的最快方法。最快的方法是走最少的步数，其中一步是向左、向右、向上或向下走。当然，你不能穿墙而过。</p>
+<p>不过，也有一个问题：如果向同一方向迈出三步以上，就会失去平衡而摔倒。因此，禁止向同一方向连续走三步以上。向右走三步，然后向左走一步，再向右走三步是可以的。这与向右走五步的效果相同，但速度较慢。</p>
+<h1><span id="2分析">2.分析</span></h1><p>典型的<strong>dp问题</strong>，题目中提到不能连续一个方向走四步，所以转移方程需要考虑到方向和沿着当前方向已经走了几步，很容易得到dp数组的形式$$dp[N][N][4][4]$$，接着考虑转移的方式，一般求最短路的题目bfs和dfs均可，但在这道题中，由于bfs沿着步数的大小开始拓展，第一次遍历到终点既是最短路径，如果选择dfs，可能在某种状态第一次的遍历中没有得到最优答案，因此选用<strong>bfs</strong></p>
+<h1><span id="3代码实现">3.代码实现</span></h1><pre><code class="c++">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+#define int long long
+typedef pair&lt;int, int&gt; PII;
+const int N = 2e5 + 10;
+int dx[4]=&#123;1,0,-1,0&#125;;
+int dy[4]=&#123;0,1,0,-1&#125;;
+void solve() &#123;
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    int x,y;
+    int nx;
+    int ny;
+    vector&lt;vector&lt;char&gt;&gt;a(n+1,vector&lt;char&gt;(m+1));
+    vector&lt;vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt;&gt;dp(n+1,vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt;(m+1,vector&lt;vector&lt;int&gt;&gt;(4,vector&lt;int&gt;(4))));
+    for(int i=1;i&lt;=n;i++)&#123;
+        for(int j=1;j&lt;=m;j++)&#123;
+            cin&gt;&gt;a[i][j];
+            if(a[i][j]==&#39;S&#39;) x=i,y=j;
+            if(a[i][j]==&#39;T&#39;) nx=i,ny=j;
+        &#125;
+    &#125;
+    queue&lt;array&lt;int,4&gt;&gt;q;
+    q.push(&#123;x,y,0,0&#125;);
+    while(!q.empty())&#123;
+        auto [x,y,dir,step]=q.front();
+        q.pop();
+        for(int i=0;i&lt;4;i++)&#123;
+            if(a[x+dx[i]][y+dy[i]]==&#39;#&#39;) continue;
+            if(i==dir)&#123;
+                if(step==3||dp[x+dx[i]][y+dy[i]][i][step+1]) continue;
+                q.push(&#123;x+dx[i],y+dy[i],dir,step+1&#125;);
+                dp[x+dx[i]][y+dy[i]][i][step+1]=dp[x][y][i][step]+1;
+                continue;
+            &#125;
+            if(dp[x+dx[i]][y+dy[i]][i][1]) continue;
+            q.push(&#123;x+dx[i],y+dy[i],i,1&#125;);
+            dp[x+dx[i]][y+dy[i]][i][1]=dp[x][y][dir][step]+1;
+        &#125;
+    &#125;
+    int ans=1e9;
+    for(int i=0;i&lt;4;i++)&#123;
+        for(int j=0;j&lt;4;j++)&#123;
+            if(dp[nx][ny][i][j])&#123;
+                ans=min(ans,dp[nx][ny][i][j]);
+            &#125;
+        &#125;
+    &#125;
+    if(ans==1e9) ans=-1;
+    cout&lt;&lt;ans&lt;&lt;endl;
+&#125;
+
+signed main() &#123;
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int T=1;
+    //cin &gt;&gt; T;
+    while (T--) &#123;
+        solve();
+    &#125;
+    return 0;
+&#125;
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #00a596">动态规划</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/bfs/" style="color: #ff7d73">bfs</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE%EF%BC%88brute-force%EF%BC%89/" style="color: #00a596">暴力枚举（brute force）</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%9C%80%E7%9F%AD%E8%B7%AF%EF%BC%88shortest-paths%EF%BC%89/" style="color: #ff7d73">最短路（shortest paths）</a>
+        </span>
+        
+    </div>
+    <a href="/2025/03/01/Maze/" class="go-post">阅读全文</a>
 </div>
 
 <div class="post">
@@ -449,7 +579,7 @@ signed main() &#123;
         
         <span class="tag">
             
-            <a href="/tags/codeforces/" style="color: #00a596">codeforces</a>
+            <a href="/tags/codeforces/" style="color: #03a9f4">codeforces</a>
         </span>
         
         <span class="tag">
@@ -459,7 +589,7 @@ signed main() &#123;
         
         <span class="tag">
             
-            <a href="/tags/%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%BB%B4%E6%8A%A4GCD/" style="color: #00a596">线段树维护GCD</a>
+            <a href="/tags/%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%BB%B4%E6%8A%A4GCD/" style="color: #03a9f4">线段树维护GCD</a>
         </span>
         
     </div>
@@ -657,7 +787,7 @@ int main() &#123;
         
         <span class="tag">
             
-            <a href="/tags/%E5%9B%A0%E6%95%B0%E5%88%86%E8%A7%A3/" style="color: #ffa2c4">因数分解</a>
+            <a href="/tags/%E5%9B%A0%E6%95%B0%E5%88%86%E8%A7%A3/" style="color: #00a596">因数分解</a>
         </span>
         
     </div>
@@ -943,12 +1073,12 @@ signed main() &#123;
         
         <span class="tag">
             
-            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #03a9f4">动态规划</a>
+            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #00a596">动态规划</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" style="color: #00a596">单调队列</a>
+            <a href="/tags/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" style="color: #ff7d73">单调队列</a>
         </span>
         
     </div>
@@ -1068,12 +1198,12 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/tuposort/" style="color: #00bcd4">tuposort</a>
+            <a href="/tags/tuposort/" style="color: #03a9f4">tuposort</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E9%98%9F%E5%88%97/" style="color: #ffa2c4">队列</a>
+            <a href="/tags/%E9%98%9F%E5%88%97/" style="color: #00a596">队列</a>
         </span>
         
     </div>
@@ -1233,12 +1363,12 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/c/" style="color: #03a9f4">c++</a>
+            <a href="/tags/c/" style="color: #00a596">c++</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #ff7d73">数据结构</a>
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #03a9f4">数据结构</a>
         </span>
         
         <span class="tag">
@@ -1248,7 +1378,7 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/tarjan/" style="color: #ff7d73">tarjan</a>
+            <a href="/tags/tarjan/" style="color: #ffa2c4">tarjan</a>
         </span>
         
         <span class="tag">
@@ -1440,32 +1570,32 @@ signed main()&#123;
         
         <span class="tag">
             
-            <a href="/tags/c/" style="color: #00bcd4">c++</a>
+            <a href="/tags/c/" style="color: #ff7d73">c++</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #ffa2c4">数据结构</a>
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #00bcd4">数据结构</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #00a596">图论</a>
+            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #ffa2c4">图论</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E7%94%9F%E6%88%90%E6%A0%91/" style="color: #ffa2c4">生成树</a>
+            <a href="/tags/%E7%94%9F%E6%88%90%E6%A0%91/" style="color: #03a9f4">生成树</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/lca/" style="color: #03a9f4">lca</a>
+            <a href="/tags/lca/" style="color: #00a596">lca</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E5%80%8D%E5%A2%9E/" style="color: #00bcd4">倍增</a>
+            <a href="/tags/%E5%80%8D%E5%A2%9E/" style="color: #ffa2c4">倍增</a>
         </span>
         
     </div>
@@ -1617,187 +1747,17 @@ signed main()
         
         <span class="tag">
             
-            <a href="/tags/c/" style="color: #ff7d73">c++</a>
-        </span>
-        
-        <span class="tag">
-            
-            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #03a9f4">数据结构</a>
-        </span>
-        
-        <span class="tag">
-            
-            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #00a596">图论</a>
-        </span>
-        
-        <span class="tag">
-            
-            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="color: #ffa2c4">动态规划</a>
-        </span>
-        
-    </div>
-    <a href="/2024/10/24/%E6%8D%A2%E6%A0%B9dp%E6%B1%82%E8%B7%9D%E7%A6%BB%E5%92%8C-%E5%80%8D%E5%A2%9Elca%E6%B1%82%E9%93%BE%E9%95%BF/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2024/09/26/%E6%8D%A2%E6%A0%B9dp/">
-        <h2 class="post-title">换根dp</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E7%AE%97%E6%B3%95/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                算法
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/9/26
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <!-- toc -->
-
-<ul>
-<li><a href="#%E6%A0%91%E7%9A%84%E6%9C%80%E9%95%BF%E8%B7%AF%E5%BE%84">树的最长路径</a><ul>
-<li><a href="#%E9%A2%98%E7%9B%AE">题目</a></li>
-<li><a href="#%E6%80%9D%E8%B7%AF">思路</a></li>
-<li><a href="#%E4%BB%A3%E7%A0%81">代码</a></li>
-</ul>
-</li>
-</ul>
-<!-- tocstop -->
-
-<h1><span id="树的最长路径">树的最长路径</span></h1><h2><span id="题目">题目</span></h2><p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//imgimage-20240926193757033.png" alt="image-20240926193757033"></p>
-<h2><span id="思路">思路</span></h2><p>这道题的前置知识点可以参考[树的最长路径](<a target="_blank" rel="noopener" href="https://www.acwing.com/problem/content/1074/">1072. 树的最长路径 - AcWing题库</a>)easy版，核心代码如下：</p>
-<pre><code class="c++">void up(int u,int fa)&#123;
-    st[u]=1;
-    for(auto v:e[u])&#123;
-        if(v.to==fa) continue;
-        up(v.to,u);
-        if(f[u][1]&lt;=f[v.to][1]+v.w)&#123;
-            f[u][2]=f[u][1];
-            f[u][1]=f[v.to][1]+v.w;
-        &#125;
-        else if(f[u][2]&lt;=f[v.to][1]+v.w)&#123;
-            f[u][2]=f[v.to][1]+v.w;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p>以某点为根的子树的最长路径即为以该点为根的最长路与次长路的长度和，一遍dfs即可求出所有子树的最长路径，但在这个题里，显然某点的最长路径不一定存在于某点的子树中，而存在于该点的根节点里面，这个时候就需要引入<strong>换根</strong>的概念了</p>
-<p><img src="https://joso-1302558797.cos.ap-nanjing.myqcloud.com//img1b396cad67460d0e5dd0ad21f18fc608.jpg" alt="img"></p>
-<p>​	如图给出了一颗树，当以1为根时，显然他的最长直径为路径1-3-7-11（f[1] [2]&#x3D;3,一维表示以1为根，二维表示第2长的路）与路径1-4-9-13-15（f[1] [1]&#x3D;4）的长度和7.</p>
-<p>​	但当我们考虑结点4时,第一遍dfs跑出来的结果p[4] [1]&#x3D;3,p[4] [2]&#x3D;2,显然不是最优的，因为把结点1看作他的子节点时，f[4] [1]可以被f[1] [2]+1替换，同理f[3] [1]可以被f[1] [1]+1替换，f[3] [2]继承 f[3] [1]。</p>
-<p>​	如果此时我们对每个节点都跑一遍dfs的话可以解决这个问题，但其时间复杂度为O(n^2) 的，显然不符合题面的要求，所有需要考虑怎么在O(n)的时间复杂度下得出每点的答案，这个时候对每个结点观察可以看出，答案是否需要更新只和他的根节点信息有关，当根节点长度大于p[i][1]或者p[i][2]时按需求更新答案即可。</p>
-<p>​	具体的更新答案的情况有两类，一种是子节点v被父节点u的第一长路径覆盖，另一种则是被第二长路径覆盖或不被覆盖。</p>
-<p>​	当我们考虑第一种情况是，对应图中的v&#x3D;4号结点，当前结点v被根节点u的第一长的路径包括在内，v的第一长的路径长度一定是最优的，但需要考虑f[v] [2]与f[u] [2]+1的关系。第二种情况对应v&#x3D;2或者v&#x3D;3，此时根节点u中一定存在一条最优的路径大于p[v] [1]与p[v] [2]，因为根结点在寻找最长路径时没有考虑经过子节点v，所以子节点v中的任何路径都是非最优解，那么直接将p[v] [2]更新为p[v] [1],并用p[u] [1]+1替换p[v] [1]。</p>
-<p>​	注意在每一次更新都要维护当前的结点所选的每一条路都要经过的那个子节点，用来后续判断某个点是否为父节点所选</p>
-<h2><span id="代码">代码</span></h2><pre><code class="c++">#include &lt;bits/stdc++.h&gt;
-using namespace std;
-#define int long long
-const int N = 2e6 + 10;
-typedef pair&lt;int,int&gt; PII;
-bool st[N];
-struct tree&#123;
-    int to;
-&#125;;
-int size[N],f[N][3],p[N][3];
-vector&lt;tree&gt; e[N];
-void up(int u)&#123;
-    st[u]=1;
-    for(auto v:e[u])&#123;
-        if(st[v.to]) continue;
-        up(v.to);
-        if(f[u][1]&lt;f[v.to][1]+1)&#123;
-            f[u][2]=f[u][1];
-            p[u][2]=p[u][1];
-            f[u][1]=f[v.to][1]+1;
-            p[u][1]=v.to;
-        &#125;
-        else if(f[u][2]&lt;f[v.to][1]+1)&#123;
-            f[u][2]=f[v.to][1]+1;
-            p[u][2]=v.to;
-        &#125;
-    &#125;
-&#125;
-void down(int u)&#123;
-    st[u]=1;
-    for(auto v:e[u])&#123;
-        if(st[v.to]) continue;
-        if(p[u][1]==v.to)&#123;
-            if(f[v.to][1]&lt;f[u][2]+1)&#123;
-                f[v.to][2]=f[v.to][1];
-                p[v.to][2]=p[v.to][1];
-                f[v.to][1]=f[u][2]+1;
-                p[v.to][1]=u;
-            &#125;
-            else if(f[v.to][2]&lt;f[u][2]+1)&#123;
-                f[v.to][2]=f[u][2]+1;
-                p[v.to][2]=u;
-            &#125;
-        &#125;
-        else&#123;
-            f[v.to][2]=f[v.to][1];
-            p[v.to][2]=p[v.to][1];
-            f[v.to][1]=f[u][1]+1;
-            p[v.to][1]=u;
-        &#125;
-        down(v.to);
-    &#125;
-&#125;
-void solve()&#123;
-    int n;
-    cin&gt;&gt;n;
-    for(int i=1;i&lt;n;i++)&#123;
-        int u,v;
-        cin&gt;&gt;u&gt;&gt;v;
-        e[u].push_back(&#123;v&#125;);
-        e[v].push_back(&#123;u&#125;);
-    &#125;
-    up(1);
-    for(int i=1;i&lt;=n;i++) st[i]=0;
-    down(1);
-    int ans=0;
-    for(int i=1;i&lt;=n;i++)&#123;
-        cout&lt;&lt;f[i][1]+f[i][2]&lt;&lt;endl;
-    &#125;
-&#125;
-signed main()&#123;
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int t=1;
-    //cin &gt;&gt; t;
-    while (t--) &#123;
-        solve();
-    &#125; 
-&#125;
-</code></pre>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
             <a href="/tags/c/" style="color: #ffa2c4">c++</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="color: #00bcd4">数据结构</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="color: #ffa2c4">图论</a>
         </span>
         
         <span class="tag">
@@ -1806,7 +1766,7 @@ signed main()&#123;
         </span>
         
     </div>
-    <a href="/2024/09/26/%E6%8D%A2%E6%A0%B9dp/" class="go-post">阅读全文</a>
+    <a href="/2024/10/24/%E6%8D%A2%E6%A0%B9dp%E6%B1%82%E8%B7%9D%E7%A6%BB%E5%92%8C-%E5%80%8D%E5%A2%9Elca%E6%B1%82%E9%93%BE%E9%95%BF/" class="go-post">阅读全文</a>
 </div>
 
 
